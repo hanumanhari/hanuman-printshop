@@ -795,25 +795,15 @@
           </a>
         </div>
 
-        <!-- Secondary Actions (Copy Link & Edit in Settings) -->
-        <div class="flex items-center gap-2 w-full pt-0.5">
+        <!-- Secondary Action: Copy Link (Public safe, no outside edit option) -->
+        <div class="w-full pt-0.5">
           <button 
             type="button" 
             onclick="copyInstagramLink()" 
-            class="flex-1 py-1.5 px-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 border border-slate-200 transition-all cursor-pointer"
+            class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-200 transition-all cursor-pointer shadow-xs"
           >
-            <i data-lucide="copy" class="w-3 h-3 text-slate-600"></i>
-            <span>Copy Link</span>
-          </button>
-
-          <button 
-            type="button" 
-            onclick="closeInstagramQRModal(); openAdminDashboardModal('settings');" 
-            class="py-1.5 px-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 border border-pink-200 transition-all cursor-pointer"
-            title="இன்ஸ்டாகிராம் இணைப்பை மாற்ற Settings திறக்க"
-          >
-            <i data-lucide="edit-3" class="w-3 h-3 text-pink-600"></i>
-            <span>Edit செய்ய</span>
+            <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-600"></i>
+            <span>Instagram Profile Link-ஐ Copy செய்ய</span>
           </button>
         </div>
 
@@ -1852,37 +1842,37 @@
                 </div>
               </div>
 
-              <!-- Instagram Link & QR Settings (Editable) -->
-              <div class="p-2.5 bg-gradient-to-r from-pink-50/70 to-purple-50/70 rounded-xl border border-pink-200 space-y-1.5">
+              <!-- Instagram Link & QR Settings (Admin Only Edit) -->
+              <div class="p-3 bg-gradient-to-r from-pink-50 via-rose-50/50 to-purple-50/70 rounded-2xl border border-pink-200 shadow-xs space-y-2">
                 <div class="flex items-center justify-between">
-                  <label class="text-[11px] font-bold text-slate-800 flex items-center gap-1">
-                    <i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-600"></i>
-                    <span>இன்ஸ்டாகிராம் இணைப்பு & QR Code (Instagram Link) *</span>
+                  <label class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                    <i data-lucide="instagram" class="w-4 h-4 text-pink-600"></i>
+                    <span>இன்ஸ்டாகிராம் இணைப்பு (Instagram Profile Link Edit) *</span>
                   </label>
-                  <a id="set-instagram-preview-link" href="https://www.instagram.com/print_shop_price_list" target="_blank" class="text-[10px] text-pink-600 hover:underline font-bold flex items-center gap-0.5">
+                  <a id="set-instagram-preview-link" href="https://www.instagram.com/print_shop_price_list" target="_blank" rel="noopener noreferrer" class="text-[10.5px] text-pink-600 hover:text-pink-700 hover:underline font-bold flex items-center gap-0.5">
                     <span>பார்வையிட</span>
                     <i data-lucide="external-link" class="w-3 h-3"></i>
                   </a>
                 </div>
-                <div class="flex gap-1.5">
+                <div class="flex gap-2">
                   <input 
                     type="url" 
                     id="set-instagram" 
                     placeholder="https://www.instagram.com/print_shop_price_list" 
-                    class="flex-1 px-2.5 py-1.5 bg-white border border-pink-300 focus:border-pink-500 rounded-xl text-xs font-bold text-pink-700 shadow-xs" 
+                    class="flex-1 px-3 py-2 bg-white border border-pink-300 focus:border-pink-500 rounded-xl text-xs font-bold text-pink-700 shadow-xs" 
                   />
                   <button 
                     type="button" 
                     onclick="previewInstagramQRModal()" 
-                    class="px-2.5 py-1.5 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shrink-0 flex items-center gap-1 shadow-sm transition-all cursor-pointer"
+                    class="px-3 py-2 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shrink-0 flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
                     title="தற்போதைய இணைப்பிற்கான QR Code-ஐ பார்க்க"
                   >
                     <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
                     <span>QR Code பார்</span>
                   </button>
                 </div>
-                <p class="text-[9.5px] text-slate-500">
-                  💡 இந்த இணைப்பை மாற்றினால் Heading-ல் உள்ள Instagram பட்டன் மற்றும் QR Code உடனடியாக அனைத்து மொபைல்களிலும் மாறும்.
+                <p class="text-[10px] text-slate-500 leading-tight">
+                  💡 <strong>Admin Edit:</strong> இந்த இணைப்பை மாற்றிய பிறகு கீழே உள்ள <em>"அமைப்புகளைச் சேமி (Save Settings)"</em> பட்டனை அழுத்தவும். Heading-ல் உள்ள பட்டன் மற்றும் QR Code உடனடியாக மாற்றப்பட்டு Firebase &amp; Supabase-ல் தானாகவே புதுப்பிக்கப்படும்.
                 </p>
               </div>
 
