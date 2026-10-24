@@ -705,8 +705,8 @@
   <!-- ==================== MODALS ==================== -->
 
   <!-- 0. INSTAGRAM PROFILE & LIVE QR CODE MODAL -->
-  <div id="instagram-qr-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 hidden transition-all">
-    <div class="modal-content bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-pink-100 flex flex-col">
+  <div id="instagram-qr-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 transition-all">
+    <div id="instagram-qr-modal-content" class="modal-content bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-pink-100 flex flex-col">
       
       <!-- Gradient Header -->
       <div class="p-3.5 sm:p-4 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white flex items-center justify-between shadow-sm shrink-0">
@@ -753,6 +753,7 @@
           href="https://www.instagram.com/print_shop_price_list" 
           target="_blank" 
           rel="noopener noreferrer" 
+          onclick="handleInstagramQRTouch(event)"
           class="block p-2.5 rounded-3xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all cursor-pointer group"
           title="👆 QR-ஐ டச் செய்து Instagram செல்லவும் (Touch to Open Instagram)"
         >
@@ -768,7 +769,8 @@
               id="instagram-qr-img" 
               src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fwww.instagram.com%2Fprint_shop_price_list" 
               alt="Instagram QR Code - Touch to Open" 
-              class="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg shadow-inner group-hover:opacity-95 transition-all"
+              class="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg shadow-inner group-hover:opacity-95 transition-all cursor-pointer"
+              onclick="handleInstagramQRTouch(event)"
             />
 
             <div class="mt-2.5 flex items-center justify-center gap-1.5 text-xs font-black text-pink-700 group-hover:text-pink-900">
@@ -7568,6 +7570,7 @@ function extractInstagramHandle(url) {
 
 function openInstagramQRModal() {
   const modal = document.getElementById("instagram-qr-modal");
+  const modalContent = document.getElementById("instagram-qr-modal-content");
   if (!modal) return;
   const instaUrl = (SHOP_INFO.instagram && SHOP_INFO.instagram.trim()) || "https://www.instagram.com/print_shop_price_list";
   const handle = extractInstagramHandle(instaUrl);
@@ -7585,6 +7588,8 @@ function openInstagramQRModal() {
   if (qrTouchAnchor) qrTouchAnchor.href = instaUrl;
   if (qrImgEl) qrImgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(instaUrl)}`;
 
+  modal.classList.add("active");
+  if (modalContent) modalContent.classList.add("active");
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   if (window.lucide) {
@@ -7594,8 +7599,21 @@ function openInstagramQRModal() {
 
 function closeInstagramQRModal() {
   const modal = document.getElementById("instagram-qr-modal");
-  if (modal) modal.classList.add("hidden");
+  const modalContent = document.getElementById("instagram-qr-modal-content");
+  if (modalContent) modalContent.classList.remove("active");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.classList.add("hidden");
+  }
   document.body.style.overflow = "";
+}
+
+function handleInstagramQRTouch(e) {
+  if (e) {
+    e.stopPropagation();
+  }
+  const instaUrl = (SHOP_INFO.instagram && SHOP_INFO.instagram.trim()) || "https://www.instagram.com/print_shop_price_list";
+  window.open(instaUrl, '_blank', 'noopener,noreferrer');
 }
 
 function copyInstagramLink() {
