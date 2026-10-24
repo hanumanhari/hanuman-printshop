@@ -293,6 +293,18 @@
             <button id="lang-en" class="px-1.5 sm:px-2 py-0.5 rounded-md text-slate-600 hover:bg-slate-200 transition-all">Eng</button>
           </div>
 
+          <!-- Instagram Profile & Live QR Code Trigger Button in Header -->
+          <button 
+            type="button"
+            onclick="openInstagramQRModal()" 
+            class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:from-pink-700 hover:to-amber-600 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer group border border-pink-400/40"
+            title="Instagram பக்கம் & QR Code (Click to open QR Code)"
+          >
+            <i data-lucide="instagram" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+            <span class="hidden xs:inline sm:inline">Instagram QR</span>
+            <i data-lucide="qr-code" class="w-3 h-3 opacity-90"></i>
+          </button>
+
           <!-- WhatsApp Side Option Trigger Button in Header -->
           <button 
             onclick="toggleWhatsAppSideDrawer(true)" 
@@ -586,6 +598,13 @@
               <i data-lucide="phone" class="w-3.5 h-3.5 text-orange-400 shrink-0"></i>
               <a id="footer-phone-display" href="tel:+919876543210" class="hover:text-white transition-colors">+91 98765 43210</a>
             </div>
+            <div class="flex items-center gap-1.5 pt-0.5">
+              <i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-400 shrink-0"></i>
+              <button type="button" onclick="openInstagramQRModal()" class="text-pink-400 hover:text-pink-300 font-bold hover:underline flex items-center gap-1 cursor-pointer text-left">
+                <span>Instagram Profile & QR Code</span>
+                <i data-lucide="qr-code" class="w-3 h-3"></i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -650,6 +669,99 @@
   </div>
 
   <!-- ==================== MODALS ==================== -->
+
+  <!-- 0. INSTAGRAM PROFILE & LIVE QR CODE MODAL -->
+  <div id="instagram-qr-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 hidden transition-all">
+    <div class="modal-content bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-pink-100 flex flex-col">
+      
+      <!-- Gradient Header -->
+      <div class="p-3.5 sm:p-4 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white flex items-center justify-between shadow-sm shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 shrink-0">
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-xs sm:text-sm font-black leading-tight flex items-center gap-1">
+              <span>ஸ்ரீ ஹனுமான் Instagram QR</span>
+            </h3>
+            <p class="text-[10px] text-pink-100 leading-none mt-0.5">ஸ்கேன் செய்து பின்தொடரவும்</p>
+          </div>
+        </div>
+        <button 
+          type="button"
+          onclick="closeInstagramQRModal()" 
+          class="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer"
+        >
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-4 sm:p-5 flex flex-col items-center text-center space-y-3 bg-gradient-to-b from-pink-50/40 via-white to-white">
+        
+        <!-- Shop Instagram Handle Badge -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-100 text-pink-800 border border-pink-200 text-xs font-black shadow-xs">
+          <i data-lucide="at-sign" class="w-3.5 h-3.5 text-pink-600"></i>
+          <span id="instagram-modal-handle">@print_shop_price_list</span>
+        </div>
+
+        <!-- Dynamic QR Code Frame with Gradient Border -->
+        <div class="p-2.5 rounded-3xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shadow-xl">
+          <div class="p-3 bg-white rounded-2xl flex flex-col items-center justify-center">
+            <img 
+              id="instagram-qr-img" 
+              src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fwww.instagram.com%2Fprint_shop_price_list" 
+              alt="Instagram QR Code" 
+              class="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg shadow-inner"
+            />
+            <div class="mt-2 flex items-center gap-1 text-[10.5px] font-bold text-slate-700">
+              <i data-lucide="camera" class="w-3.5 h-3.5 text-pink-600"></i>
+              <span>மொபைல் கேமராவால் ஸ்கேன் செய்க</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instagram Profile Open Button -->
+        <div class="w-full">
+          <a 
+            id="instagram-modal-url" 
+            href="https://www.instagram.com/print_shop_price_list" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-full py-2.5 px-4 bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 hover:from-pink-700 hover:to-amber-600 text-white rounded-2xl text-xs font-black shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+            <span>Instagram-ல் பார்க்க (Open Profile)</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Secondary Actions (Copy Link & Edit in Settings) -->
+        <div class="flex items-center gap-2 w-full pt-0.5">
+          <button 
+            type="button" 
+            onclick="copyInstagramLink()" 
+            class="flex-1 py-1.5 px-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 border border-slate-200 transition-all cursor-pointer"
+          >
+            <i data-lucide="copy" class="w-3 h-3 text-slate-600"></i>
+            <span>Copy Link</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="closeInstagramQRModal(); openAdminDashboardModal('settings');" 
+            class="py-1.5 px-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 border border-pink-200 transition-all cursor-pointer"
+            title="இன்ஸ்டாகிராம் இணைப்பை மாற்ற Settings திறக்க"
+          >
+            <i data-lucide="edit-3" class="w-3 h-3 text-pink-600"></i>
+            <span>Edit செய்ய</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 
   <!-- 1. Service Detail Modal -->
   <div id="service-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
@@ -1681,6 +1793,40 @@
                 </div>
               </div>
 
+              <!-- Instagram Link & QR Settings (Editable) -->
+              <div class="p-2.5 bg-gradient-to-r from-pink-50/70 to-purple-50/70 rounded-xl border border-pink-200 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="text-[11px] font-bold text-slate-800 flex items-center gap-1">
+                    <i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-600"></i>
+                    <span>இன்ஸ்டாகிராம் இணைப்பு & QR Code (Instagram Link) *</span>
+                  </label>
+                  <a id="set-instagram-preview-link" href="https://www.instagram.com/print_shop_price_list" target="_blank" class="text-[10px] text-pink-600 hover:underline font-bold flex items-center gap-0.5">
+                    <span>பார்வையிட</span>
+                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                  </a>
+                </div>
+                <div class="flex gap-1.5">
+                  <input 
+                    type="url" 
+                    id="set-instagram" 
+                    placeholder="https://www.instagram.com/print_shop_price_list" 
+                    class="flex-1 px-2.5 py-1.5 bg-white border border-pink-300 focus:border-pink-500 rounded-xl text-xs font-bold text-pink-700 shadow-xs" 
+                  />
+                  <button 
+                    type="button" 
+                    onclick="previewInstagramQRModal()" 
+                    class="px-2.5 py-1.5 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shrink-0 flex items-center gap-1 shadow-sm transition-all cursor-pointer"
+                    title="தற்போதைய இணைப்பிற்கான QR Code-ஐ பார்க்க"
+                  >
+                    <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                    <span>QR Code பார்</span>
+                  </button>
+                </div>
+                <p class="text-[9.5px] text-slate-500">
+                  💡 இந்த இணைப்பை மாற்றினால் Heading-ல் உள்ள Instagram பட்டன் மற்றும் QR Code உடனடியாக அனைத்து மொபைல்களிலும் மாறும்.
+                </p>
+              </div>
+
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 mb-0.5">📢 வரவேற்பு & அறிவிப்புச் செய்தி (Top Announcement Banner)</label>
                 <input type="text" id="set-announcement-ta" placeholder="📢 ஸ்ரீ ஹனுමාන් ஜெராக்ஸ் & போட்டோ பிரிண்ட் அன்புடன் வரவேற்கிறது! வாட்ஸ்அப் மூலம் ஆவணங்களை அனுப்பி உடனுக்குடன் பிரிண்ட் அவுட் எடுக்கலாம்!" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-purple-900" />
@@ -2599,6 +2745,7 @@ const DEFAULT_SHOP_INFO = {
   logo: "", // Custom Photo (Data URL or Image URL)
   phone: "+91 98765 43210",
   whatsapp: "919876543210",
+  instagram: "https://www.instagram.com/print_shop_price_list",
   addressEn: "Kathiriyangadu, Poonachi Village",
   addressTa: "கத்திரியங்காடு, பூனாச்சி கிராமம்",
   openingHoursEn: "8:30 AM - 9:30 PM",
@@ -4415,6 +4562,7 @@ function getStoredShopInfo() {
         if (parsed.photoStockCount === undefined) parsed.photoStockCount = 200;
         if (parsed.a4PaperInStock === undefined) parsed.a4PaperInStock = (parsed.a4StockCount > 0);
         if (parsed.photoSheetInStock === undefined) parsed.photoSheetInStock = (parsed.photoStockCount > 0);
+        if (!parsed.instagram) parsed.instagram = DEFAULT_SHOP_INFO.instagram;
         return parsed;
       }
     }
@@ -6257,6 +6405,10 @@ function loadAdminSettingsForm() {
   if (logoInputEl) logoInputEl.value = shop.logo || "";
   if (phoneEl) phoneEl.value = shop.phone || "";
   if (whatsappEl) whatsappEl.value = shop.whatsapp || "";
+  const instaEl = document.getElementById("set-instagram");
+  if (instaEl) instaEl.value = shop.instagram || "https://www.instagram.com/print_shop_price_list";
+  const setInstaPreview = document.getElementById("set-instagram-preview-link");
+  if (setInstaPreview) setInstaPreview.href = shop.instagram || "https://www.instagram.com/print_shop_price_list";
   if (hoursTaEl) hoursTaEl.value = shop.openingHoursTa || "8:30 AM - 9:30 PM";
   if (hoursEnEl) hoursEnEl.value = shop.openingHoursEn || shop.openingHoursTa || "8:30 AM - 9:30 PM";
   if (addressTaEl) addressTaEl.value = shop.addressTa || "";
@@ -6278,6 +6430,7 @@ function handleAdminDashSaveShopInfo(e) {
   const logoVal = document.getElementById("set-shop-logo-input")?.value.trim();
   const phoneVal = document.getElementById("set-phone")?.value.trim();
   const whatsappVal = document.getElementById("set-whatsapp")?.value.trim();
+  const instaVal = document.getElementById("set-instagram")?.value.trim();
   const hoursTaVal = document.getElementById("set-shop-hours-ta")?.value.trim();
   const hoursEnVal = document.getElementById("set-shop-hours-en")?.value.trim();
   const addressTaVal = document.getElementById("set-address-ta")?.value.trim();
@@ -6298,6 +6451,9 @@ function handleAdminDashSaveShopInfo(e) {
   shop.logo = logoVal || "";
   if (phoneVal) shop.phone = phoneVal;
   if (whatsappVal) shop.whatsapp = whatsappVal;
+  if (instaVal !== undefined) {
+    shop.instagram = instaVal || "https://www.instagram.com/print_shop_price_list";
+  }
   if (hoursTaVal) {
     shop.openingHoursTa = hoursTaVal;
     shop.openingHoursEn = hoursEnVal || hoursTaVal;
@@ -6747,6 +6903,19 @@ function updateTexts() {
     footerPhoneEl.textContent = SHOP_INFO.phone;
     footerPhoneEl.href = `tel:${SHOP_INFO.phone.replace(/[^0-9+]/g, '')}`;
   }
+
+  // Update Instagram Profile & QR links
+  const instaUrl = (SHOP_INFO.instagram && SHOP_INFO.instagram.trim()) || "https://www.instagram.com/print_shop_price_list";
+  const handle = extractInstagramHandle(instaUrl);
+  const modalHandleEl = document.getElementById("instagram-modal-handle");
+  const modalUrlEl = document.getElementById("instagram-modal-url");
+  const qrImgEl = document.getElementById("instagram-qr-img");
+  const setInstaPreview = document.getElementById("set-instagram-preview-link");
+
+  if (modalHandleEl) modalHandleEl.textContent = `@${handle}`;
+  if (modalUrlEl) modalUrlEl.href = instaUrl;
+  if (qrImgEl) qrImgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(instaUrl)}`;
+  if (setInstaPreview) setInstaPreview.href = instaUrl;
 
   renderShopStatus();
   renderTopAnnouncementBanner();
@@ -7265,6 +7434,13 @@ function setupModals() {
       if (e.target === stockModal) closeAddStockModal();
     });
   }
+
+  const instaModal = document.getElementById('instagram-qr-modal');
+  if (instaModal) {
+    instaModal.addEventListener('click', (e) => {
+      if (e.target === instaModal) closeInstagramQRModal();
+    });
+  }
 }
 
 // WhatsApp Direct Message
@@ -7311,6 +7487,65 @@ function sendGeneralWhatsApp() {
     : `Hello! I would like to inquire about your Xerox, Photo Print & Horoscope Xerox services.`;
 
   window.open(`https://wa.me/${SHOP_INFO.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+// ==================== INSTAGRAM PROFILE & LIVE QR CODE ====================
+function extractInstagramHandle(url) {
+  if (!url) return "print_shop_price_list";
+  try {
+    const cleanUrl = url.replace(/\/$/, "");
+    const parts = cleanUrl.split("/");
+    const lastPart = parts[parts.length - 1];
+    if (lastPart && !lastPart.includes("instagram.com")) {
+      return lastPart.replace(/^@/, "");
+    }
+  } catch(e) {}
+  return "print_shop_price_list";
+}
+
+function openInstagramQRModal() {
+  const modal = document.getElementById("instagram-qr-modal");
+  if (!modal) return;
+  const instaUrl = (SHOP_INFO.instagram && SHOP_INFO.instagram.trim()) || "https://www.instagram.com/print_shop_price_list";
+  const handle = extractInstagramHandle(instaUrl);
+  const modalHandleEl = document.getElementById("instagram-modal-handle");
+  const modalUrlEl = document.getElementById("instagram-modal-url");
+  const qrImgEl = document.getElementById("instagram-qr-img");
+
+  if (modalHandleEl) modalHandleEl.textContent = `@${handle}`;
+  if (modalUrlEl) modalUrlEl.href = instaUrl;
+  if (qrImgEl) qrImgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(instaUrl)}`;
+
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+}
+
+function closeInstagramQRModal() {
+  const modal = document.getElementById("instagram-qr-modal");
+  if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function copyInstagramLink() {
+  const instaUrl = (SHOP_INFO.instagram && SHOP_INFO.instagram.trim()) || "https://www.instagram.com/print_shop_price_list";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(instaUrl).then(() => {
+      showToast("📋 Instagram இணைப்பு Copy செய்யப்பட்டது!", "Instagram link copied!");
+    });
+  } else {
+    fallbackCopyText(instaUrl);
+  }
+}
+
+function previewInstagramQRModal() {
+  const instaVal = document.getElementById("set-instagram")?.value.trim();
+  if (instaVal) {
+    SHOP_INFO.instagram = instaVal;
+  }
+  openInstagramQRModal();
 }
 
 // Astrology Modal
