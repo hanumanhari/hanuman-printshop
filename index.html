@@ -58,6 +58,38 @@
     .badge-rose { background-color: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
     .badge-cyan { background-color: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; }
 
+    /* Instagram Username Continuous Blinking Animation */
+    @keyframes instaBlink {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        text-shadow: 0 0 8px rgba(251, 191, 36, 0.9), 0 0 16px rgba(236, 72, 153, 0.7);
+      }
+      50% {
+        opacity: 0.25;
+        transform: scale(0.96);
+        text-shadow: none;
+      }
+    }
+    .insta-username-blink {
+      display: inline-block;
+      animation: instaBlink 1.2s infinite ease-in-out;
+    }
+    @keyframes instaBadgeBlink {
+      0%, 100% {
+        box-shadow: 0 0 16px rgba(236, 72, 153, 0.7), 0 0 30px rgba(245, 158, 11, 0.5);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 4px rgba(236, 72, 153, 0.2);
+        transform: scale(0.97);
+        opacity: 0.85;
+      }
+    }
+    .insta-badge-blink {
+      animation: instaBadgeBlink 1.4s infinite ease-in-out;
+    }
+
     /* Modal Safe Isolation (Hidden by default, flex when active) */
     .modal-backdrop, .side-drawer-backdrop {
       display: none !important;
@@ -297,12 +329,14 @@
           <button 
             type="button"
             onclick="openInstagramQRModal()" 
-            class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:from-pink-700 hover:to-amber-600 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer group border border-pink-400/40"
+            class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:from-pink-700 hover:to-amber-600 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer group border border-pink-400/40 shrink-0"
             title="Instagram பக்கம் & QR Code (Click to open QR Code)"
           >
-            <i data-lucide="instagram" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
-            <span class="hidden xs:inline sm:inline">Instagram QR</span>
-            <i data-lucide="qr-code" class="w-3 h-3 opacity-90"></i>
+            <i data-lucide="instagram" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform text-white"></i>
+            <span id="header-instagram-handle" class="insta-username-blink font-black text-[11px] sm:text-xs text-amber-200 tracking-tight inline-flex items-center gap-0.5 truncate max-w-[125px] sm:max-w-none">
+              @print_shop_price_list
+            </span>
+            <i data-lucide="qr-code" class="w-3 h-3 opacity-90 text-amber-100"></i>
           </button>
 
           <!-- WhatsApp Side Option Trigger Button in Header -->
@@ -699,18 +733,18 @@
       <!-- Modal Body -->
       <div class="p-4 sm:p-5 flex flex-col items-center text-center space-y-3 bg-gradient-to-b from-pink-50/40 via-white to-white">
         
-        <!-- Shop Instagram Handle Badge (Clickable) -->
+        <!-- Shop Instagram Handle Badge (Clickable with continuous blink / glow) -->
         <a 
           id="instagram-modal-handle-link"
           href="https://www.instagram.com/print_shop_price_list" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-800 border border-pink-200 text-xs font-black shadow-xs transition-colors cursor-pointer"
+          class="insta-badge-blink inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer border border-pink-300/60"
           title="Open Instagram Profile"
         >
-          <i data-lucide="at-sign" class="w-3.5 h-3.5 text-pink-600"></i>
-          <span id="instagram-modal-handle">@print_shop_price_list</span>
-          <i data-lucide="external-link" class="w-3 h-3 text-pink-500"></i>
+          <i data-lucide="instagram" class="w-4 h-4 text-white"></i>
+          <span id="instagram-modal-handle" class="insta-username-blink tracking-wide text-amber-100 font-extrabold">@print_shop_price_list</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5 text-amber-200"></i>
         </a>
 
         <!-- Dynamic Touch-to-Open QR Code Frame with Gradient Border -->
@@ -6937,6 +6971,8 @@ function updateTexts() {
   const qrImgEl = document.getElementById("instagram-qr-img");
   const setInstaPreview = document.getElementById("set-instagram-preview-link");
 
+  const headerHandleEl = document.getElementById("header-instagram-handle");
+  if (headerHandleEl) headerHandleEl.textContent = `@${handle}`;
   if (modalHandleEl) modalHandleEl.textContent = `@${handle}`;
   if (modalHandleLink) modalHandleLink.href = instaUrl;
   if (modalUrlEl) modalUrlEl.href = instaUrl;
@@ -7541,6 +7577,8 @@ function openInstagramQRModal() {
   const qrTouchAnchor = document.getElementById("instagram-qr-touch-anchor");
   const qrImgEl = document.getElementById("instagram-qr-img");
 
+  const headerHandleEl = document.getElementById("header-instagram-handle");
+  if (headerHandleEl) headerHandleEl.textContent = `@${handle}`;
   if (modalHandleEl) modalHandleEl.textContent = `@${handle}`;
   if (modalHandleLink) modalHandleLink.href = instaUrl;
   if (modalUrlEl) modalUrlEl.href = instaUrl;
