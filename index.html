@@ -2153,7 +2153,7 @@ alter publication supabase_realtime add table shop_data;</pre>
               </div>
               <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800">
                 <span class="text-slate-400 block text-[10px]">Git & GitHub:</span>
-                <span id="hub-bar-git" class="font-bold text-purple-300">main (5d5d5c5)</span>
+                <span id="hub-bar-git" class="font-bold text-purple-300">main (38cf0f7)</span>
               </div>
               <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800">
                 <span class="text-slate-400 block text-[10px]">Firebase DB:</span>
@@ -2274,7 +2274,7 @@ alter publication supabase_realtime add table shop_data;</pre>
                 </div>
                 <div class="flex justify-between items-center py-1 border-b border-slate-50">
                   <span class="text-slate-500">தற்போதைய Commit SHA:</span>
-                  <span id="hub-det-git-sha" class="font-mono text-slate-800 font-bold">5d5d5c5</span>
+                  <span id="hub-det-git-sha" class="font-mono text-slate-800 font-bold">38cf0f7</span>
                 </div>
                 <div class="flex justify-between items-center py-1 border-b border-slate-50">
                   <span class="text-slate-500">GitHub Remote SHA:</span>
@@ -2864,8 +2864,8 @@ const SYSTEM_HEALTH = {
     status: 'ok',
     repo: 'hanumanhari/hanuman-printshop',
     branch: 'main',
-    commit: '5d5d5c5',
-    remoteSha: '5d5d5c5',
+    commit: '38cf0f7',
+    remoteSha: '38cf0f7',
     remoteMsg: 'Add Live System Health and Diagnostics Hub',
     hasUpdate: false,
     isAhead: false,
@@ -3061,7 +3061,7 @@ function renderHubTimelineLogs() {
 
 async function checkGitHubRemoteUpdates(userTriggered = false) {
   const repo = SYSTEM_HEALTH.git.repo || "hanumanhari/hanuman-printshop";
-  const currentSha = SYSTEM_HEALTH.git.commit || "5d5d5c5";
+  const currentSha = SYSTEM_HEALTH.git.commit || "38cf0f7";
   const pillEl = document.getElementById("hub-update-pill");
   const msgEl = document.getElementById("hub-update-message");
   const remoteShaEl = document.getElementById("hub-det-git-remote-sha");
@@ -3554,7 +3554,7 @@ async function runLiveSystemDiagnostics(userTriggered = false) {
   // 4. Git & GitHub
   SYSTEM_HEALTH.git.repo = "hanumanhari/hanuman-printshop";
   SYSTEM_HEALTH.git.branch = "main";
-  SYSTEM_HEALTH.git.commit = "5d5d5c5";
+  SYSTEM_HEALTH.git.commit = "38cf0f7";
   SYSTEM_HEALTH.git.isAhead = false;
   SYSTEM_HEALTH.git.unpushedCount = 0;
   if (!SYSTEM_HEALTH.git.hasUpdate) {
