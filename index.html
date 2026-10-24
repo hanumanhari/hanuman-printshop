@@ -330,13 +330,16 @@
             type="button"
             onclick="openInstagramQRModal()" 
             class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-pink-600 via-rose-500 to-amber-500 hover:from-pink-700 hover:to-amber-600 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer group border border-pink-400/40 shrink-0"
-            title="Instagram பக்கம் & QR Code (Click to open QR Code)"
+            title="Instagram படங்கள், வீடியோக்கள் & QR Code (Login தேவையில்லை)"
           >
             <i data-lucide="instagram" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform text-white"></i>
             <span id="header-instagram-handle" class="insta-username-blink font-black text-[11px] sm:text-xs text-amber-200 tracking-tight inline-flex items-center gap-0.5 truncate max-w-[125px] sm:max-w-none">
               @print_shop_price_list
             </span>
-            <i data-lucide="qr-code" class="w-3 h-3 opacity-90 text-amber-100"></i>
+            <span class="hidden md:inline-flex items-center px-1.5 py-0.2 rounded-full bg-emerald-500 text-[9px] font-black text-white shadow-xs">
+              No Login
+            </span>
+            <i data-lucide="image" class="w-3 h-3 opacity-90 text-amber-100"></i>
           </button>
 
           <!-- WhatsApp Side Option Trigger Button in Header -->
@@ -704,42 +707,200 @@
 
   <!-- ==================== MODALS ==================== -->
 
-  <!-- 0. INSTAGRAM PROFILE & LIVE QR CODE MODAL -->
-  <div id="instagram-qr-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 transition-all">
-    <div id="instagram-qr-modal-content" class="modal-content bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-pink-100 flex flex-col">
+  <!-- 0. INSTAGRAM PROFILE, NO-LOGIN MEDIA GALLERY & LIVE QR CODE MODAL -->
+  <div id="instagram-qr-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-4 transition-all">
+    <div id="instagram-qr-modal-content" class="modal-content bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-hidden shadow-2xl border border-pink-100 flex flex-col">
       
       <!-- Gradient Header -->
-      <div class="p-3.5 sm:p-4 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white flex items-center justify-between shadow-sm shrink-0">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 shrink-0">
-            <i data-lucide="instagram" class="w-4 h-4"></i>
+      <div class="p-3 sm:p-4 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white flex items-center justify-between shadow-sm shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 shrink-0 shadow-inner">
+            <i data-lucide="instagram" class="w-4 h-4 sm:w-5 sm:h-5"></i>
           </div>
           <div>
-            <h3 class="text-xs sm:text-sm font-black leading-tight flex items-center gap-1">
-              <span>ஸ்ரீ ஹனுமான் Instagram QR</span>
-            </h3>
-            <p class="text-[10px] text-pink-100 leading-none mt-0.5">ஸ்கேன் செய்து பின்தொடரவும்</p>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h3 class="text-xs sm:text-sm font-black leading-tight flex items-center gap-1">
+                <span>ஸ்ரீ ஹனுமான் Instagram</span>
+              </h3>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500 text-[10px] font-black text-white shadow-xs">
+                ✨ No Login / Free View
+              </span>
+            </div>
+            <p class="text-[10.5px] text-pink-100 leading-none mt-0.5">விலைப்பட்டியல், போட்டோக்கள் &amp; வீடியோக்கள்</p>
           </div>
         </div>
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <a 
+            id="instagram-modal-top-visit-btn" 
+            href="https://www.instagram.com/print_shop_price_list" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="hidden xs:inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer" 
+            title="Open Instagram Profile in new tab"
+          >
+            <span id="instagram-modal-top-handle" class="insta-username-blink text-amber-200">@print_shop_price_list</span>
+            <i data-lucide="external-link" class="w-3 h-3 text-amber-200"></i>
+          </a>
+          <button 
+            type="button" 
+            onclick="closeInstagramQRModal()" 
+            class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer" 
+            title="Close"
+          >
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation Switcher -->
+      <div class="flex border-b border-slate-200/80 bg-slate-50/90 p-1.5 gap-1 shrink-0">
         <button 
-          type="button"
-          onclick="closeInstagramQRModal()" 
-          class="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer"
+          id="insta-tab-btn-media" 
+          type="button" 
+          onclick="switchInstagramModalTab('media')" 
+          class="flex-1 py-2 px-2.5 rounded-xl text-[11.5px] sm:text-xs font-black flex items-center justify-center gap-1.5 transition-all bg-white text-pink-600 shadow-sm border border-pink-100 cursor-pointer"
         >
-          <i data-lucide="x" class="w-4 h-4"></i>
+          <i data-lucide="images" class="w-4 h-4"></i>
+          <span>🖼️ போட்டோ &amp; வீடியோக்கள் (No Login)</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        </button>
+        <button 
+          id="insta-tab-btn-qr" 
+          type="button" 
+          onclick="switchInstagramModalTab('qr')" 
+          class="flex-1 py-2 px-2.5 rounded-xl text-[11.5px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+        >
+          <i data-lucide="qr-code" class="w-4 h-4"></i>
+          <span>📲 நேரலை QR Code &amp; Follow</span>
         </button>
       </div>
 
-      <!-- Modal Body -->
-      <div class="p-4 sm:p-5 flex flex-col items-center text-center space-y-3 bg-gradient-to-b from-pink-50/40 via-white to-white">
+      <!-- TAB 1: MEDIA GALLERY (PHOTOS, VIDEOS, PRICE LISTS - NO LOGIN NEEDED) -->
+      <div id="insta-tab-content-media" class="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-4 bg-gradient-to-b from-pink-50/30 via-white to-white">
         
-        <!-- Shop Instagram Handle Badge (Clickable with continuous blink / glow) -->
+        <!-- Informational Banner with Web Viewer link -->
+        <div class="p-3 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-pink-50 border border-emerald-200/80 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+          <div class="flex items-start gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="unlock" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-slate-800">
+                Instagram Login தேவையில்லை! இங்கேயே நேரடியாகப் பார்க்கலாம்
+              </h4>
+              <p class="text-[10.5px] text-slate-600 leading-tight mt-0.5">
+                கடையின் ஜெராக்ஸ் ரேட் கார்டுகள், போட்டோ சாம்பிள்கள் மற்றும் ரீல்ஸ் வீடியோக்களை Login இன்றி Fullscreen-ல் பெரிதாக்கி ஆர்டர் செய்யலாம்.
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-1.5 shrink-0 w-full sm:w-auto justify-end">
+            <a 
+              id="insta-web-viewer-link" 
+              href="https://imginn.com/print_shop_price_list/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:to-pink-700 text-white text-[11px] font-bold shadow-xs flex items-center gap-1 transition-all cursor-pointer" 
+              title="Open Public Web Viewer (Imginn) without Login"
+            >
+              <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+              <span>🌐 Web Viewer (Imginn)</span>
+              <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Media Filter Pills & Admin Add Post Button -->
+        <div class="flex items-center justify-between gap-2 flex-wrap pt-0.5">
+          <div class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto pb-1 max-w-full">
+            <button 
+              type="button" 
+              onclick="filterInstagramMedia('all')" 
+              id="insta-filter-all" 
+              class="insta-filter-btn px-2.5 py-1 rounded-xl text-[11px] font-bold bg-pink-600 text-white shadow-xs cursor-pointer transition-all"
+            >
+              அனைத்தும்
+            </button>
+            <button 
+              type="button" 
+              onclick="filterInstagramMedia('price_list')" 
+              id="insta-filter-price_list" 
+              class="insta-filter-btn px-2.5 py-1 rounded-xl text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-all"
+            >
+              🏷️ விலைப்பட்டியல்
+            </button>
+            <button 
+              type="button" 
+              onclick="filterInstagramMedia('photo')" 
+              id="insta-filter-photo" 
+              class="insta-filter-btn px-2.5 py-1 rounded-xl text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-all"
+            >
+              🖼️ போட்டோக்கள்
+            </button>
+            <button 
+              type="button" 
+              onclick="filterInstagramMedia('video')" 
+              id="insta-filter-video" 
+              class="insta-filter-btn px-2.5 py-1 rounded-xl text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-all"
+            >
+              🎬 ரீல்ஸ் / வீடியோ
+            </button>
+          </div>
+
+          <!-- Add Post Button (Admin action or triggers login prompt) -->
+          <button 
+            type="button" 
+            onclick="openAddInstagramMediaModal()" 
+            class="px-2.5 py-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-bold flex items-center gap-1 shadow-xs transition-all cursor-pointer" 
+            title="புதிய போட்டோ / வீடியோ போஸ்ட் சேர்க்க (Admin)"
+          >
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>+ பதிவு சேர்க்க</span>
+          </button>
+        </div>
+
+        <!-- Media Cards Container (Grid) -->
+        <div id="insta-media-cards-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- Rendered dynamically by renderInstagramMediaGallery() -->
+        </div>
+
+        <!-- Bottom Action Bar inside Media Tab -->
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 gap-2 flex-wrap">
+          <span class="text-[11px]">
+            💡 குறிப்பு: எந்த படத்தையும் தொட்டு Zoom செய்து தெளிவாய் பார்க்கலாம்.
+          </span>
+          <div class="flex items-center gap-2">
+            <button 
+              type="button" 
+              onclick="copyInstagramLink()" 
+              class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10.5px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+            >
+              <i data-lucide="copy" class="w-3 h-3"></i>
+              <span>Copy Link</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="closeInstagramQRModal(); openAdminDashboardModal('settings');" 
+              class="px-2.5 py-1 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 text-[10.5px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+            >
+              <i data-lucide="settings" class="w-3 h-3"></i>
+              <span>Edit Handle</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: LIVE QR CODE & DIRECT FOLLOW TAB -->
+      <div id="insta-tab-content-qr" class="hidden flex-1 overflow-y-auto p-4 sm:p-5 flex flex-col items-center text-center space-y-3.5 bg-gradient-to-b from-pink-50/40 via-white to-white">
+        
+        <!-- Shop Instagram Handle Badge -->
         <a 
-          id="instagram-modal-handle-link"
+          id="instagram-modal-handle-link" 
           href="https://www.instagram.com/print_shop_price_list" 
           target="_blank" 
-          rel="noopener noreferrer"
-          class="insta-badge-blink inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer border border-pink-300/60"
+          rel="noopener noreferrer" 
+          class="insta-badge-blink inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white font-black text-xs sm:text-sm shadow-md transition-all cursor-pointer border border-pink-300/60" 
           title="Open Instagram Profile"
         >
           <i data-lucide="instagram" class="w-4 h-4 text-white"></i>
@@ -753,8 +914,8 @@
           href="https://www.instagram.com/print_shop_price_list" 
           target="_blank" 
           rel="noopener noreferrer" 
-          onclick="handleInstagramQRTouch(event)"
-          class="block p-2.5 rounded-3xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all cursor-pointer group"
+          onclick="handleInstagramQRTouch(event)" 
+          class="block p-2.5 rounded-3xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all cursor-pointer group" 
           title="👆 QR-ஐ டச் செய்து Instagram செல்லவும் (Touch to Open Instagram)"
         >
           <div class="p-3.5 bg-white rounded-2xl flex flex-col items-center justify-center relative overflow-hidden">
@@ -769,8 +930,8 @@
               id="instagram-qr-img" 
               src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fwww.instagram.com%2Fprint_shop_price_list" 
               alt="Instagram QR Code - Touch to Open" 
-              class="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg shadow-inner group-hover:opacity-95 transition-all cursor-pointer"
-              onclick="handleInstagramQRTouch(event)"
+              class="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg shadow-inner group-hover:opacity-95 transition-all cursor-pointer" 
+              onclick="handleInstagramQRTouch(event)" 
             />
 
             <div class="mt-2.5 flex items-center justify-center gap-1.5 text-xs font-black text-pink-700 group-hover:text-pink-900">
@@ -781,22 +942,22 @@
         </a>
 
         <!-- Instagram Profile Open Button -->
-        <div class="w-full">
+        <div class="w-full max-w-sm">
           <a 
             id="instagram-modal-url" 
             href="https://www.instagram.com/print_shop_price_list" 
             target="_blank" 
-            rel="noopener noreferrer"
+            rel="noopener noreferrer" 
             class="w-full py-2.5 px-4 bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 hover:from-pink-700 hover:to-amber-600 text-white rounded-2xl text-xs font-black shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <i data-lucide="instagram" class="w-4 h-4"></i>
-            <span>Instagram-ல் பார்க்க (Open Profile)</span>
+            <span>Instagram App / Profile-ல் பார்க்க</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
         </div>
 
         <!-- Secondary Actions (Copy Link & Edit in Settings) -->
-        <div class="flex items-center gap-2 w-full pt-0.5">
+        <div class="flex items-center gap-2 w-full max-w-sm pt-0.5">
           <button 
             type="button" 
             onclick="copyInstagramLink()" 
@@ -809,7 +970,7 @@
           <button 
             type="button" 
             onclick="closeInstagramQRModal(); openAdminDashboardModal('settings');" 
-            class="py-1.5 px-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 border border-pink-200 transition-all cursor-pointer"
+            class="py-1.5 px-2.5 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 border border-pink-200 transition-all cursor-pointer" 
             title="இன்ஸ்டாகிராம் இணைப்பை மாற்ற Settings திறக்க"
           >
             <i data-lucide="edit-3" class="w-3 h-3 text-pink-600"></i>
@@ -818,6 +979,170 @@
         </div>
 
       </div>
+
+    </div>
+  </div>
+
+  <!-- 0.1 FULLSCREEN IMAGE & REEL LIGHTBOX MODAL -->
+  <div id="image-lightbox-modal" class="modal-backdrop fixed inset-0 z-[70] bg-black/92 backdrop-blur-md flex flex-col items-center justify-center p-2 sm:p-4 transition-all">
+    <div id="image-lightbox-modal-content" class="modal-content relative max-w-3xl w-full max-h-[96vh] flex flex-col items-center justify-center bg-slate-900/90 rounded-3xl overflow-hidden shadow-2xl border border-slate-700">
+      
+      <!-- Top Bar -->
+      <div class="w-full flex items-center justify-between text-white p-3 bg-black/60 backdrop-blur-sm border-b border-white/10 shrink-0">
+        <div class="flex items-center gap-2 overflow-hidden mr-2">
+          <span id="lightbox-badge" class="px-2.5 py-0.5 rounded-full text-[10.5px] font-black bg-pink-500 text-white shrink-0">
+            🏷️ விலைப்பட்டியல்
+          </span>
+          <h4 id="lightbox-title" class="text-xs sm:text-sm font-black text-white truncate max-w-[200px] sm:max-w-md">
+            தலைப்பு
+          </h4>
+        </div>
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <a 
+            id="lightbox-whatsapp-btn" 
+            href="#" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-1 transition-all shadow-xs cursor-pointer"
+          >
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span class="hidden sm:inline">WhatsApp Order</span>
+          </a>
+          <button 
+            type="button" 
+            onclick="closeImageLightbox()" 
+            class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer" 
+            title="Close Lightbox"
+          >
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Media Display Area (Image or Video) -->
+      <div class="relative w-full max-h-[72vh] flex items-center justify-center bg-black/50 p-2 overflow-hidden">
+        <img 
+          id="lightbox-image" 
+          src="" 
+          alt="Full view preview" 
+          class="max-h-[68vh] max-w-full object-contain rounded-xl shadow-2xl transition-all" 
+        />
+        <video 
+          id="lightbox-video" 
+          src="" 
+          controls 
+          playsinline 
+          class="hidden max-h-[68vh] max-w-full rounded-xl shadow-2xl bg-black"
+        ></video>
+      </div>
+
+      <!-- Bottom Caption Bar -->
+      <div class="w-full p-3 bg-black/70 backdrop-blur-sm text-center text-slate-200 text-xs border-t border-white/10 shrink-0">
+        <p id="lightbox-desc" class="text-slate-300 font-medium leading-relaxed"></p>
+        <p class="text-[10px] text-pink-300/80 mt-1">
+          💡 இந்த சேவையை நேரடியாக வாட்ஸ்அப்பில் பெற மேலே உள்ள "WhatsApp Order" பட்டனை அழுத்தவும்.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 0.2 ADMIN ADD INSTAGRAM MEDIA MODAL -->
+  <div id="add-instagram-media-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 transition-all">
+    <div id="add-instagram-media-modal-content" class="modal-content bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-200">
+      
+      <div class="p-4 bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          <div>
+            <h3 class="text-xs sm:text-sm font-extrabold leading-tight">புதிய போட்டோ / வீடியோ பதிவு சேர்க்க</h3>
+            <p class="text-[10px] text-pink-100">வாடிக்கையாளர்கள் Login இன்றி உடனே பார்க்க</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeAddInstagramMediaModal()" 
+          class="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer"
+        >
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="add-instagram-media-form" onsubmit="handleSaveInstagramMedia(event)" class="p-4 sm:p-5 space-y-3.5 text-xs text-slate-700">
+        <!-- Title -->
+        <div>
+          <label class="block font-bold text-slate-800 mb-1">தலைப்பு (Post Title / Service Name) *</label>
+          <input 
+            type="text" 
+            id="insta-add-title" 
+            required 
+            placeholder="எ.கா: A4 கலர் ஜெராக்ஸ் ரேட் கார்டு" 
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-500 text-xs shadow-xs" 
+          />
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label class="block font-bold text-slate-800 mb-1">பிரிவு (Category) *</label>
+          <select 
+            id="insta-add-category" 
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-500 text-xs shadow-xs"
+          >
+            <option value="price_list">🏷️ விலைப்பட்டியல் (Price List)</option>
+            <option value="photo">🖼️ போட்டோ சாம்பிள் (Photo Sample)</option>
+            <option value="video">🎬 வீடியோ ரீல் (Video / Reel)</option>
+          </select>
+        </div>
+
+        <!-- Media Type & URL / File -->
+        <div>
+          <label class="block font-bold text-slate-800 mb-1">போட்டோ / வீடியோ இணைப்பு (Image or Video URL) *</label>
+          <input 
+            type="url" 
+            id="insta-add-url" 
+            placeholder="https://... அல்லது கீழே உள்ள பட்டன் மூலம் போனில் இருந்து பதிவேற்றவும்" 
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-500 text-xs shadow-xs" 
+          />
+          <div class="mt-1.5 flex items-center gap-2">
+            <span class="text-[10.5px] text-slate-500">அல்லது போனில் இருந்து:</span>
+            <input 
+              type="file" 
+              id="insta-add-file" 
+              accept="image/*" 
+              onchange="handleInstaFileUpload(event)" 
+              class="text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 cursor-pointer" 
+            />
+          </div>
+        </div>
+
+        <!-- Description / Rates -->
+        <div>
+          <label class="block font-bold text-slate-800 mb-1">விவரம் &amp; விலை விவரக்குறிப்பு (Description &amp; Rates)</label>
+          <textarea 
+            id="insta-add-desc" 
+            rows="2" 
+            placeholder="எ.கா: A4 B&W ₹1 | கலர் ₹3 முதல் | 100+ காப்பி சிறப்பு தள்ளுபடி" 
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-500 text-xs shadow-xs"
+          ></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="pt-2 flex gap-2">
+          <button 
+            type="button" 
+            onclick="closeAddInstagramMediaModal()" 
+            class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold cursor-pointer transition-all"
+          >
+            ரத்து செய்
+          </button>
+          <button 
+            type="submit" 
+            class="flex-1 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white rounded-xl font-bold shadow-md hover:shadow-lg cursor-pointer transition-all"
+          >
+            பதிவு செய் (Save Post)
+          </button>
+        </div>
+      </form>
 
     </div>
   </div>
@@ -1864,12 +2189,12 @@
                     <i data-lucide="external-link" class="w-3 h-3"></i>
                   </a>
                 </div>
-                <div class="flex gap-1.5">
+                <div class="flex flex-wrap gap-1.5">
                   <input 
                     type="url" 
                     id="set-instagram" 
                     placeholder="https://www.instagram.com/print_shop_price_list" 
-                    class="flex-1 px-2.5 py-1.5 bg-white border border-pink-300 focus:border-pink-500 rounded-xl text-xs font-bold text-pink-700 shadow-xs" 
+                    class="flex-1 min-w-[200px] px-2.5 py-1.5 bg-white border border-pink-300 focus:border-pink-500 rounded-xl text-xs font-bold text-pink-700 shadow-xs" 
                   />
                   <button 
                     type="button" 
@@ -1880,9 +2205,18 @@
                     <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
                     <span>QR Code பார்</span>
                   </button>
+                  <button 
+                    type="button" 
+                    onclick="closeAdminDashboardModal(); openInstagramQRModal(); switchInstagramModalTab('media');" 
+                    class="px-2.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold shrink-0 flex items-center gap-1 shadow-sm transition-all cursor-pointer"
+                    title="Instagram போட்டோக்கள் மற்றும் வீடியோக்களை பார்வையிட / சேர்க்க"
+                  >
+                    <i data-lucide="images" class="w-3.5 h-3.5"></i>
+                    <span>போட்டோ/வீடியோ பார்</span>
+                  </button>
                 </div>
                 <p class="text-[9.5px] text-slate-500">
-                  💡 இந்த இணைப்பை மாற்றினால் Heading-ல் உள்ள Instagram பட்டன் மற்றும் QR Code உடனடியாக அனைத்து மொபைல்களிலும் மாறும்.
+                  💡 இந்த இணைப்பை மாற்றினால் Heading-ல் உள்ள Instagram பட்டன் மற்றும் QR Code உடனடியாக மாறும். வாடிக்கையாளர்கள் Login, Sign up அல்லது Follow எதுவுமே செய்யாமலேயே போட்டோக்கள், விலைப்பட்டியல் மற்றும் ரீல்ஸ்களை நேரடியாகப் பார்க்கலாம்.
                 </p>
               </div>
 
@@ -4126,6 +4460,20 @@ async function syncCustomStocksToSupabase(stocks) {
   }
 }
 
+async function syncInstagramMediaToSupabase(media) {
+  if (isSupabaseConnected && supabaseClient) {
+    try {
+      await supabaseClient.from('shop_data').upsert({
+        id: 'instagram_media',
+        data: media,
+        updated_at: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error("Supabase sync instagram media error", e);
+    }
+  }
+}
+
 async function pushAllDataToSupabase() {
   if (!isSupabaseConnected || !supabaseClient) {
     showToast("Supabase இணைக்கப்படவில்லை", "Connect Supabase first", "error");
@@ -4133,11 +4481,13 @@ async function pushAllDataToSupabase() {
   }
   showToast("⏳ Supabase-ல் தரவுகள் பதிவேற்றப்படுகின்றன...", "Uploading all data to Supabase...");
   try {
+    const mediaToSync = (typeof INSTAGRAM_MEDIA !== 'undefined' && Array.isArray(INSTAGRAM_MEDIA)) ? INSTAGRAM_MEDIA : getStoredInstagramMedia();
     await Promise.all([
       syncServicesToSupabase(SERVICES),
       syncCategoriesToSupabase(CATEGORIES),
       syncShopInfoToSupabase(SHOP_INFO),
-      syncCustomStocksToSupabase(CUSTOM_STOCKS)
+      syncCustomStocksToSupabase(CUSTOM_STOCKS),
+      syncInstagramMediaToSupabase(mediaToSync)
     ]);
     showToast("☁️ அனைத்து தகவல்களும் Supabase-ல் சேமிக்கப்பட்டன!", "All data pushed to Supabase successfully!");
   } catch (err) {
@@ -4403,6 +4753,18 @@ function setupFirestoreListeners() {
       }
     }
   }, err => handleSnapshotError(err, "visitor_counter"));
+
+  // Realtime Instagram Media Listener
+  db.collection("shop_data").doc("instagram_media").onSnapshot(doc => {
+    if (doc.exists) {
+      const remoteData = doc.data().items;
+      if (Array.isArray(remoteData) && remoteData.length > 0) {
+        INSTAGRAM_MEDIA = remoteData;
+        localStorage.setItem("shop_instagram_media", JSON.stringify(INSTAGRAM_MEDIA));
+        renderInstagramMediaGallery();
+      }
+    }
+  }, err => handleSnapshotError(err, "instagram_media"));
 }
 
 function syncCategoriesToFirebase(categories) {
@@ -4461,6 +4823,20 @@ function syncCustomStocksToFirebase(stocks) {
   }
 }
 
+function syncInstagramMediaToFirebase(media) {
+  if (isFirebaseConnected && db) {
+    db.collection("shop_data").doc("instagram_media").set({
+      items: media,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }).catch(err => {
+      console.error("Sync instagram media error", err);
+      if (err && (err.code === 'permission-denied' || (err.message && err.message.includes('permission')))) {
+        updateFirebaseStatusUI(false, "Permission Denied: Firebase Rules மாற்ற வேண்டும்");
+      }
+    });
+  }
+}
+
 function syncVisitorCountToFirebase(count) {
   if (isFirebaseConnected && db) {
     db.collection("shop_data").doc("visitor_counter").set({
@@ -4477,6 +4853,7 @@ async function pushAllDataToFirebase() {
   }
   showToast("⏳ Firebase-ல் தரவுகள் பதிவேற்றப்படுகின்றன...", "Uploading all data to Firebase...");
   try {
+    const mediaToSync = (typeof INSTAGRAM_MEDIA !== 'undefined' && Array.isArray(INSTAGRAM_MEDIA)) ? INSTAGRAM_MEDIA : getStoredInstagramMedia();
     await Promise.all([
       db.collection("shop_data").doc("categories").set({
         items: CATEGORIES,
@@ -4492,6 +4869,10 @@ async function pushAllDataToFirebase() {
       }, { merge: true }),
       db.collection("shop_data").doc("custom_stocks").set({
         items: CUSTOM_STOCKS,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true }),
+      db.collection("shop_data").doc("instagram_media").set({
+        items: mediaToSync,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }),
       db.collection("shop_data").doc("visitor_counter").set({
@@ -4694,6 +5075,8 @@ function initApp() {
   setupModals();
   renderAdminBar();
   updateTexts();
+  INSTAGRAM_MEDIA = getStoredInstagramMedia();
+  renderInstagramMediaGallery();
   if (window.lucide) {
     try { lucide.createIcons(); } catch(e) {}
   }
@@ -6974,7 +7357,13 @@ function updateTexts() {
   const setInstaPreview = document.getElementById("set-instagram-preview-link");
 
   const headerHandleEl = document.getElementById("header-instagram-handle");
+  const modalTopHandleEl = document.getElementById("instagram-modal-top-handle");
+  const modalTopVisitBtn = document.getElementById("instagram-modal-top-visit-btn");
+  const webViewerLink = document.getElementById("insta-web-viewer-link");
   if (headerHandleEl) headerHandleEl.textContent = `@${handle}`;
+  if (modalTopHandleEl) modalTopHandleEl.textContent = `@${handle}`;
+  if (modalTopVisitBtn) modalTopVisitBtn.href = instaUrl;
+  if (webViewerLink) webViewerLink.href = `https://imginn.com/${handle}/`;
   if (modalHandleEl) modalHandleEl.textContent = `@${handle}`;
   if (modalHandleLink) modalHandleLink.href = instaUrl;
   if (modalUrlEl) modalUrlEl.href = instaUrl;
@@ -7506,6 +7895,20 @@ function setupModals() {
       if (e.target === instaModal) closeInstagramQRModal();
     });
   }
+
+  const lightboxModal = document.getElementById('image-lightbox-modal');
+  if (lightboxModal) {
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) closeImageLightbox();
+    });
+  }
+
+  const addMediaModal = document.getElementById('add-instagram-media-modal');
+  if (addMediaModal) {
+    addMediaModal.addEventListener('click', (e) => {
+      if (e.target === addMediaModal) closeAddInstagramMediaModal();
+    });
+  }
 }
 
 // WhatsApp Direct Message
@@ -7554,7 +7957,106 @@ function sendGeneralWhatsApp() {
   window.open(`https://wa.me/${SHOP_INFO.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-// ==================== INSTAGRAM PROFILE & LIVE QR CODE ====================
+// ==================== INSTAGRAM PROFILE, NO-LOGIN MEDIA GALLERY & QR CODE ====================
+
+const DEFAULT_INSTAGRAM_MEDIA = [
+  {
+    id: 'insta-media-1',
+    title: 'A4 & A3 கலர் ஜெராக்ஸ் & பிரின்ட் ரேட் கார்டு',
+    category: 'price_list',
+    type: 'photo',
+    url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
+    desc: 'A4 B&W ₹1 | A4 கலர் ₹3 முதல் | A3 மேப்லித்தோ கார்டு பிரின்ட் ₹10 | 100+ காப்பிகளுக்கு சிறப்பு மொத்த விலை தள்ளுபடி!',
+    date: 'Today'
+  },
+  {
+    id: 'insta-media-2',
+    title: 'போட்டோ ஃபிரேமிங் & கஸ்டம் போட்டோ கிஃப்ட் சாம்பிள்',
+    category: 'photo',
+    type: 'photo',
+    url: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
+    desc: 'மர பிரேம்கள், கிளாஸ் ஃபிரேம்கள் (6x8, 8x12, 10x12, 12x18) உங்கள் குடும்ப போட்டோக்கள் மற்றும் திருமணப் படங்கள் மிக நேர்த்தியாக ஃபிரேம் செய்து தரப்படும்.',
+    date: 'Latest'
+  },
+  {
+    id: 'insta-media-3',
+    title: 'சுபமுகூர்த்த திருமண பத்திரிகைகள் & அழைப்பிதழ் மாடல்கள்',
+    category: 'photo',
+    type: 'photo',
+    url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+    desc: 'மணமகன் மணமகள் பெயர் பொறித்து கவர் மற்றும் அழைப்பிதழ் அட்டைகள் உடனடி தயாரிப்பு. 100 முதல் 5000 பத்திரிகைகள் வரை.',
+    date: 'Popular'
+  },
+  {
+    id: 'insta-media-4',
+    title: 'கம்ப்யூட்டர் ஜாதகம் & திருமணப் பொருத்தம் அறிக்கை',
+    category: 'price_list',
+    type: 'photo',
+    url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
+    desc: '1-பக்க சுருக்க ஜாதகம் ₹20 | விரிவான 12-பக்க முழு ஜாதக புத்தகம் ₹150 | கலர் அச்சு, லேமினேஷன் மற்றும் ஸ்பைரல் பைண்டிங்.',
+    date: 'Special'
+  },
+  {
+    id: 'insta-media-5',
+    title: 'PVC ஸ்மார்ட் கார்டு & லேமினேஷன் விலைப் பட்டியல்',
+    category: 'price_list',
+    type: 'photo',
+    url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+    desc: 'ஆதார், பான், ஓட்டுநர் உரிமம் வாட்டர்ப்ரூஃப் PVC கார்டு ₹50 | A4 லேமினேஷன் ₹15 | ஐடி கார்டு ரோப் & ஹோல்டர் கிடைக்கும்.',
+    date: 'Updated'
+  },
+  {
+    id: 'insta-media-6',
+    title: 'ஸ்ரீ ஹனுமான் அச்சகம் நேரலை ஒர்க் வீடியோ ரீல்',
+    category: 'video',
+    type: 'video',
+    url: 'https://assets.mixkit.co/videos/preview/mixkit-printing-press-machine-in-a-workshop-41312-large.mp4',
+    poster: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?auto=format&fit=crop&w=800&q=80',
+    desc: 'நமது கடையில் அதிவேக ஜெராக்ஸ், கலர் பிரின்டிங் மற்றும் ஃபிரேமிங் செய்யப்படும் நேரலை வீடியோ ரீல்!',
+    date: 'Instagram Reel'
+  }
+];
+
+let INSTAGRAM_MEDIA = [];
+let currentInstaFilter = 'all';
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getStoredInstagramMedia() {
+  try {
+    const saved = localStorage.getItem("shop_instagram_media");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch(e) {
+    console.error("Error reading instagram media from localStorage", e);
+  }
+  localStorage.setItem("shop_instagram_media", JSON.stringify(DEFAULT_INSTAGRAM_MEDIA));
+  return DEFAULT_INSTAGRAM_MEDIA;
+}
+
+function saveStoredInstagramMedia(media) {
+  try {
+    INSTAGRAM_MEDIA = media;
+    localStorage.setItem("shop_instagram_media", JSON.stringify(media));
+    syncInstagramMediaToFirebase(media);
+    syncInstagramMediaToSupabase(media);
+  } catch(e) {
+    console.error("Error saving instagram media", e);
+  }
+}
+
 function extractInstagramHandle(url) {
   if (!url) return "print_shop_price_list";
   try {
@@ -7568,30 +8070,403 @@ function extractInstagramHandle(url) {
   return "print_shop_price_list";
 }
 
+function switchInstagramModalTab(tab) {
+  const mediaTabBtn = document.getElementById("insta-tab-btn-media");
+  const qrTabBtn = document.getElementById("insta-tab-btn-qr");
+  const mediaContent = document.getElementById("insta-tab-content-media");
+  const qrContent = document.getElementById("insta-tab-content-qr");
+
+  if (!mediaTabBtn || !qrTabBtn || !mediaContent || !qrContent) return;
+
+  if (tab === 'media') {
+    mediaContent.classList.remove("hidden");
+    qrContent.classList.add("hidden");
+    mediaTabBtn.className = "flex-1 py-2 px-2.5 rounded-xl text-[11.5px] sm:text-xs font-black flex items-center justify-center gap-1.5 transition-all bg-white text-pink-600 shadow-sm border border-pink-100 cursor-pointer";
+    qrTabBtn.className = "flex-1 py-2 px-2.5 rounded-xl text-[11.5px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all cursor-pointer";
+    renderInstagramMediaGallery();
+  } else {
+    mediaContent.classList.add("hidden");
+    qrContent.classList.remove("hidden");
+    qrTabBtn.className = "flex-1 py-2 px-2.5 rounded-xl text-[11.5px] sm:text-xs font-black flex items-center justify-center gap-1.5 transition-all bg-white text-pink-600 shadow-sm border border-pink-100 cursor-pointer";
+    mediaTabBtn.className = "flex-1 py-2 px-2.5 rounded-xl text-[11.5px] sm:text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all cursor-pointer";
+  }
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+}
+
+function filterInstagramMedia(category) {
+  currentInstaFilter = category;
+  document.querySelectorAll(".insta-filter-btn").forEach(btn => {
+    btn.className = "insta-filter-btn px-2.5 py-1 rounded-xl text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-all";
+  });
+  const activeBtn = document.getElementById(`insta-filter-${category}`);
+  if (activeBtn) {
+    activeBtn.className = "insta-filter-btn px-2.5 py-1 rounded-xl text-[11px] font-bold bg-pink-600 text-white shadow-xs cursor-pointer transition-all";
+  }
+  renderInstagramMediaGallery();
+}
+
+function getCategoryBadge(category) {
+  switch(category) {
+    case 'price_list':
+      return { label: '🏷️ விலைப்பட்டியல்', cls: 'bg-emerald-600 text-white' };
+    case 'photo':
+      return { label: '🖼️ போட்டோ சாம்பிள்', cls: 'bg-indigo-600 text-white' };
+    case 'video':
+      return { label: '🎬 வீடியோ ரீல்', cls: 'bg-pink-600 text-white' };
+    default:
+      return { label: '📸 Instagram', cls: 'bg-slate-700 text-white' };
+  }
+}
+
+function renderInstagramMediaGallery() {
+  const container = document.getElementById("insta-media-cards-container");
+  if (!container) return;
+
+  if (!INSTAGRAM_MEDIA || INSTAGRAM_MEDIA.length === 0) {
+    INSTAGRAM_MEDIA = getStoredInstagramMedia();
+  }
+
+  const items = INSTAGRAM_MEDIA.filter(item => {
+    if (currentInstaFilter === 'all') return true;
+    return item.category === currentInstaFilter;
+  });
+
+  if (items.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full py-10 flex flex-col items-center justify-center text-center space-y-2 text-slate-400">
+        <i data-lucide="image-off" class="w-10 h-10 text-slate-300"></i>
+        <p class="text-xs font-bold text-slate-600">இந்த பிரிவில் இன்னும் பதிவுகள் இல்லை.</p>
+        <button type="button" onclick="filterInstagramMedia('all')" class="text-[11px] text-pink-600 font-bold hover:underline cursor-pointer">
+          அனைத்துப் பதிவுகளையும் பார்க்க
+        </button>
+      </div>
+    `;
+    if (window.lucide) {
+      try { lucide.createIcons(); } catch(e) {}
+    }
+    return;
+  }
+
+  const phone = SHOP_INFO.whatsapp || SHOP_INFO.phone || '9443213456';
+  const cleanNum = phone.replace(/[^0-9]/g, '');
+  const isAdmin = isAdminLoggedIn();
+
+  container.innerHTML = items.map(item => {
+    const badge = getCategoryBadge(item.category);
+    const isVideo = item.type === 'video' || (item.url && item.url.match(/\.(mp4|webm|ogg)$/i));
+    const safeTitle = escapeHtml(item.title);
+    const safeDesc = escapeHtml(item.desc || '');
+    const safeUrl = item.url;
+    const safePoster = item.poster || item.url;
+    const waText = encodeURIComponent(`வணக்கம்! நான் உங்கள் Instagram பதிவில் உள்ள "${item.title}" பற்றி ஆர்டர் செய்ய விரும்புகிறேன்.`);
+
+    return `
+      <div class="bg-white rounded-2xl border border-pink-100/90 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col group">
+        <!-- Media Thumbnail Preview -->
+        <div class="relative h-44 sm:h-48 bg-slate-950 overflow-hidden cursor-pointer" onclick="openImageLightbox('${safeUrl}', '${safeTitle}', '${safeDesc}', '${item.category}', '${isVideo ? 'video' : 'photo'}')">
+          ${isVideo ? `
+            <img src="${safePoster}" alt="${safeTitle}" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+            <div class="absolute inset-0 bg-black/35 flex items-center justify-center">
+              <div class="w-12 h-12 rounded-full bg-white/90 text-pink-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <i data-lucide="play" class="w-6 h-6 fill-current ml-0.5"></i>
+              </div>
+            </div>
+            <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-lg bg-black/80 text-white text-[10px] font-bold flex items-center gap-1 shadow-xs">
+              <i data-lucide="video" class="w-3 h-3 text-pink-400"></i>
+              <span>வீடியோ ரீல்</span>
+            </span>
+          ` : `
+            <img src="${safeUrl}" alt="${safeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+              <span class="px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-slate-900 text-xs font-black flex items-center gap-1.5 shadow-md">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-pink-600"></i>
+                <span>பெரிதாக்கி பார்க்க</span>
+              </span>
+            </div>
+          `}
+          <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-black ${badge.cls} shadow-xs">
+            ${badge.label}
+          </span>
+          <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-white/90 text-slate-700 shadow-xs backdrop-blur-sm">
+            ✨ No Login
+          </span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="p-3 flex-1 flex flex-col justify-between space-y-2 bg-gradient-to-b from-white to-pink-50/20">
+          <div>
+            <h5 class="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-1 group-hover:text-pink-600 transition-colors">
+              ${safeTitle}
+            </h5>
+            <p class="text-[11px] text-slate-600 leading-normal line-clamp-2 mt-1">
+              ${safeDesc}
+            </p>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex items-center gap-1.5 pt-1.5 border-t border-slate-100">
+            <button 
+              type="button" 
+              onclick="openImageLightbox('${safeUrl}', '${safeTitle}', '${safeDesc}', '${item.category}', '${isVideo ? 'video' : 'photo'}')" 
+              class="flex-1 py-1.5 px-2 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-pink-200/60"
+            >
+              <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
+              <span>Full View</span>
+            </button>
+
+            <a 
+              href="https://wa.me/${cleanNum}?text=${waText}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="flex-1 py-1.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer shadow-xs"
+            >
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+              <span>WhatsApp</span>
+            </a>
+
+            ${isAdmin ? `
+              <button 
+                type="button" 
+                onclick="deleteInstagramMedia('${item.id}')" 
+                class="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all cursor-pointer border border-rose-200" 
+                title="பதிவை நீக்கு (Admin Delete)"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+}
+
+// Lightbox Viewer
+function openImageLightbox(url, title, desc, category, type) {
+  const modal = document.getElementById("image-lightbox-modal");
+  const modalContent = document.getElementById("image-lightbox-modal-content");
+  const imgEl = document.getElementById("lightbox-image");
+  const videoEl = document.getElementById("lightbox-video");
+  const titleEl = document.getElementById("lightbox-title");
+  const descEl = document.getElementById("lightbox-desc");
+  const badgeEl = document.getElementById("lightbox-badge");
+  const waBtn = document.getElementById("lightbox-whatsapp-btn");
+
+  if (!modal || !modalContent) return;
+
+  if (titleEl) titleEl.textContent = title || "Instagram பதிவு";
+  if (descEl) descEl.textContent = desc || "";
+
+  const badge = getCategoryBadge(category);
+  if (badgeEl) {
+    badgeEl.textContent = badge.label;
+    badgeEl.className = `px-2.5 py-0.5 rounded-full text-[10.5px] font-black ${badge.cls} shrink-0`;
+  }
+
+  const phone = SHOP_INFO.whatsapp || SHOP_INFO.phone || '9443213456';
+  const cleanNum = phone.replace(/[^0-9]/g, '');
+  if (waBtn) {
+    waBtn.href = `https://wa.me/${cleanNum}?text=${encodeURIComponent(`வணக்கம்! நான் உங்கள் Instagram பதிவில் உள்ள "${title}" பற்றி ஆர்டர் செய்ய விரும்புகிறேன்.`)}`;
+  }
+
+  const isVideo = type === 'video' || (url && url.match(/\.(mp4|webm|ogg)$/i));
+  if (isVideo) {
+    if (imgEl) imgEl.classList.add("hidden");
+    if (videoEl) {
+      videoEl.classList.remove("hidden");
+      videoEl.src = url;
+      videoEl.play().catch(() => {});
+    }
+  } else {
+    if (videoEl) {
+      videoEl.pause();
+      videoEl.src = "";
+      videoEl.classList.add("hidden");
+    }
+    if (imgEl) {
+      imgEl.src = url;
+      imgEl.classList.remove("hidden");
+    }
+  }
+
+  modal.classList.add("active");
+  modalContent.classList.add("active");
+  document.body.style.overflow = "hidden";
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+}
+
+function closeImageLightbox() {
+  const modal = document.getElementById("image-lightbox-modal");
+  const modalContent = document.getElementById("image-lightbox-modal-content");
+  const videoEl = document.getElementById("lightbox-video");
+
+  if (videoEl) {
+    videoEl.pause();
+    videoEl.src = "";
+  }
+
+  if (modalContent) modalContent.classList.remove("active");
+  if (modal) modal.classList.remove("active");
+
+  const instaModal = document.getElementById("instagram-qr-modal");
+  if (!instaModal || !instaModal.classList.contains("active")) {
+    document.body.style.overflow = "";
+  }
+}
+
+// Admin Add Instagram Media
+function openAddInstagramMediaModal() {
+  if (!isAdminLoggedIn()) {
+    showToast("⚠️ பதிவு சேர்க்க Admin Login தேவை!", "Admin login required to add posts");
+    openAdminLoginModal();
+    return;
+  }
+  const modal = document.getElementById("add-instagram-media-modal");
+  const modalContent = document.getElementById("add-instagram-media-modal-content");
+  if (!modal || !modalContent) return;
+
+  document.getElementById("add-instagram-media-form")?.reset();
+  modal.classList.add("active");
+  modalContent.classList.add("active");
+  document.body.style.overflow = "hidden";
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+}
+
+function closeAddInstagramMediaModal() {
+  const modal = document.getElementById("add-instagram-media-modal");
+  const modalContent = document.getElementById("add-instagram-media-modal-content");
+  if (modalContent) modalContent.classList.remove("active");
+  if (modal) modal.classList.remove("active");
+
+  const instaModal = document.getElementById("instagram-qr-modal");
+  if (!instaModal || !instaModal.classList.contains("active")) {
+    document.body.style.overflow = "";
+  }
+}
+
+function handleInstaFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (file.size > 2.5 * 1024 * 1024) {
+    alert("படத்தின் அளவு 2.5MB-க்குள் இருக்க வேண்டும். தயவுசெய்து சிறிய அளவிலான படத்தை தேர்ந்தெடுக்கவும்.");
+    event.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const urlInput = document.getElementById("insta-add-url");
+    if (urlInput) {
+      urlInput.value = e.target.result;
+      showToast("📸 படம் வெற்றிகரமாக தேர்ந்தெடுக்கப்பட்டது!", "Photo loaded from device!");
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleSaveInstagramMedia(event) {
+  if (event) event.preventDefault();
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+
+  const title = document.getElementById("insta-add-title")?.value.trim();
+  const category = document.getElementById("insta-add-category")?.value || "price_list";
+  const url = document.getElementById("insta-add-url")?.value.trim();
+  const desc = document.getElementById("insta-add-desc")?.value.trim() || "";
+
+  if (!title) {
+    showToast("⚠️ தலைப்பு அவசியம்!", "Title is required", "error");
+    return;
+  }
+  if (!url) {
+    showToast("⚠️ போட்டோ அல்லது வீடியோ லிங்க் தேவை!", "URL or photo file is required", "error");
+    return;
+  }
+
+  const isVideo = category === 'video' || url.match(/\.(mp4|webm|ogg)$/i);
+  const newItem = {
+    id: `insta-media-${Date.now()}`,
+    title: title,
+    category: category,
+    type: isVideo ? 'video' : 'photo',
+    url: url,
+    desc: desc,
+    date: 'New'
+  };
+
+  INSTAGRAM_MEDIA.unshift(newItem);
+  saveStoredInstagramMedia(INSTAGRAM_MEDIA);
+  closeAddInstagramMediaModal();
+  renderInstagramMediaGallery();
+  showToast("✅ புதிய Instagram பதிவு சேர்க்கப்பட்டது!", "New post added to gallery!");
+}
+
+function deleteInstagramMedia(id) {
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+
+  if (!confirm("இந்த பதிவை நீக்க விரும்புகிறீர்களா? (Delete this Instagram post?)")) {
+    return;
+  }
+
+  INSTAGRAM_MEDIA = INSTAGRAM_MEDIA.filter(item => item.id !== id);
+  saveStoredInstagramMedia(INSTAGRAM_MEDIA);
+  renderInstagramMediaGallery();
+  showToast("🗑️ பதிவு நீக்கப்பட்டது", "Post deleted successfully!");
+}
+
 function openInstagramQRModal() {
   const modal = document.getElementById("instagram-qr-modal");
   const modalContent = document.getElementById("instagram-qr-modal-content");
   if (!modal) return;
+
   const instaUrl = (SHOP_INFO.instagram && SHOP_INFO.instagram.trim()) || "https://www.instagram.com/print_shop_price_list";
   const handle = extractInstagramHandle(instaUrl);
   const modalHandleEl = document.getElementById("instagram-modal-handle");
   const modalHandleLink = document.getElementById("instagram-modal-handle-link");
+  const modalTopHandleEl = document.getElementById("instagram-modal-top-handle");
+  const modalTopVisitBtn = document.getElementById("instagram-modal-top-visit-btn");
+  const webViewerLink = document.getElementById("insta-web-viewer-link");
   const modalUrlEl = document.getElementById("instagram-modal-url");
   const qrTouchAnchor = document.getElementById("instagram-qr-touch-anchor");
   const qrImgEl = document.getElementById("instagram-qr-img");
-
   const headerHandleEl = document.getElementById("header-instagram-handle");
+
   if (headerHandleEl) headerHandleEl.textContent = `@${handle}`;
+  if (modalTopHandleEl) modalTopHandleEl.textContent = `@${handle}`;
+  if (modalTopVisitBtn) modalTopVisitBtn.href = instaUrl;
   if (modalHandleEl) modalHandleEl.textContent = `@${handle}`;
   if (modalHandleLink) modalHandleLink.href = instaUrl;
   if (modalUrlEl) modalUrlEl.href = instaUrl;
+  if (webViewerLink) webViewerLink.href = `https://imginn.com/${handle}/`;
   if (qrTouchAnchor) qrTouchAnchor.href = instaUrl;
   if (qrImgEl) qrImgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(instaUrl)}`;
 
+  // Default to media gallery tab with free no-login view
+  switchInstagramModalTab('media');
+
   modal.classList.add("active");
   if (modalContent) modalContent.classList.add("active");
-  modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+
   if (window.lucide) {
     try { lucide.createIcons(); } catch(e) {}
   }
@@ -7601,10 +8476,7 @@ function closeInstagramQRModal() {
   const modal = document.getElementById("instagram-qr-modal");
   const modalContent = document.getElementById("instagram-qr-modal-content");
   if (modalContent) modalContent.classList.remove("active");
-  if (modal) {
-    modal.classList.remove("active");
-    modal.classList.add("hidden");
-  }
+  if (modal) modal.classList.remove("active");
   document.body.style.overflow = "";
 }
 
@@ -7634,6 +8506,27 @@ function previewInstagramQRModal() {
   }
   openInstagramQRModal();
 }
+
+// Global Escape Key Listener for Modals & Lightbox
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const lightbox = document.getElementById('image-lightbox-modal');
+    if (lightbox && lightbox.classList.contains('active')) {
+      closeImageLightbox();
+      return;
+    }
+    const addMediaModal = document.getElementById('add-instagram-media-modal');
+    if (addMediaModal && addMediaModal.classList.contains('active')) {
+      closeAddInstagramMediaModal();
+      return;
+    }
+    const instaModal = document.getElementById('instagram-qr-modal');
+    if (instaModal && instaModal.classList.contains('active')) {
+      closeInstagramQRModal();
+      return;
+    }
+  }
+});
 
 // Astrology Modal
 function openAstrologyModal(type = '1 Page Horoscope') {
