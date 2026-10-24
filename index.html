@@ -374,7 +374,7 @@
                 </div>
                 <div class="min-w-0">
                   <h4 class="text-[10px] font-extrabold text-slate-900 leading-tight" data-ta="கடை முகவரி" data-en="Location">கடை முகவரி</h4>
-                  <p id="hero-address-display" class="text-[9px] text-slate-600 truncate">124, பஜார் மெயின் ரோடு, பஸ் நிலையம் அருகில், தமிழ்நாடு</p>
+                  <p id="hero-address-display" class="text-[9px] text-slate-600 truncate">கத்திரியங்காடு, பூனாச்சி கிராமம்</p>
                 </div>
               </div>
 
@@ -571,7 +571,7 @@
           <div class="space-y-1.5 text-xs text-slate-400">
             <div class="flex items-start gap-1.5">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-orange-400 shrink-0 mt-0.5"></i>
-              <span id="footer-address-display">124, பஜார் மெயின் ரோடு, தமிழ்நாடு</span>
+              <span id="footer-address-display">கத்திரியங்காடு, பூனாச்சி கிராமம்</span>
             </div>
             <div class="flex items-center gap-1.5">
               <i data-lucide="phone" class="w-3.5 h-3.5 text-orange-400 shrink-0"></i>
@@ -1450,7 +1450,7 @@
 
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 mb-0.5">முகவரி (Address)</label>
-                <input type="text" id="set-address-ta" placeholder="124, பஜார் மெயின் ரோடு, பஸ் நிலையம் அருகில், தமிழ்நாடு" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold" />
+                <input type="text" id="set-address-ta" placeholder="கத்திரியங்காடு, பூனாச்சி கிராமம்" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold" />
                 <input type="hidden" id="set-address-en" value="" />
               </div>
             </div>
@@ -2014,8 +2014,8 @@ const DEFAULT_SHOP_INFO = {
   logo: "", // Custom Photo (Data URL or Image URL)
   phone: "+91 98765 43210",
   whatsapp: "919876543210",
-  addressEn: "124, Bazaar Main Road, Near Bus Stand, Tamil Nadu",
-  addressTa: "124, பஜார் மெயின் ரோடு, பஸ் நிலையம் அருகில், தமிழ்நாடு",
+  addressEn: "Kathiriyangadu, Poonachi Village",
+  addressTa: "கத்திரியங்காடு, பூனாச்சி கிராமம்",
   openingHoursEn: "8:30 AM - 9:30 PM",
   openingHoursTa: "8:30 AM - 9:30 PM",
   isOpen: true,
@@ -3001,6 +3001,11 @@ function getStoredShopInfo() {
         if (!parsed.nameTa || parsed.nameTa.includes("முருகன்")) {
           parsed.nameTa = "ஸ்ரீ ஹனுமான் ஜெராக்ஸ் & போட்டோ பிரிண்ட்";
           parsed.nameEn = "Sri Hanuman Xerox & Photo Print";
+        }
+        if (!parsed.addressTa || parsed.addressTa.includes("பஜார் மெயின் ரோடு") || parsed.addressTa.includes("Bazaar Main Road")) {
+          parsed.addressTa = "கத்திரியங்காடு, பூனாச்சி கிராமம்";
+          parsed.addressEn = "Kathiriyangadu, Poonachi Village";
+          saveStoredShopInfo(parsed);
         }
         if (parsed.a4StockCount === undefined) parsed.a4StockCount = 500;
         if (parsed.photoStockCount === undefined) parsed.photoStockCount = 200;
