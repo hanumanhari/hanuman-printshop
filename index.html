@@ -2205,7 +2205,7 @@ alter publication supabase_realtime add table shop_data;</pre>
               </button>
               <button 
                 type="button" 
-                onclick="window.location.reload(true)" 
+                onclick="if (typeof SYSTEM_HEALTH !== 'undefined' && SYSTEM_HEALTH.git && SYSTEM_HEALTH.git.remoteSha) { localStorage.setItem('shop_client_git_sha', SYSTEM_HEALTH.git.remoteSha); } window.location.reload(true);" 
                 class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-1.5 cursor-pointer"
               >
                 <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
@@ -3061,7 +3061,8 @@ function renderHubTimelineLogs() {
 
 async function checkGitHubRemoteUpdates(userTriggered = false) {
   const repo = SYSTEM_HEALTH.git.repo || "hanumanhari/hanuman-printshop";
-  const currentSha = SYSTEM_HEALTH.git.commit || "38cf0f7";
+  let currentSha = localStorage.getItem("shop_client_git_sha") || SYSTEM_HEALTH.git.commit || "8a7edc7";
+  SYSTEM_HEALTH.git.commit = currentSha;
   const pillEl = document.getElementById("hub-update-pill");
   const msgEl = document.getElementById("hub-update-message");
   const remoteShaEl = document.getElementById("hub-det-git-remote-sha");
@@ -3080,6 +3081,13 @@ async function checkGitHubRemoteUpdates(userTriggered = false) {
     const fullSha = data.sha || "";
     const shortSha = fullSha.substring(0, 7);
     const commitMsg = (data.commit && data.commit.message ? data.commit.message.split("\n")[0] : "");
+
+    // If first time visit and no stored SHA yet, baseline with current remote SHA
+    if (!localStorage.getItem("shop_client_git_sha") && shortSha) {
+      localStorage.setItem("shop_client_git_sha", shortSha);
+      currentSha = shortSha;
+      SYSTEM_HEALTH.git.commit = shortSha;
+    }
 
     SYSTEM_HEALTH.git.remoteSha = shortSha;
     SYSTEM_HEALTH.git.remoteMsg = commitMsg;
