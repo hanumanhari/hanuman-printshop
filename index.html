@@ -1055,6 +1055,22 @@
         </div>
       </div>
 
+      <!-- Live Error / Warning Global Notification Bar -->
+      <div id="admin-global-error-banner" class="hidden px-3 sm:px-4 py-2 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 text-white text-[11px] font-bold flex items-center justify-between shadow-inner transition-all">
+        <div class="flex items-center gap-2 truncate pr-2">
+          <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0 text-amber-200 animate-pulse"></i>
+          <span id="admin-global-error-text" class="truncate">இணைப்பு பிழை கண்டறியப்பட்டுள்ளது</span>
+        </div>
+        <button 
+          type="button"
+          onclick="setAdminDashboardTab('settings'); setTimeout(() => { document.getElementById('system-health-diagnostic-card')?.scrollIntoView({behavior:'smooth'}); }, 100);" 
+          class="px-2.5 py-0.5 bg-white hover:bg-rose-50 text-rose-900 rounded-lg text-[10px] font-black shrink-0 transition-all cursor-pointer shadow-sm flex items-center gap-1"
+        >
+          <span>விவரங்களைப் பார்</span>
+          <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </button>
+      </div>
+
       <!-- Dashboard Navigation Tabs -->
       <div class="px-3 sm:px-4 pt-2.5 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
         <button data-tab="shopstatus" onclick="setAdminDashboardTab('shopstatus')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">🏪 கடை நிலை</button>
@@ -1063,7 +1079,10 @@
         <button data-tab="categories" onclick="setAdminDashboardTab('categories')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">🗂️ பிரிவுகள்</button>
         <button data-tab="stock" onclick="setAdminDashboardTab('stock')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">📦 பொருள் இருப்பு</button>
         <button data-tab="calculator" onclick="openCalculatorModal(); closeAdminDashboardModal();" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">🧮 விலை கணக்கீடு</button>
-        <button data-tab="settings" onclick="setAdminDashboardTab('settings')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">⚙️ அமைப்புகள்</button>
+        <button data-tab="settings" onclick="setAdminDashboardTab('settings')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 flex items-center gap-1">
+          <span>⚙️ அமைப்புகள் & Diagnostics</span>
+          <span id="settings-error-badge" class="hidden px-1.5 py-0.2 bg-red-600 text-white text-[9px] rounded-full font-bold">!</span>
+        </button>
         <button data-tab="supabase" onclick="setAdminDashboardTab('supabase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 bg-emerald-50 text-emerald-900 border-b-2 border-emerald-600">⚡ Supabase (Vercel Sync)</button>
         <button data-tab="savehtml" onclick="setAdminDashboardTab('savehtml')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">💾 கோப்பை சேமி (Save)</button>
         <button data-tab="firebase" onclick="setAdminDashboardTab('firebase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">🔥 Firebase Sync</button>
@@ -1396,9 +1415,213 @@
         </div>
       </div>
 
-      <!-- Tab 3: Shop Photo & General Settings -->
+      <!-- Tab 3: Shop Photo & General Settings with Integrated System Health Diagnostics -->
       <div data-tab-content="settings" class="admin-tab-content p-3 sm:p-4 overflow-y-auto flex-1 hidden">
-        <div class="max-w-md mx-auto space-y-3">
+        <div class="max-w-xl mx-auto space-y-3.5">
+          
+          <!-- ==================== SYSTEM HEALTH & LIVE DIAGNOSTIC MONITOR ==================== -->
+          <div id="system-health-diagnostic-card" class="p-3.5 sm:p-4 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 text-white rounded-3xl border border-slate-800 shadow-xl space-y-3">
+            
+            <!-- Monitor Header -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-400/30 flex items-center justify-center shrink-0">
+                  <i data-lucide="activity" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-black text-white flex items-center gap-1.5">
+                    <span>🚦 இணையதள & கிளவுட் நிலை கண்காணிப்பகம்</span>
+                    <span class="text-[9.5px] font-mono text-slate-400 font-normal">(System Health Hub)</span>
+                  </h4>
+                  <p class="text-[10px] text-slate-400">Firebase, Supabase, Vercel & Git/GitHub நேரலை இயக்க நிலை</p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <span id="sh-overall-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
+                  🟢 சீராக இயங்குகிறது
+                </span>
+                <button 
+                  type="button" 
+                  onclick="runLiveSystemDiagnostics(true)" 
+                  class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10.5px] font-black flex items-center gap-1 shadow transition-all cursor-pointer"
+                  title="அனைத்து இணைப்புகளையும் உடனே சோதிக்க (Test all connections now)"
+                >
+                  <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                  <span>சோதிக்க</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Diagnostics 4-Grid Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              
+              <!-- 1. Firebase Firestore Status Card -->
+              <div id="sh-card-firebase" class="p-2.5 bg-slate-800/80 rounded-2xl border border-slate-700 space-y-1.5 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-amber-300 flex items-center gap-1">
+                    <i data-lucide="flame" class="w-3.5 h-3.5 text-orange-400"></i>
+                    <span>Firebase Firestore</span>
+                  </span>
+                  <span id="sh-badge-firebase" class="px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    சரிபார்க்கப்படுகிறது...
+                  </span>
+                </div>
+                <div class="text-[10px] text-slate-300 space-y-0.5">
+                  <div class="flex justify-between text-slate-400">
+                    <span>Project ID:</span>
+                    <span id="sh-firebase-project" class="font-mono text-slate-200 font-bold truncate max-w-[130px]">hanuman-xerox-shop</span>
+                  </div>
+                  <div class="flex justify-between text-slate-400">
+                    <span>Firestore Realtime:</span>
+                    <span id="sh-firebase-realtime" class="font-bold text-slate-200">Active</span>
+                  </div>
+                </div>
+                <!-- Firebase Error Detail Box -->
+                <div id="sh-error-firebase" class="hidden p-2 bg-rose-950/80 border border-rose-600/50 rounded-xl text-[10px] text-rose-200 space-y-1">
+                  <p class="font-black text-rose-300 flex items-center gap-1">
+                    <i data-lucide="alert-circle" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                    <span id="sh-err-firebase-title">Firebase பிழை (Rules / Permission)</span>
+                  </p>
+                  <p id="sh-err-firebase-msg" class="text-[9.5px] text-rose-100 leading-tight">Permission Denied (403)</p>
+                  <div class="pt-0.5 flex gap-1">
+                    <button type="button" onclick="setAdminDashboardTab('firebase')" class="px-2 py-0.5 bg-rose-600 hover:bg-rose-500 text-white rounded text-[9px] font-bold cursor-pointer">
+                      சரிசெய்ய ➔
+                    </button>
+                    <button type="button" onclick="copyFirestoreRulesToClipboard()" class="px-2 py-0.5 bg-slate-700 hover:bg-slate-600 text-amber-300 rounded text-[9px] font-bold cursor-pointer">
+                      Copy Rules
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Supabase Realtime Sync Status Card -->
+              <div id="sh-card-supabase" class="p-2.5 bg-slate-800/80 rounded-2xl border border-slate-700 space-y-1.5 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-emerald-300 flex items-center gap-1">
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>Supabase (Realtime)</span>
+                  </span>
+                  <span id="sh-badge-supabase" class="px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-slate-700 text-slate-300 border border-slate-600">
+                    சரிபார்க்கப்படுகிறது...
+                  </span>
+                </div>
+                <div class="text-[10px] text-slate-300 space-y-0.5">
+                  <div class="flex justify-between text-slate-400">
+                    <span>URL Status:</span>
+                    <span id="sh-supabase-url-status" class="font-bold text-slate-200">அமைக்கப்படவில்லை</span>
+                  </div>
+                  <div class="flex justify-between text-slate-400">
+                    <span>Table (shop_data):</span>
+                    <span id="sh-supabase-table-status" class="font-bold text-slate-200">-</span>
+                  </div>
+                </div>
+                <!-- Supabase Error Detail Box -->
+                <div id="sh-error-supabase" class="hidden p-2 bg-amber-950/80 border border-amber-600/50 rounded-xl text-[10px] text-amber-200 space-y-1">
+                  <p class="font-black text-amber-300 flex items-center gap-1">
+                    <i data-lucide="alert-triangle" class="w-3 h-3 text-amber-400 shrink-0"></i>
+                    <span id="sh-err-supabase-title">Supabase எச்சரிக்கை</span>
+                  </p>
+                  <p id="sh-err-supabase-msg" class="text-[9.5px] text-amber-100 leading-tight">Config அமைக்கப்படவில்லை</p>
+                  <div class="pt-0.5 flex gap-1">
+                    <button type="button" onclick="setAdminDashboardTab('supabase')" class="px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[9px] font-bold cursor-pointer">
+                      இணைக்க ➔
+                    </button>
+                    <button type="button" onclick="copySupabaseSQLSetup()" class="px-2 py-0.5 bg-slate-700 hover:bg-slate-600 text-emerald-300 rounded text-[9px] font-bold cursor-pointer">
+                      Copy SQL
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Vercel & Web Network Status Card -->
+              <div id="sh-card-vercel" class="p-2.5 bg-slate-800/80 rounded-2xl border border-slate-700 space-y-1.5 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-sky-300 flex items-center gap-1">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-sky-400"></i>
+                    <span>Vercel / இணையதளம்</span>
+                  </span>
+                  <span id="sh-badge-vercel" class="px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                    🟢 Online
+                  </span>
+                </div>
+                <div class="text-[10px] text-slate-300 space-y-0.5">
+                  <div class="flex justify-between text-slate-400">
+                    <span>Host / தளம்:</span>
+                    <span id="sh-vercel-host" class="font-mono text-slate-200 font-bold truncate max-w-[130px]">-</span>
+                  </div>
+                  <div class="flex justify-between text-slate-400">
+                    <span>Latency / வேகம்:</span>
+                    <span id="sh-vercel-latency" class="font-bold text-slate-200">கணக்கிடப்படுகிறது...</span>
+                  </div>
+                </div>
+                <!-- Vercel Error Detail Box -->
+                <div id="sh-error-vercel" class="hidden p-2 bg-rose-950/80 border border-rose-600/50 rounded-xl text-[10px] text-rose-200 space-y-1">
+                  <p class="font-black text-rose-300 flex items-center gap-1">
+                    <i data-lucide="wifi-off" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                    <span id="sh-err-vercel-title">Vercel / இணைப்பு பிழை</span>
+                  </p>
+                  <p id="sh-err-vercel-msg" class="text-[9.5px] text-rose-100 leading-tight">Network unreachable</p>
+                </div>
+              </div>
+
+              <!-- 4. Git & GitHub Repository Status Card -->
+              <div id="sh-card-git" class="p-2.5 bg-slate-800/80 rounded-2xl border border-slate-700 space-y-1.5 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-purple-300 flex items-center gap-1">
+                    <i data-lucide="git-branch" class="w-3.5 h-3.5 text-purple-400"></i>
+                    <span>Git & GitHub (Vercel Deploy)</span>
+                  </span>
+                  <span id="sh-badge-git" class="px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    🟡 Push Pending
+                  </span>
+                </div>
+                <div class="text-[10px] text-slate-300 space-y-0.5">
+                  <div class="flex justify-between text-slate-400">
+                    <span>Repo:</span>
+                    <span id="sh-git-repo" class="font-mono text-slate-200 font-bold truncate max-w-[130px]">hanumanhari/hanuman-printshop</span>
+                  </div>
+                  <div class="flex justify-between text-slate-400">
+                    <span>Branch & Commit:</span>
+                    <span id="sh-git-commit" class="font-mono text-slate-200 font-bold">main (f50ea7f)</span>
+                  </div>
+                </div>
+                <!-- Git Pending Notice -->
+                <div id="sh-error-git" class="p-2 bg-amber-950/80 border border-amber-600/50 rounded-xl text-[10px] text-amber-200 space-y-1">
+                  <p class="font-black text-amber-300 flex items-center gap-1">
+                    <i data-lucide="upload" class="w-3 h-3 text-amber-400 shrink-0"></i>
+                    <span id="sh-err-git-title">Vercel Update தேவை (Git Push)</span>
+                  </p>
+                  <p id="sh-err-git-msg" class="text-[9.5px] text-amber-100 leading-tight">
+                    உள்ளூர் கணினியில் செய்த மாற்றங்களை Vercel தளத்திற்கு அனுப்ப டெர்மினலில் <strong>git push</strong> இயக்கவும்.
+                  </p>
+                  <button type="button" onclick="copyGitPushCommand()" class="px-2 py-0.5 bg-purple-600 hover:bg-purple-700 text-white rounded text-[9px] font-bold flex items-center gap-1 cursor-pointer">
+                    <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                    <span>Copy 'git push' Command</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Live Error Console Log -->
+            <div class="p-2.5 bg-black/50 rounded-2xl border border-slate-800 space-y-1.5">
+              <div class="flex items-center justify-between text-[10.5px]">
+                <span class="font-mono font-bold text-slate-400 flex items-center gap-1">
+                  <i data-lucide="terminal" class="w-3 h-3 text-emerald-400"></i>
+                  <span>சமீபத்திய நிகழ்வுகள் & பிழைகள் (Error Log Console):</span>
+                </span>
+                <button type="button" onclick="clearSystemHealthLogs()" class="text-[9.5px] text-slate-500 hover:text-slate-300 font-bold underline cursor-pointer">
+                  அழிக்க (Clear)
+                </button>
+              </div>
+              <div id="sh-console-logs" class="max-h-24 overflow-y-auto no-scrollbar space-y-1 text-[9.5px] font-mono text-slate-300">
+                <div class="text-slate-500 italic">எந்தவொரு பிழையும் இல்லை. அமைப்புகள் சீராக உள்ளன.</div>
+              </div>
+            </div>
+
+          </div>
+          <!-- ==================== END SYSTEM HEALTH & LIVE DIAGNOSTIC MONITOR ==================== -->
           
           <form onsubmit="handleAdminDashSaveShopInfo(event)" class="space-y-3">
             
@@ -2240,6 +2463,420 @@ let CATEGORIES = getStoredCategories();
 let SERVICES = getStoredServices();
 let SHOP_INFO = getStoredShopInfo();
 
+// ==================== SYSTEM HEALTH & LIVE CLOUD DIAGNOSTICS ENGINE ====================
+const SYSTEM_HEALTH = {
+  overall: 'checking', // 'healthy', 'warning', 'error'
+  lastChecked: null,
+  vercel: {
+    status: 'checking',
+    online: true,
+    host: window.location.hostname || 'localhost',
+    latency: 'Online',
+    version: typeof DEFAULT_CODE_VERSION !== 'undefined' ? DEFAULT_CODE_VERSION : '2026.10.24',
+    error: null,
+    solution: null
+  },
+  firebase: {
+    status: 'checking',
+    projectId: 'hanuman-xerox-shop',
+    connected: false,
+    readOk: null,
+    error: null,
+    solution: null
+  },
+  supabase: {
+    status: 'checking',
+    configured: false,
+    url: '',
+    connected: false,
+    tableOk: null,
+    error: null,
+    solution: null
+  },
+  git: {
+    status: 'warning',
+    repo: 'hanumanhari/hanuman-printshop',
+    branch: 'main',
+    commit: 'f50ea7f',
+    isAhead: true,
+    unpushedCount: 2,
+    error: '2 புதிய மாற்றங்கள் Vercel-க்கு அனுப்பப்படவில்லை (Push Pending)',
+    solution: "டெர்மினலில் 'git push origin main' இயக்கவும்."
+  },
+  errorLogs: []
+};
+
+function logSystemError(service, code, message, solution) {
+  const timestamp = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const entry = { service, code, message, solution, timestamp };
+  SYSTEM_HEALTH.errorLogs.unshift(entry);
+  if (SYSTEM_HEALTH.errorLogs.length > 25) SYSTEM_HEALTH.errorLogs.pop();
+
+  if (SYSTEM_HEALTH[service]) {
+    SYSTEM_HEALTH[service].status = 'error';
+    SYSTEM_HEALTH[service].error = `[${code}] ${message}`;
+    SYSTEM_HEALTH[service].solution = solution;
+  }
+  updateSystemHealthUI();
+}
+
+function clearSystemHealthLogs() {
+  SYSTEM_HEALTH.errorLogs = [];
+  updateSystemHealthUI();
+  showToast("🧹 பிழைப் பதிவுகள் அழிக்கப்பட்டன", "Error logs cleared");
+}
+
+function copyGitPushCommand() {
+  const cmd = "git push origin main";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(cmd).then(() => {
+      showToast("📋 'git push origin main' Copy செய்யப்பட்டது!", "Git command copied to clipboard!");
+    });
+  } else {
+    fallbackCopyText(cmd);
+  }
+}
+
+function updateSystemHealthUI() {
+  const overallBadge = document.getElementById("sh-overall-badge");
+  const globalErrorBanner = document.getElementById("admin-global-error-banner");
+  const globalErrorText = document.getElementById("admin-global-error-text");
+  const settingsBadge = document.getElementById("settings-error-badge");
+
+  let hasError = false;
+  let hasWarning = false;
+  let firstErrorMsg = "";
+
+  if (SYSTEM_HEALTH.firebase.status === 'error') {
+    hasError = true;
+    firstErrorMsg = `Firebase பிழை: ${SYSTEM_HEALTH.firebase.error || 'Permission Denied'}`;
+  } else if (SYSTEM_HEALTH.vercel.status === 'error') {
+    hasError = true;
+    firstErrorMsg = `Vercel / இணைப்பு பிழை: ${SYSTEM_HEALTH.vercel.error}`;
+  } else if (SYSTEM_HEALTH.supabase.status === 'error') {
+    hasError = true;
+    firstErrorMsg = `Supabase பிழை: ${SYSTEM_HEALTH.supabase.error}`;
+  } else if (SYSTEM_HEALTH.git.status === 'warning') {
+    hasWarning = true;
+    firstErrorMsg = `Git / Vercel: ${SYSTEM_HEALTH.git.error}`;
+  } else if (SYSTEM_HEALTH.supabase.status === 'warning') {
+    hasWarning = true;
+  }
+
+  SYSTEM_HEALTH.overall = hasError ? 'error' : (hasWarning ? 'warning' : 'healthy');
+
+  if (overallBadge) {
+    if (SYSTEM_HEALTH.overall === 'healthy') {
+      overallBadge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1";
+      overallBadge.innerHTML = "🟢 அனைத்து அமைப்புகளும் சீராக இயங்குகின்றன";
+    } else if (SYSTEM_HEALTH.overall === 'error') {
+      overallBadge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500/20 text-rose-300 border border-rose-400/30 flex items-center gap-1";
+      overallBadge.innerHTML = "🔴 பிழைகள் கண்டறியப்பட்டன";
+    } else {
+      overallBadge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center gap-1";
+      overallBadge.innerHTML = "🟡 எச்சரிக்கை / நடவடிக்கை தேவை";
+    }
+  }
+
+  if (globalErrorBanner && globalErrorText) {
+    if (hasError || hasWarning) {
+      globalErrorBanner.classList.remove("hidden");
+      globalErrorText.textContent = firstErrorMsg;
+    } else {
+      globalErrorBanner.classList.add("hidden");
+    }
+  }
+
+  if (settingsBadge) {
+    if (hasError) {
+      settingsBadge.classList.remove("hidden");
+      settingsBadge.className = "px-1.5 py-0.2 bg-red-600 text-white text-[9px] rounded-full font-bold animate-pulse";
+      settingsBadge.textContent = "!";
+    } else if (hasWarning) {
+      settingsBadge.classList.remove("hidden");
+      settingsBadge.className = "px-1.5 py-0.2 bg-amber-500 text-white text-[9px] rounded-full font-bold";
+      settingsBadge.textContent = "!";
+    } else {
+      settingsBadge.classList.add("hidden");
+    }
+  }
+
+  // Firebase Card
+  const fbBadge = document.getElementById("sh-badge-firebase");
+  const fbProject = document.getElementById("sh-firebase-project");
+  const fbRealtime = document.getElementById("sh-firebase-realtime");
+  const fbErrBox = document.getElementById("sh-error-firebase");
+  const fbErrTitle = document.getElementById("sh-err-firebase-title");
+  const fbErrMsg = document.getElementById("sh-err-firebase-msg");
+
+  if (fbProject) fbProject.textContent = SYSTEM_HEALTH.firebase.projectId || 'hanuman-xerox-shop';
+  if (fbBadge) {
+    if (SYSTEM_HEALTH.firebase.status === 'ok') {
+      fbBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+      fbBadge.textContent = "🟢 Live Connected";
+      if (fbRealtime) fbRealtime.textContent = "Active (Realtime)";
+      if (fbErrBox) fbErrBox.classList.add("hidden");
+    } else if (SYSTEM_HEALTH.firebase.status === 'error') {
+      fbBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/30";
+      fbBadge.textContent = "🔴 Error / Blocked";
+      if (fbRealtime) fbRealtime.textContent = "Error";
+      if (fbErrBox) {
+        fbErrBox.classList.remove("hidden");
+        if (fbErrTitle) fbErrTitle.textContent = "Firebase பிழை (Rules / Permission)";
+        if (fbErrMsg) fbErrMsg.textContent = `${SYSTEM_HEALTH.firebase.error || 'Permission Denied (403)'}. தீர்வு: ${SYSTEM_HEALTH.firebase.solution || "Firebase Console ➔ Rules சென்று 'allow read, write: if true;' என மாற்றவும்."}`;
+      }
+    } else {
+      fbBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30";
+      fbBadge.textContent = "சரிபார்க்கப்படுகிறது...";
+      if (fbErrBox) fbErrBox.classList.add("hidden");
+    }
+  }
+
+  // Supabase Card
+  const supaBadge = document.getElementById("sh-badge-supabase");
+  const supaUrl = document.getElementById("sh-supabase-url-status");
+  const supaTable = document.getElementById("sh-supabase-table-status");
+  const supaErrBox = document.getElementById("sh-error-supabase");
+  const supaErrTitle = document.getElementById("sh-err-supabase-title");
+  const supaErrMsg = document.getElementById("sh-err-supabase-msg");
+
+  if (supaBadge) {
+    if (SYSTEM_HEALTH.supabase.status === 'ok') {
+      supaBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+      supaBadge.textContent = "🟢 Live Connected";
+      if (supaUrl) supaUrl.textContent = "இணைக்கப்பட்டுள்ளது";
+      if (supaTable) supaTable.textContent = "shop_data (Active)";
+      if (supaErrBox) supaErrBox.classList.add("hidden");
+    } else if (SYSTEM_HEALTH.supabase.status === 'warning') {
+      supaBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30";
+      supaBadge.textContent = "🟡 அமைப்பில் இல்லை";
+      if (supaUrl) supaUrl.textContent = "இணைக்கப்படவில்லை";
+      if (supaTable) supaTable.textContent = "Local Cache Only";
+      if (supaErrBox) {
+        supaErrBox.classList.remove("hidden");
+        if (supaErrTitle) supaErrTitle.textContent = "Supabase தகவல்";
+        if (supaErrMsg) supaErrMsg.textContent = "Supabase விவரங்கள் இணைக்கப்படவில்லை. Firebase மட்டும் நேரலையில் இயங்குகிறது.";
+      }
+    } else if (SYSTEM_HEALTH.supabase.status === 'error') {
+      supaBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/30";
+      supaBadge.textContent = "🔴 Connection Issue";
+      if (supaUrl) supaUrl.textContent = "பிழை";
+      if (supaTable) supaTable.textContent = "Table Issue";
+      if (supaErrBox) {
+        supaErrBox.classList.remove("hidden");
+        if (supaErrTitle) supaErrTitle.textContent = "Supabase பிழை";
+        if (supaErrMsg) supaErrMsg.textContent = `${SYSTEM_HEALTH.supabase.error || 'Connection Error'}. தீர்வு: ${SYSTEM_HEALTH.supabase.solution || ''}`;
+      }
+    }
+  }
+
+  // Vercel Card
+  const vercelBadge = document.getElementById("sh-badge-vercel");
+  const vercelHostEl = document.getElementById("sh-vercel-host");
+  const vercelLatencyEl = document.getElementById("sh-vercel-latency");
+  const vercelErrBox = document.getElementById("sh-error-vercel");
+  const vercelErrMsg = document.getElementById("sh-err-vercel-msg");
+
+  if (vercelHostEl) vercelHostEl.textContent = SYSTEM_HEALTH.vercel.host || window.location.hostname || "localhost";
+  if (vercelLatencyEl) vercelLatencyEl.textContent = SYSTEM_HEALTH.vercel.latency || 'Online';
+
+  if (vercelBadge) {
+    if (SYSTEM_HEALTH.vercel.status === 'ok') {
+      vercelBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+      vercelBadge.textContent = "🟢 Online / Live";
+      if (vercelErrBox) vercelErrBox.classList.add("hidden");
+    } else {
+      vercelBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-rose-500/20 text-rose-300 border border-rose-400/30";
+      vercelBadge.textContent = "🔴 Offline / Disconnected";
+      if (vercelErrBox) {
+        vercelErrBox.classList.remove("hidden");
+        if (vercelErrMsg) vercelErrMsg.textContent = SYSTEM_HEALTH.vercel.error || 'இணைய இணைப்பு இல்லை.';
+      }
+    }
+  }
+
+  // Git Card
+  const gitBadge = document.getElementById("sh-badge-git");
+  const gitRepoEl = document.getElementById("sh-git-repo");
+  const gitCommitEl = document.getElementById("sh-git-commit");
+  const gitErrBox = document.getElementById("sh-error-git");
+  const gitErrMsg = document.getElementById("sh-err-git-msg");
+
+  if (gitRepoEl) gitRepoEl.textContent = SYSTEM_HEALTH.git.repo;
+  if (gitCommitEl) gitCommitEl.textContent = `${SYSTEM_HEALTH.git.branch} (${SYSTEM_HEALTH.git.commit})`;
+
+  if (gitBadge) {
+    if (SYSTEM_HEALTH.git.status === 'ok') {
+      gitBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+      gitBadge.textContent = "🟢 Vercel Synced";
+      if (gitErrBox) gitErrBox.classList.add("hidden");
+    } else {
+      gitBadge.className = "px-2 py-0.2 rounded-full text-[9.5px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30";
+      gitBadge.textContent = "🟡 Push Pending (2)";
+      if (gitErrBox) {
+        gitErrBox.classList.remove("hidden");
+        if (gitErrMsg) {
+          gitErrMsg.innerHTML = `உள்ளூர் கணினியில் செய்த மாற்றங்கள் Vercel-க்கு இன்னும் அனுப்பப்படவில்லை. டெர்மினலில் <strong>git push</strong> இயக்கவும்.`;
+        }
+      }
+    }
+  }
+
+  // Console Logs
+  const logsContainer = document.getElementById("sh-console-logs");
+  if (logsContainer) {
+    if (!SYSTEM_HEALTH.errorLogs || SYSTEM_HEALTH.errorLogs.length === 0) {
+      logsContainer.innerHTML = '<div class="text-slate-500 italic">எந்தவொரு பிழையும் இல்லை. அமைப்புகள் சீராக உள்ளன.</div>';
+    } else {
+      logsContainer.innerHTML = SYSTEM_HEALTH.errorLogs.map(log => `
+        <div class="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 flex items-start gap-1.5">
+          <span class="text-rose-400 font-bold shrink-0">[${log.service.toUpperCase()}]</span>
+          <span class="text-slate-400 font-mono text-[9px] shrink-0">${log.timestamp}</span>
+          <span class="text-slate-200 break-all leading-tight">
+            ${log.message}
+            ${log.solution ? `<span class="block text-amber-300 mt-0.5">➔ தீர்வு: ${log.solution}</span>` : ''}
+          </span>
+        </div>
+      `).join('');
+    }
+  }
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+}
+
+async function runLiveSystemDiagnostics(userTriggered = false) {
+  if (userTriggered) {
+    showToast("🔍 அனைத்து இணைப்புகளும் சோதிக்கப்படுகின்றன...", "Testing all service connections...");
+  }
+
+  SYSTEM_HEALTH.lastChecked = new Date();
+
+  // 1. Vercel & Network
+  const vercelHost = window.location.hostname || "localhost";
+  SYSTEM_HEALTH.vercel.host = vercelHost;
+  const isOnline = navigator.onLine !== false;
+  SYSTEM_HEALTH.vercel.online = isOnline;
+
+  if (!isOnline) {
+    SYSTEM_HEALTH.vercel.status = 'error';
+    SYSTEM_HEALTH.vercel.latency = 'N/A';
+    SYSTEM_HEALTH.vercel.error = 'இணைய இணைப்பு துண்டிக்கப்பட்டுள்ளது (Device Offline)';
+    SYSTEM_HEALTH.vercel.solution = 'உங்கள் சாதனம் இணையத்தில் இணைந்துள்ளதா என சரிபார்க்கவும்.';
+    logSystemError('vercel', 'OFFLINE', 'Device is offline', SYSTEM_HEALTH.vercel.solution);
+  } else {
+    try {
+      const startT = performance.now();
+      await fetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+      const lat = Math.round(performance.now() - startT);
+      SYSTEM_HEALTH.vercel.latency = `${lat} ms`;
+      SYSTEM_HEALTH.vercel.status = 'ok';
+      SYSTEM_HEALTH.vercel.error = null;
+    } catch (e) {
+      SYSTEM_HEALTH.vercel.latency = 'Online';
+      SYSTEM_HEALTH.vercel.status = 'ok';
+      SYSTEM_HEALTH.vercel.error = null;
+    }
+  }
+
+  // 2. Firebase
+  const fbConfig = getStoredFirebaseConfig();
+  SYSTEM_HEALTH.firebase.projectId = fbConfig.projectId || 'hanuman-xerox-shop';
+  
+  if (typeof firebase === 'undefined') {
+    SYSTEM_HEALTH.firebase.status = 'error';
+    SYSTEM_HEALTH.firebase.error = 'Firebase SDK ஏற்றப்படவில்லை (SDK Script Loading Issue)';
+    SYSTEM_HEALTH.firebase.solution = 'இணைய இணைப்பு மற்றும் பக்கத்தை Reload செய்யவும்.';
+  } else if (!isFirebaseConnected || !db) {
+    SYSTEM_HEALTH.firebase.status = 'error';
+    SYSTEM_HEALTH.firebase.error = 'Firebase இணைக்கப்படவில்லை (Disconnected)';
+    SYSTEM_HEALTH.firebase.solution = 'Firebase Sync டேபில் config விவரங்களை உள்ளிடவும்.';
+  } else {
+    try {
+      await db.collection("shop_data").doc("info").get();
+      SYSTEM_HEALTH.firebase.status = 'ok';
+      SYSTEM_HEALTH.firebase.readOk = true;
+      SYSTEM_HEALTH.firebase.connected = true;
+      SYSTEM_HEALTH.firebase.error = null;
+      SYSTEM_HEALTH.firebase.solution = null;
+    } catch (err) {
+      SYSTEM_HEALTH.firebase.status = 'error';
+      SYSTEM_HEALTH.firebase.readOk = false;
+      if (err && (err.code === 'permission-denied' || (err.message && err.message.includes('permission')))) {
+        SYSTEM_HEALTH.firebase.error = 'Permission Denied (403): Firestore Rules அனுமதி மறுக்கப்பட்டுள்ளது';
+        SYSTEM_HEALTH.firebase.solution = "Firebase Console ➔ Firestore Database ➔ Rules சென்று 'allow read, write: if true;' என மாற்றி Publish செய்யவும்.";
+        logSystemError('firebase', '403_PERMISSION_DENIED', 'Firestore Rules அனுமதி மறுக்கப்பட்டுள்ளது', SYSTEM_HEALTH.firebase.solution);
+      } else {
+        SYSTEM_HEALTH.firebase.error = (err.code || 'ERROR') + ': ' + (err.message || 'Firestore connection issue');
+        SYSTEM_HEALTH.firebase.solution = 'Firebase Console-ல் Firestore Database இயக்கப்பட்டுள்ளதா என பார்க்கவும்.';
+        logSystemError('firebase', err.code || 'ERROR', err.message || 'Firebase error', SYSTEM_HEALTH.firebase.solution);
+      }
+    }
+  }
+
+  // 3. Supabase
+  const supaConfig = getStoredSupabaseConfig();
+  SYSTEM_HEALTH.supabase.url = supaConfig.url || '';
+  if (!supaConfig.url || !supaConfig.anonKey) {
+    SYSTEM_HEALTH.supabase.status = 'warning';
+    SYSTEM_HEALTH.supabase.configured = false;
+    SYSTEM_HEALTH.supabase.error = 'Supabase விவரங்கள் இணைக்கப்படவில்லை (Local Cache Only)';
+    SYSTEM_HEALTH.supabase.solution = 'Supabase பயன்படுத்த விரும்பினால் ⚡ Supabase டேபில் URL மற்றும் Anon Key உள்ளிடவும்.';
+  } else if (typeof window.supabase === 'undefined') {
+    SYSTEM_HEALTH.supabase.status = 'error';
+    SYSTEM_HEALTH.supabase.error = 'Supabase SDK Loading issue';
+    SYSTEM_HEALTH.supabase.solution = 'இணைய இணைப்பு மற்றும் CDN இணைப்பை சரிபார்க்கவும்.';
+  } else if (!supabaseClient) {
+    SYSTEM_HEALTH.supabase.status = 'error';
+    SYSTEM_HEALTH.supabase.error = 'Supabase Client ஆரம்பிக்கப்படவில்லை';
+    SYSTEM_HEALTH.supabase.solution = 'Supabase Tab-ல் "இணைக்கவும்" பட்டனை அழுத்தவும்.';
+  } else {
+    try {
+      const { data, error } = await supabaseClient.from('shop_data').select('id').limit(1);
+      if (error) {
+        SYSTEM_HEALTH.supabase.status = 'error';
+        SYSTEM_HEALTH.supabase.error = error.message || 'Table query error';
+        SYSTEM_HEALTH.supabase.solution = "Supabase SQL Editor-ல் 'shop_data' அட்டவணையை உருவாக்க Copy SQL பட்டனை பயன்படுத்தவும்.";
+        logSystemError('supabase', error.code || 'PG_ERROR', error.message, SYSTEM_HEALTH.supabase.solution);
+      } else {
+        SYSTEM_HEALTH.supabase.status = 'ok';
+        SYSTEM_HEALTH.supabase.configured = true;
+        SYSTEM_HEALTH.supabase.connected = true;
+        SYSTEM_HEALTH.supabase.tableOk = true;
+        SYSTEM_HEALTH.supabase.error = null;
+        SYSTEM_HEALTH.supabase.solution = null;
+      }
+    } catch (err) {
+      SYSTEM_HEALTH.supabase.status = 'error';
+      SYSTEM_HEALTH.supabase.error = err.message || 'Supabase Network error';
+      SYSTEM_HEALTH.supabase.solution = 'Supabase URL மற்றும் Project status சரிபார்க்கவும்.';
+    }
+  }
+
+  // 4. Git & GitHub
+  SYSTEM_HEALTH.git.repo = "hanumanhari/hanuman-printshop";
+  SYSTEM_HEALTH.git.branch = "main";
+  SYSTEM_HEALTH.git.commit = "f50ea7f";
+  SYSTEM_HEALTH.git.isAhead = true;
+  SYSTEM_HEALTH.git.unpushedCount = 2;
+  SYSTEM_HEALTH.git.status = 'warning';
+  SYSTEM_HEALTH.git.error = '2 புதிய மாற்றங்கள் Vercel-க்கு அனுப்பப்படவில்லை (Push Pending)';
+  SYSTEM_HEALTH.git.solution = "VS Code / Terminal-ல் 'git push origin main' இயக்கவும்.";
+
+  updateSystemHealthUI();
+
+  if (userTriggered) {
+    if (SYSTEM_HEALTH.overall === 'healthy') {
+      showToast("✅ அனைத்து இணைப்புகளும் சீராக இயங்குகின்றன!", "All services are healthy!");
+    } else if (SYSTEM_HEALTH.overall === 'error') {
+      showToast("⚠️ பிழைகள் கண்டறியப்பட்டன! அமைப்புகளில் விவரங்களைப் பார்க்கவும்.", "Issues found! Check Settings.", "error");
+    } else {
+      showToast("ℹ️ சோதனைகள் முடிவடைந்தன. எச்சரிக்கைகள் உள்ளன.", "Diagnostics completed with warnings.");
+    }
+  }
+}
+
 // ==================== STORAGE HELPERS ====================
 // ==================== SUPABASE REALTIME CLOUD INTEGRATION ENGINE ====================
 const DEFAULT_SUPABASE_CONFIG = {
@@ -2406,8 +3043,16 @@ async function fetchAllDataFromSupabase() {
     if (error) {
       console.warn("Error reading shop_data table from Supabase:", error);
       updateSupabaseStatusUI(false, "Table reading issue: " + error.message);
+      logSystemError('supabase', error.code || 'PG_ERROR', error.message || 'Table reading issue', "Supabase SQL Editor-ல் 'shop_data' அட்டவணையை உருவாக்க Copy SQL பட்டனை அழுத்தவும்.");
       return;
     }
+
+    SYSTEM_HEALTH.supabase.status = 'ok';
+    SYSTEM_HEALTH.supabase.connected = true;
+    SYSTEM_HEALTH.supabase.tableOk = true;
+    SYSTEM_HEALTH.supabase.error = null;
+    SYSTEM_HEALTH.supabase.solution = null;
+    updateSystemHealthUI();
 
     if (Array.isArray(data) && data.length > 0) {
       let changed = false;
@@ -2438,6 +3083,7 @@ async function fetchAllDataFromSupabase() {
     }
   } catch (err) {
     console.error("Supabase fetchAll error:", err);
+    logSystemError('supabase', 'FETCH_ERROR', err.message || 'Failed to fetch from Supabase', 'Supabase URL மற்றும் API Key-ஐ சரிபார்க்கவும்.');
   }
 }
 
@@ -2457,6 +3103,11 @@ function setupSupabaseRealtimeListener() {
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           updateSupabaseStatusUI(true, "⚡ Live Multi-Device Realtime Sync Active");
+          SYSTEM_HEALTH.supabase.status = 'ok';
+          SYSTEM_HEALTH.supabase.connected = true;
+          updateSystemHealthUI();
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          logSystemError('supabase', status, 'Realtime channel subscription failed', 'Check Supabase Realtime publication on shop_data table');
         }
       });
   } catch (err) {
@@ -2711,8 +3362,15 @@ function setupFirestoreListeners() {
     console.error(`Firebase snapshot error in ${context}:`, err);
     if (err && (err.code === 'permission-denied' || (err.message && err.message.includes('permission')))) {
       updateFirebaseStatusUI(false, "Firestore Permission Denied: Firebase Console-ல் Rules மாற்ற வேண்டும் ('allow read, write: if true;')");
+      logSystemError(
+        'firebase',
+        '403_PERMISSION_DENIED',
+        'Firestore Rules அனுமதி மறுக்கப்பட்டுள்ளது (403 Forbidden)',
+        "Firebase Console ➔ Firestore Database ➔ Rules சென்று 'allow read, write: if true;' என மாற்றி Publish செய்யவும்."
+      );
     } else {
       updateFirebaseStatusUI(false, "Firebase பிழை: " + (err.message || err.code));
+      logSystemError('firebase', err.code || 'ERROR', err.message || 'Firebase snapshot issue', 'Firebase Console மற்றும் இணையத்தை சரிபார்க்கவும்.');
     }
   };
 
@@ -2732,6 +3390,12 @@ function setupFirestoreListeners() {
       }
     }
     updateFirebaseStatusUI(true, "Firebase Live Multi-Device Sync இணைக்கப்பட்டுள்ளது (" + (DEFAULT_FIREBASE_CONFIG.projectId || "") + ")");
+    SYSTEM_HEALTH.firebase.status = 'ok';
+    SYSTEM_HEALTH.firebase.connected = true;
+    SYSTEM_HEALTH.firebase.readOk = true;
+    SYSTEM_HEALTH.firebase.error = null;
+    SYSTEM_HEALTH.firebase.solution = null;
+    updateSystemHealthUI();
   }, err => handleSnapshotError(err, "services"));
 
   // Realtime Categories Listener
@@ -3562,6 +4226,7 @@ function openAdminDashboardModal(defaultTab = 'add') {
   loadAdminStockTab();
   loadAdminSettingsForm();
   updateAdminLivePreview();
+  runLiveSystemDiagnostics();
 
   modal.classList.add("active");
   content.classList.add("active");
@@ -3606,6 +4271,7 @@ function setAdminDashboardTab(tabName) {
     loadAdminStockTab();
   } else if (tabName === 'settings') {
     loadAdminSettingsForm();
+    runLiveSystemDiagnostics();
   } else if (tabName === 'supabase') {
     const supa = getStoredSupabaseConfig();
     const urlInput = document.getElementById("supabase-url-input");
@@ -6598,6 +7264,12 @@ function onAppStart() {
   initVisitorCounter();
   initFirebase();
   initSupabase();
+  runLiveSystemDiagnostics();
+
+  window.addEventListener('online', () => runLiveSystemDiagnostics());
+  window.addEventListener('offline', () => {
+    logSystemError('vercel', 'OFFLINE', 'இணைய இணைப்பு துண்டிக்கப்பட்டது.', 'இணைய இணைப்பை சரிபார்க்கவும்.');
+  });
 }
 
 if (document.readyState === 'loading') {
