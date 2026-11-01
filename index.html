@@ -837,18 +837,88 @@
         <p id="modal-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
 
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">சிறப்பம்சங்கள் / Details</h4>
-          <ul id="modal-features-list" class="space-y-1.5"></ul>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>சிறப்பம்சங்கள் / Details</span>
+            </h4>
+            <div class="flex items-center gap-1.5">
+              <button 
+                id="modal-edit-features-btn" 
+                type="button" 
+                onclick="toggleModalFeaturesEdit()" 
+                class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+                title="சிறப்பம்சங்களை திருத்த (Edit Features)"
+              >
+                <i data-lucide="edit-3" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span id="modal-edit-features-btn-text">எடிட் (Edit)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- View Mode (Default list) -->
+          <div id="modal-features-view-container">
+            <ul id="modal-features-list" class="space-y-1.5"></ul>
+          </div>
+
+          <!-- Edit Mode (Interactive In-Place Editor) -->
+          <div id="modal-features-edit-container" class="hidden space-y-2.5 bg-gradient-to-br from-blue-50/70 to-indigo-50/50 p-3 rounded-2xl border border-blue-200 shadow-inner">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+              <span class="flex items-center gap-1.5 text-blue-900">
+                <i data-lucide="list-plus" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>சிறப்பம்சங்களை மாற்றவும் / சேர்க்கவும்</span>
+              </span>
+              <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">1 வரி = 1 குறிப்பு</span>
+            </div>
+
+            <textarea 
+              id="modal-features-textarea" 
+              rows="4" 
+              class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 font-medium leading-relaxed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+              placeholder="ஒவ்வொரு வரியிலும் ஒரு சிறப்பம்சம் உள்ளிடவும்...&#10;தெளிவான எழுத்துக்கள் மற்றும் வரிகள்&#10;வேகமான ஆட்டோமேட்டிக் ஜெராக்ஸ்"
+            ></textarea>
+
+            <div class="flex items-center justify-between pt-0.5">
+              <span class="text-[10px] text-slate-500">உடனடியாக சேமிக்கப்படும்</span>
+              <div class="flex items-center gap-1.5">
+                <button 
+                  type="button" 
+                  onclick="cancelModalFeaturesEdit()" 
+                  class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-xs"
+                >
+                  ரத்து (Cancel)
+                </button>
+                <button 
+                  type="button" 
+                  onclick="saveModalFeaturesEdit()" 
+                  class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-black transition-all flex items-center gap-1 shadow-sm cursor-pointer"
+                >
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>சேமிக்க (Save)</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="p-3.5 sm:p-5 border-t border-slate-100 bg-slate-50 flex items-center gap-2.5 shrink-0">
         <button 
           id="modal-whatsapp-btn" 
-          class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition-all flex items-center justify-center gap-1.5"
+          class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition-all flex items-center justify-center gap-1.5"
         >
           <i data-lucide="message-circle" class="w-4 h-4"></i>
           <span>வாட்ஸ்அப் ஆர்டர் (WhatsApp Order)</span>
+        </button>
+        <button 
+          id="modal-admin-full-edit-btn" 
+          type="button" 
+          onclick="handleModalAdminEditClick()" 
+          class="py-2.5 px-3 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
+          title="முழு சேவை விவரங்களையும் அட்மின் மூலம் திருத்த (Edit Full Service in Admin)"
+        >
+          <i data-lucide="settings-2" class="w-4 h-4 text-slate-700"></i>
+          <span class="hidden sm:inline">அட்மின் எடிட்</span>
         </button>
       </div>
     </div>
@@ -1324,7 +1394,21 @@
               <label class="block text-[11px] font-bold text-slate-700 mb-0.5">விளக்கம் (Description)</label>
               <textarea id="ad-form-desc-ta" rows="2" placeholder="சேவை விவரம் (விருப்பப்பட்டால்)..." oninput="updateAdminLivePreview()" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs"></textarea>
               <input type="hidden" id="ad-form-desc-en" value="" />
-              <input type="hidden" id="ad-form-features-ta" value="" />
+            </div>
+
+            <!-- Features / Details Field (Newly Editable) -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-0.5 flex items-center justify-between">
+                <span>சிறப்பம்சங்கள் / Features (ஒவ்வொரு வரியிலும் ஒன்று) *</span>
+                <span class="text-[9.5px] text-blue-600 font-bold">1 வரி = 1 குறிப்பு</span>
+              </label>
+              <textarea 
+                id="ad-form-features-ta" 
+                rows="3" 
+                placeholder="எ.கா:&#10;தெளிவான எழுத்துக்கள் மற்றும் வரிகள்&#10;வேகமான ஆட்டோமேட்டிக் ஜெராக்ஸ்&#10;100 பிரதிகளுக்கு மேல் சிறப்பு தள்ளுபடி" 
+                oninput="updateAdminLivePreview()" 
+                class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs leading-relaxed font-sans"
+              ></textarea>
               <input type="hidden" id="ad-form-features-en" value="" />
               <input type="hidden" id="ad-form-pricenote-ta" value="" />
               <input type="hidden" id="ad-form-pricenote-en" value="" />
@@ -1401,6 +1485,9 @@
               <div class="p-2.5 space-y-1">
                 <h5 id="ad-prev-title" class="text-xs font-bold text-slate-900 leading-snug">சேவை பெயர்</h5>
                 <p id="ad-prev-desc" class="text-[10px] text-slate-500 leading-relaxed line-clamp-2">சேவை விளக்கம் இங்கே தோன்றும்...</p>
+                <div id="ad-prev-features-container" class="border-t border-slate-100 pt-1 mt-1">
+                  <ul id="ad-prev-features-list" class="space-y-0.5 text-[9px] text-slate-600"></ul>
+                </div>
               </div>
             </div>
           </div>
@@ -5386,6 +5473,22 @@ function updateAdminLivePreview() {
     prevBadge.textContent = catName;
     prevBadge.className = `px-2.5 py-0.5 text-[10px] font-bold rounded-full uppercase badge-${catColor || 'blue'}`;
   }
+
+  const featTaRaw = document.getElementById("ad-form-features-ta")?.value || "";
+  const featLines = featTaRaw.split('\n').map(l => l.trim()).filter(Boolean);
+  const prevFeatList = document.getElementById("ad-prev-features-list");
+  if (prevFeatList) {
+    if (featLines.length > 0) {
+      prevFeatList.innerHTML = featLines.slice(0, 3).map(f => `
+        <li class="flex items-center gap-1 text-[9px] text-slate-700">
+          <span class="text-emerald-500 font-bold">✓</span>
+          <span class="truncate">${f}</span>
+        </li>
+      `).join('');
+    } else {
+      prevFeatList.innerHTML = `<li class="text-slate-400 italic text-[8.5px]">சிறப்பம்சங்கள் எதுவும் உள்ளிடப்படவில்லை</li>`;
+    }
+  }
 }
 
 function handleAdminDashSaveService(e) {
@@ -7355,9 +7458,14 @@ function setupLanguageToggle() {
 }
 
 // Modal Handling
+let currentDetailServiceId = null;
+
 function openServiceDetail(serviceId) {
   const service = SERVICES.find(s => s.id === serviceId);
   if (!service) return;
+
+  currentDetailServiceId = serviceId;
+  cancelModalFeaturesEdit(false);
 
   const modal = document.getElementById('service-modal');
   const modalContent = document.getElementById('service-modal-content');
@@ -7421,9 +7529,129 @@ function closeServiceDetail() {
   const modalContent = document.getElementById('service-modal-content');
   if (!modal || !modalContent) return;
 
+  cancelModalFeaturesEdit(false);
   modalContent.classList.remove('active');
   modal.classList.remove('active');
   document.body.style.overflow = '';
+}
+
+function toggleModalFeaturesEdit() {
+  if (!currentDetailServiceId) return;
+  const service = SERVICES.find(s => s.id === currentDetailServiceId);
+  if (!service) return;
+
+  // Check admin login. If not logged in, prompt password for quick effortless access
+  if (!isAdminLoggedIn()) {
+    const enteredPass = prompt(
+      currentLang === 'ta' 
+        ? 'சிறப்பம்சங்களை திருத்த அட்மின் கடவுச்சொல்லை உள்ளிடவும் (இயல்புநிலை: admin123):' 
+        : 'Enter Admin Password to edit features (default: admin123):'
+    );
+    if (!enteredPass) return;
+    const creds = getStoredAdmin();
+    if (enteredPass.trim() === creds.password) {
+      setAdminLoggedIn(true);
+      renderAdminBar();
+      showToast("🔓 அட்மின் உள்நுழைவு வெற்றிகரமானது!", "Admin unlocked!");
+    } else {
+      alert(currentLang === 'ta' ? 'தவறான கடவுச்சொல்! (Wrong Password)' : 'Wrong password!');
+      return;
+    }
+  }
+
+  const editContainer = document.getElementById('modal-features-edit-container');
+  const viewContainer = document.getElementById('modal-features-view-container');
+  const btnText = document.getElementById('modal-edit-features-btn-text');
+  const textarea = document.getElementById('modal-features-textarea');
+
+  if (!editContainer || !viewContainer || !textarea) return;
+
+  const isHidden = editContainer.classList.contains('hidden');
+  if (isHidden) {
+    const feat = currentLang === 'ta' ? (service.featuresTa || []) : (service.featuresEn || service.featuresTa || []);
+    textarea.value = (feat || []).join('\n');
+    viewContainer.classList.add('hidden');
+    editContainer.classList.remove('hidden');
+    if (btnText) btnText.textContent = currentLang === 'ta' ? 'மூடுக' : 'Close';
+    setTimeout(() => {
+      textarea.focus();
+      textarea.select();
+    }, 50);
+  } else {
+    cancelModalFeaturesEdit();
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+function cancelModalFeaturesEdit(refreshIcons = true) {
+  const editContainer = document.getElementById('modal-features-edit-container');
+  const viewContainer = document.getElementById('modal-features-view-container');
+  const btnText = document.getElementById('modal-edit-features-btn-text');
+  if (editContainer) editContainer.classList.add('hidden');
+  if (viewContainer) viewContainer.classList.remove('hidden');
+  if (btnText) btnText.textContent = currentLang === 'ta' ? 'எடிட் (Edit)' : 'Edit';
+  if (refreshIcons && window.lucide) lucide.createIcons();
+}
+
+function saveModalFeaturesEdit() {
+  if (!currentDetailServiceId) return;
+  const serviceIndex = SERVICES.findIndex(s => s.id === currentDetailServiceId);
+  if (serviceIndex === -1) return;
+
+  const textarea = document.getElementById('modal-features-textarea');
+  if (!textarea) return;
+
+  const rawLines = textarea.value.split('\n').map(l => l.trim()).filter(Boolean);
+  if (rawLines.length === 0) {
+    alert(currentLang === 'ta' ? 'தயவுசெய்து குறைந்தபட்சம் ஒரு சிறப்பம்சத்தை உள்ளிடவும்!' : 'Please enter at least one feature item!');
+    return;
+  }
+
+  if (currentLang === 'ta') {
+    SERVICES[serviceIndex].featuresTa = rawLines;
+    if (!SERVICES[serviceIndex].featuresEn || SERVICES[serviceIndex].featuresEn.length === 0) {
+      SERVICES[serviceIndex].featuresEn = rawLines;
+    }
+  } else {
+    SERVICES[serviceIndex].featuresEn = rawLines;
+    if (!SERVICES[serviceIndex].featuresTa || SERVICES[serviceIndex].featuresTa.length === 0) {
+      SERVICES[serviceIndex].featuresTa = rawLines;
+    }
+  }
+
+  saveStoredServices(SERVICES);
+  renderServices();
+  if (document.getElementById("admin-dashboard-modal")?.classList.contains("active")) {
+    renderAdminDashServicesList();
+  }
+
+  const featuresList = document.getElementById('modal-features-list');
+  if (featuresList) {
+    const activeFeatures = currentLang === 'ta' ? SERVICES[serviceIndex].featuresTa : SERVICES[serviceIndex].featuresEn;
+    featuresList.innerHTML = (activeFeatures || []).map(f => `
+      <li class="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+        <span>${f}</span>
+      </li>
+    `).join('');
+  }
+
+  cancelModalFeaturesEdit(false);
+  if (window.lucide) lucide.createIcons();
+
+  showToast("🟢 சிறப்பம்சங்கள் வெற்றிகரமாக சேமிக்கப்பட்டது!", "Features updated successfully!");
+}
+
+function handleModalAdminEditClick() {
+  if (!currentDetailServiceId) return;
+  if (!isAdminLoggedIn()) {
+    showToast("⚠️ முழு திருத்தத்திற்கு அட்மின் உள்நுழைவு தேவை", "Admin login required for full edit");
+    openAdminLoginModal();
+    return;
+  }
+  const targetId = currentDetailServiceId;
+  closeServiceDetail();
+  editServiceInDashboard(targetId);
 }
 
 function setupModals() {
