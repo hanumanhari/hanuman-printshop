@@ -1980,15 +1980,15 @@
               </div>
 
               <!-- Visitor Email Alert Settings Card -->
-              <div class="p-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 rounded-2xl border border-emerald-200 shadow-xs space-y-2">
-                <div class="flex items-center justify-between pb-1 border-b border-emerald-200/80">
+              <div class="p-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 rounded-2xl border border-emerald-200 shadow-xs space-y-2.5">
+                <div class="flex items-center justify-between pb-1.5 border-b border-emerald-200/80 flex-wrap gap-2">
                   <div class="flex items-center gap-1.5">
                     <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
                       <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                     </div>
                     <div>
-                      <h4 class="text-xs font-black text-slate-900 leading-tight">📧 பார்வையாளர் மின்னஞ்சல் எச்சரிக்கை (Visitor Alerts)</h4>
-                      <p class="text-[9.5px] text-slate-500">Website-ஐ யாராவது திறந்தால் அவர்களின் IP, ஊர், சாதனம் விபரங்கள் உங்கள் ஜிமெயிலுக்கு உடனே வரும்</p>
+                      <h4 class="text-xs font-black text-slate-900 leading-tight">📧 பார்வையாளர் உடனடி மின்னஞ்சல் விபரம் (Realtime Visitor Alerts)</h4>
+                      <p class="text-[9.5px] text-slate-500">Website-ஐ யாராவது திறந்தவுடன் (IP, ஊர், சாதனம், Maps) உங்கள் ஜிமெயிலுக்கு உடனே விபரம் வரும்</p>
                     </div>
                   </div>
                   <button 
@@ -2002,18 +2002,19 @@
                   </button>
                 </div>
 
-                <div class="space-y-1.5">
+                <!-- Notification Email Target -->
+                <div class="space-y-1">
                   <label class="block text-[10.5px] font-bold text-slate-800">
                     அறிவிப்பு பெற வேண்டிய உங்கள் Email முகவரி (Notification Email) *
                   </label>
-                  <div class="flex gap-1.5">
+                  <div class="flex gap-1.5 flex-wrap sm:flex-nowrap">
                     <input 
                       type="email" 
                       id="set-notification-email" 
                       placeholder="hanumanhari.mobile@gmail.com" 
                       value="hanumanhari.mobile@gmail.com" 
                       required 
-                      class="flex-1 px-2.5 py-1.5 bg-white border border-emerald-300 focus:border-emerald-500 rounded-xl text-xs font-bold text-emerald-900 shadow-xs font-mono" 
+                      class="flex-1 min-w-[200px] px-2.5 py-1.5 bg-white border border-emerald-300 focus:border-emerald-500 rounded-xl text-xs font-bold text-emerald-900 shadow-xs font-mono" 
                     />
                     <button 
                       type="button" 
@@ -2028,7 +2029,8 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-0.5 flex-wrap gap-1.5">
+                <!-- Alert Toggle & Frequency Mode -->
+                <div class="p-2 bg-white/80 rounded-xl border border-emerald-200/70 space-y-1.5">
                   <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-bold text-slate-800">
                     <input 
                       type="checkbox" 
@@ -2038,11 +2040,106 @@
                     />
                     <span>புதிய பார்வையாளர் வருகையின் போது மின்னஞ்சல் எச்சரிக்கை அனுப்பவும்</span>
                   </label>
-                  <span id="visitor-email-last-status" class="text-[9.5px] text-slate-500 font-semibold"></span>
+
+                  <div class="pt-1 border-t border-slate-100 flex items-center gap-3 flex-wrap text-[10.5px]">
+                    <span class="font-bold text-slate-600">அறிவிப்பு வேகம்:</span>
+                    <label class="inline-flex items-center gap-1 cursor-pointer font-bold text-emerald-900">
+                      <input type="radio" name="set-visitor-alert-mode" id="set-alert-mode-always" value="always" checked class="text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
+                      <span>⚡ ஒவ்வொரு முறையும் உடனடியாக அனுப்பு (Immediate on Entry)</span>
+                    </label>
+                    <label class="inline-flex items-center gap-1 cursor-pointer font-semibold text-slate-600">
+                      <input type="radio" name="set-visitor-alert-mode" id="set-alert-mode-session" value="session" class="text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
+                      <span>⏳ ஒரு அமர்வுக்கு ஒருமுறை மட்டும் (Session mode)</span>
+                    </label>
+                  </div>
                 </div>
 
-                <div class="p-2 bg-white/90 rounded-xl border border-emerald-100 text-[10px] text-slate-600 leading-relaxed">
-                  💡 <strong>குறிப்பு:</strong> முதல் முறை FormSubmit தளத்திலிருந்து உங்கள் ஜிமெயிலுக்கு (<strong>hanumanhari.mobile@gmail.com</strong>) <em>"Activate Form"</em> என்ற உறுதிப்படுத்தல் மின்னஞ்சல் வரலாம். அதில் உள்ள பட்டனை 1 முறை அழுத்திவிட்டால் போதும்; அதன் பின் ஒவ்வொரு பார்வையாளரின் வருகையும் நேரடியாக உங்கள் Inbox-க்கு வந்துவிடும்.
+                <!-- Web3Forms Access Key Card (Primary Delivery Engine) -->
+                <div class="p-2.5 bg-gradient-to-r from-indigo-50/80 to-blue-50/80 rounded-xl border border-indigo-200 shadow-xs space-y-1.5">
+                  <div class="flex items-center justify-between flex-wrap gap-1">
+                    <label class="block text-[10.5px] font-bold text-indigo-950 flex items-center gap-1">
+                      <i data-lucide="key" class="w-3.5 h-3.5 text-indigo-600"></i>
+                      <span>Web3Forms Access Key (100% உடனடி & நேரடி ஜிமெயில் டெலிவரி)</span>
+                    </label>
+                    <div class="flex items-center gap-1">
+                      <button 
+                        type="button" 
+                        onclick="openWeb3FormsKeyHelper()" 
+                        class="px-2 py-0.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold transition-all shadow-xs flex items-center gap-1 cursor-pointer"
+                        title="Web3Forms தளத்தில் உங்கள் மின்னஞ்சலை கொடுத்து இலவச Access Key பெறுக"
+                      >
+                        <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                        <span>🔑 1-Click: இலவச Key பெறுக</span>
+                      </button>
+                      <button 
+                        type="button" 
+                        onclick="pasteWeb3FormsKey()" 
+                        class="px-2 py-0.5 rounded-lg bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-300 text-[10px] font-bold transition-all shadow-xs flex items-center gap-1 cursor-pointer"
+                        title="Clipboard-லிருந்து Access Key-ஐ ஒட்டுக"
+                      >
+                        <i data-lucide="clipboard" class="w-2.5 h-2.5"></i>
+                        <span>Paste</span>
+                      </button>
+                    </div>
+                  </div>
+                  <input 
+                    type="text" 
+                    id="set-web3forms-key" 
+                    placeholder="எ.கா: a1b2c3d4-e5f6-7890-abcd-ef1234567890 (Web3Forms Access Key)" 
+                    class="w-full px-2.5 py-1.5 bg-white border border-indigo-300 focus:border-indigo-500 rounded-xl text-xs font-mono font-bold text-indigo-950 shadow-xs placeholder:text-slate-400 placeholder:font-sans" 
+                  />
+                  <p class="text-[9.5px] text-indigo-700/90 leading-tight">
+                    💡 <strong>எளிய முறை:</strong> 'இலவச Key பெறுக' கிளிக் செய்யவும் (உங்கள் மின்னஞ்சல் நகலெடுக்கப்படும்). திறக்கும் பக்கத்தில் பேஸ்ட் செய்து 'Create Access Key' கொடுத்தால், உங்கள் ஜிமெயிலுக்கு வரும் Access Key-ஐ இங்கே ஒட்டவும்.
+                  </p>
+                </div>
+
+                <!-- Secondary Endpoints Accordion (Google Apps Script / Formspree / FormSubmit) -->
+                <details class="group bg-white/80 rounded-xl border border-slate-200 p-2 text-xs">
+                  <summary class="font-bold text-slate-700 cursor-pointer flex items-center justify-between select-none">
+                    <span class="flex items-center gap-1.5 text-[10.5px]">
+                      <i data-lucide="settings-2" class="w-3.5 h-3.5 text-slate-500"></i>
+                      <span>கூடுதல் மின்னஞ்சல் வழிகள் (Google Webhook / Formspree / FormSubmit)</span>
+                    </span>
+                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform group-open:rotate-180"></i>
+                  </summary>
+                  <div class="pt-2.5 space-y-2 border-t border-slate-100 mt-2 text-[10.5px]">
+                    <!-- Google Apps Script Webhook -->
+                    <div class="space-y-1">
+                      <div class="flex items-center justify-between">
+                        <label class="font-bold text-slate-700">Google Apps Script Webhook URL (வரம்பற்ற இலவசம்):</label>
+                        <button type="button" onclick="copyGoogleAppsScriptCode()" class="text-[9.5px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-0.5 cursor-pointer">
+                          <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                          <span>GAS Script கோடை நகலெடு</span>
+                        </button>
+                      </div>
+                      <input 
+                        type="url" 
+                        id="set-email-webhook-url" 
+                        placeholder="https://script.google.com/macros/s/.../exec" 
+                        class="w-full px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs font-mono" 
+                      />
+                    </div>
+
+                    <!-- Formspree ID -->
+                    <div class="space-y-1">
+                      <label class="font-bold text-slate-700">Formspree Form ID (Optional):</label>
+                      <input 
+                        type="text" 
+                        id="set-formspree-id" 
+                        placeholder="எ.கா: xpwzqkry அல்லது https://formspree.io/f/xpwzqkry" 
+                        class="w-full px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs font-mono" 
+                      />
+                    </div>
+
+                    <!-- FormSubmit Fallback status -->
+                    <div class="p-1.5 bg-slate-50 rounded-lg border border-slate-200 text-[9.5px] text-slate-600">
+                      ℹ️ <strong>FormSubmit.co:</strong> மூன்றாம் நிலை பேக்-அப்பாக செயல்படுகிறது. (தற்போது FormSubmit தளத்தில் உலகளாவிய சர்வர் தாமதம் 522 உள்ளதால், Web3Forms அல்லது Google Apps Script முதன்மையாக இயங்கும்).
+                    </div>
+                  </div>
+                </details>
+
+                <div class="flex items-center justify-between pt-0.5 flex-wrap gap-1">
+                  <span id="visitor-email-last-status" class="text-[10px] text-slate-600 font-semibold"></span>
                 </div>
               </div>
             </div>
@@ -3029,6 +3126,10 @@ const DEFAULT_SHOP_INFO = {
   instagram: "https://www.instagram.com/print_shop_price_list",
   notificationEmail: "hanumanhari.mobile@gmail.com",
   visitorEmailAlerts: true,
+  visitorAlertMode: "always",
+  web3formsKey: "",
+  emailWebhookUrl: "",
+  formspreeId: "",
   addressEn: "Kathiriyangadu, Poonachi Village",
   addressTa: "கத்திரியங்காடு, பூனாச்சி கிராமம்",
   openingHoursEn: "8:30 AM - 9:30 PM",
@@ -4848,6 +4949,10 @@ function getStoredShopInfo() {
         if (!parsed.instagram) parsed.instagram = DEFAULT_SHOP_INFO.instagram;
         if (!parsed.notificationEmail) parsed.notificationEmail = DEFAULT_SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
         if (parsed.visitorEmailAlerts === undefined) parsed.visitorEmailAlerts = true;
+        if (!parsed.visitorAlertMode) parsed.visitorAlertMode = "always";
+        if (parsed.web3formsKey === undefined) parsed.web3formsKey = "";
+        if (parsed.emailWebhookUrl === undefined) parsed.emailWebhookUrl = "";
+        if (parsed.formspreeId === undefined) parsed.formspreeId = "";
         return parsed;
       }
     }
@@ -6724,6 +6829,22 @@ function loadAdminSettingsForm() {
   if (notifEmailEl) notifEmailEl.value = shop.notificationEmail || "hanumanhari.mobile@gmail.com";
   const alertToggleEl = document.getElementById("set-visitor-email-alerts");
   if (alertToggleEl) alertToggleEl.checked = shop.visitorEmailAlerts !== false;
+  const modeAlways = document.getElementById("set-alert-mode-always");
+  const modeSession = document.getElementById("set-alert-mode-session");
+  if (modeAlways && modeSession) {
+    if (shop.visitorAlertMode === "session") {
+      modeSession.checked = true;
+    } else {
+      modeAlways.checked = true;
+    }
+  }
+  const web3KeyEl = document.getElementById("set-web3forms-key");
+  if (web3KeyEl) web3KeyEl.value = shop.web3formsKey || "";
+  const webhookUrlEl = document.getElementById("set-email-webhook-url");
+  if (webhookUrlEl) webhookUrlEl.value = shop.emailWebhookUrl || "";
+  const formspreeEl = document.getElementById("set-formspree-id");
+  if (formspreeEl) formspreeEl.value = shop.formspreeId || "";
+
   const statusEl = document.getElementById("visitor-email-last-status");
   if (statusEl) {
     const lastStatus = localStorage.getItem("shop_last_visitor_email_status");
@@ -6747,6 +6868,10 @@ function handleAdminDashSaveShopInfo(e) {
   const instaVal = document.getElementById("set-instagram")?.value.trim();
   const notifEmailVal = document.getElementById("set-notification-email")?.value.trim();
   const alertToggleVal = document.getElementById("set-visitor-email-alerts")?.checked;
+  const alertModeVal = document.querySelector('input[name="set-visitor-alert-mode"]:checked')?.value || "always";
+  const web3KeyVal = document.getElementById("set-web3forms-key")?.value.trim();
+  const webhookUrlVal = document.getElementById("set-email-webhook-url")?.value.trim();
+  const formspreeVal = document.getElementById("set-formspree-id")?.value.trim();
   const hoursTaVal = document.getElementById("set-shop-hours-ta")?.value.trim();
   const hoursEnVal = document.getElementById("set-shop-hours-en")?.value.trim();
   const addressTaVal = document.getElementById("set-address-ta")?.value.trim();
@@ -6776,6 +6901,10 @@ function handleAdminDashSaveShopInfo(e) {
   if (alertToggleVal !== undefined) {
     shop.visitorEmailAlerts = alertToggleVal;
   }
+  shop.visitorAlertMode = alertModeVal;
+  shop.web3formsKey = web3KeyVal || "";
+  shop.emailWebhookUrl = webhookUrlVal || "";
+  shop.formspreeId = formspreeVal || "";
   if (hoursTaVal) {
     shop.openingHoursTa = hoursTaVal;
     shop.openingHoursEn = hoursEnVal || hoursTaVal;
@@ -8870,24 +8999,113 @@ async function collectVisitorDetails() {
   return visitorData;
 }
 
-async function sendVisitorNotificationEmail(visitorData, isTest = false) {
+function openWeb3FormsKeyHelper() {
+  const email = (document.getElementById("set-notification-email")?.value.trim()) || SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).catch(() => {});
+    }
+  } catch (e) {}
+  window.open("https://web3forms.com", "_blank");
+  showToast(`📋 ${email} நகலெடுக்கப்பட்டது! திறந்த இணையதளத்தில் பேஸ்ட் செய்து 'Create Access Key' கிளிக் செய்யவும்.`, "Email copied! Paste on Web3Forms to get Key");
+}
+
+async function pasteWeb3FormsKey() {
+  try {
+    if (navigator.clipboard && navigator.clipboard.readText) {
+      const text = await navigator.clipboard.readText();
+      const input = document.getElementById("set-web3forms-key");
+      if (input && text) {
+        input.value = text.trim();
+        showToast("📋 Web3Forms Key ஒட்டப்பட்டது!", "Key pasted into field");
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn("Clipboard paste error", e);
+  }
+  showToast("கீபோர்டு வழியாக Ctrl+V அழுத்தி Key-ஐ ஒட்டவும்.", "Paste using Ctrl+V");
+}
+
+function copyGoogleAppsScriptCode() {
   const shop = getStoredShopInfo();
   const recipientEmail = (shop.notificationEmail && shop.notificationEmail.trim()) || "hanumanhari.mobile@gmail.com";
+  const scriptCode = `// Google Apps Script - Sri Hanuman Shop Realtime Visitor Alerts
+// 1. script.google.com செல்லவும் -> New Project
+// 2. இந்த கோடை பேஸ்ட் செய்யவும் -> Deploy -> New deployment -> Select Web app
+// 3. Execute as: Me, Who has access: Anyone -> Deploy
+// 4. வரும் Web app URL-ஐ அட்மின் செட்டிங்ஸில் ஒட்டவும்.
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var recipient = "${recipientEmail}";
+    var subject = data._subject || data.subject || "🔔 புதிய பார்வையாளர்! Sri Hanuman Print Shop";
+    
+    var html = "<div style='font-family:sans-serif;max-width:600px;background:#f8fafc;padding:20px;border-radius:12px;border:1px solid #cbd5e1;'>"
+      + "<h2 style='color:#0f172a;margin-top:0;'>🔔 Sri Hanuman Print Shop</h2>"
+      + "<p style='color:#64748b;font-size:13px;'>புதிய பார்வையாளர் வருகை தகவல்:</p>"
+      + "<table style='width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;'>";
+      
+    for (var k in data) {
+      if (!k.startsWith("_") && k !== "recipient") {
+        html += "<tr style='border-bottom:1px solid #f1f5f9;'>"
+          + "<td style='padding:9px 12px;font-weight:bold;color:#334155;font-size:12px;width:40%;'>" + k + "</td>"
+          + "<td style='padding:9px 12px;color:#0f172a;font-size:12px;'>" + data[k] + "</td></tr>";
+      }
+    }
+    html += "</table></div>";
+
+    MailApp.sendEmail({
+      to: recipient,
+      subject: subject,
+      htmlBody: html
+    });
+
+    return ContentService.createTextOutput(JSON.stringify({success: true})).setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({success: false, error: err.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(scriptCode).then(() => {
+        showToast("📋 Google Apps Script கோட் நகலெடுக்கப்பட்டது! script.google.com-ல் பேஸ்ட் செய்யவும்.", "Google Apps Script code copied!");
+      }).catch(() => {
+        prompt("Google Apps Script Code:", scriptCode);
+      });
+      return;
+    }
+  } catch (e) {}
+  prompt("Google Apps Script Code:", scriptCode);
+}
+
+async function sendVisitorNotificationEmail(visitorData, isTest = false) {
+  const shop = getStoredShopInfo();
+  const inputEmail = document.getElementById("set-notification-email")?.value.trim();
+  const recipientEmail = inputEmail || (shop.notificationEmail && shop.notificationEmail.trim()) || "hanumanhari.mobile@gmail.com";
 
   if (!isTest && shop.visitorEmailAlerts === false) {
     console.log("Visitor email alerts are disabled in Admin Settings.");
     return { success: false, reason: "disabled" };
   }
 
-  // Rate Limiting / Session check (skip if manual test)
+  // Rate Limiting & Cooldown check
   if (!isTest) {
-    const sessionSent = sessionStorage.getItem("shop_visitor_email_alert_sent");
-    const lastSentTime = parseInt(localStorage.getItem("shop_last_visitor_email_time") || "0");
-    const now = Date.now();
-    // 30 minutes cooldown per device / browser session
-    if (sessionSent === "true" || (now - lastSentTime < 30 * 60 * 1000)) {
-      console.log("Visitor email alert throttled for this session.");
-      return { success: false, reason: "throttled" };
+    const alertMode = shop.visitorAlertMode || "always";
+    if (alertMode === "session") {
+      const sessionSent = sessionStorage.getItem("shop_visitor_email_alert_sent");
+      if (sessionSent === "true") {
+        console.log("Visitor email alert throttled for this session (Session mode).");
+        return { success: false, reason: "throttled" };
+      }
+    } else {
+      // Default: "always" mode - only a 15-second debounce to prevent duplicate triggers on rapid reloads
+      const lastSentTime = parseInt(localStorage.getItem("shop_last_visitor_email_time") || "0");
+      if (Date.now() - lastSentTime < 15000) {
+        console.log("Visitor email alert throttled: already sent within last 15 seconds.");
+        return { success: false, reason: "throttled" };
+      }
     }
   }
 
@@ -8917,34 +9135,151 @@ async function sendVisitorNotificationEmail(visitorData, isTest = false) {
     "Google Maps இருப்பிடம்": visitorData.mapsUrl || "கிடைக்கவில்லை"
   };
 
-  try {
-    const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`;
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+  // Check active keys (prioritize live inputs if in Admin DOM, else saved shop info)
+  const inputWeb3Key = document.getElementById("set-web3forms-key")?.value.trim();
+  const inputWebhookUrl = document.getElementById("set-email-webhook-url")?.value.trim();
+  const inputFormspreeId = document.getElementById("set-formspree-id")?.value.trim();
 
-    const result = await response.json().catch(() => ({}));
+  const web3Key = inputWeb3Key || (shop.web3formsKey && shop.web3formsKey.trim()) || "";
+  const webhookUrl = inputWebhookUrl || (shop.emailWebhookUrl && shop.emailWebhookUrl.trim()) || "";
+  const formspreeId = inputFormspreeId || (shop.formspreeId && shop.formspreeId.trim()) || "";
 
-    if (response.ok || (result && (result.success === "true" || result.success === true))) {
-      sessionStorage.setItem("shop_visitor_email_alert_sent", "true");
-      localStorage.setItem("shop_last_visitor_email_time", Date.now().toString());
-      const statusText = `வெற்றிகரமாக அனுப்பப்பட்டது (${new Date().toLocaleTimeString('en-IN')})`;
-      localStorage.setItem("shop_last_visitor_email_status", statusText);
-      const statusEl = document.getElementById("visitor-email-last-status");
-      if (statusEl) statusEl.textContent = `கடைசி நிலை: ${statusText}`;
-      return { success: true, result: result };
-    } else {
-      console.warn("FormSubmit response error:", result);
-      return { success: false, error: result.message || "Email delivery failed" };
+  let deliverySuccess = false;
+  let deliveryProvider = "";
+  let lastError = "";
+
+  // 1. PRIMARY ENGINE: Web3Forms (100% Reliable, Fast & Free)
+  if (web3Key) {
+    try {
+      const formData = new FormData();
+      formData.append("access_key", web3Key);
+      formData.append("subject", subject);
+      formData.append("from_name", (shop.nameTa || "Sri Hanuman Shop") + " (பார்வையாளர் எச்சரிக்கை)");
+      formData.append("replyto", "no-reply@hanumanprintshop.com");
+      
+      Object.keys(payload).forEach(k => {
+        if (!k.startsWith("_")) {
+          formData.append(k, payload[k] || "N/A");
+        }
+      });
+
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 9000);
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+        signal: ctrl.signal
+      });
+      clearTimeout(tid);
+
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && (json.success === true || json.success === "true")) {
+        deliverySuccess = true;
+        deliveryProvider = "Web3Forms";
+      } else {
+        lastError = json.message || "Web3Forms API rejected key";
+        console.warn("Web3Forms response:", json);
+      }
+    } catch (e) {
+      lastError = "Web3Forms: " + e.message;
+      console.warn(lastError);
     }
-  } catch (err) {
-    console.error("Error sending visitor email:", err);
-    return { success: false, error: err.message };
+  }
+
+  // 2. SECONDARY ENGINE: Google Apps Script Webhook (Unlimited Free Direct to Gmail)
+  if (!deliverySuccess && webhookUrl) {
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 9000);
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          recipient: recipientEmail,
+          subject: subject,
+          ...payload
+        }),
+        signal: ctrl.signal
+      });
+      clearTimeout(tid);
+      deliverySuccess = true;
+      deliveryProvider = "Google Webhook";
+    } catch (e) {
+      lastError = "Webhook: " + e.message;
+      console.warn(lastError);
+    }
+  }
+
+  // 3. TERTIARY ENGINE: Formspree (if configured)
+  if (!deliverySuccess && formspreeId) {
+    try {
+      let endpoint = formspreeId.startsWith("http") ? formspreeId : `https://formspree.io/f/${formspreeId}`;
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 8000);
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
+      });
+      clearTimeout(tid);
+      if (res.ok) {
+        deliverySuccess = true;
+        deliveryProvider = "Formspree";
+      } else {
+        const json = await res.json().catch(() => ({}));
+        lastError = json.error || "Formspree rejected";
+      }
+    } catch (e) {
+      lastError = "Formspree: " + e.message;
+    }
+  }
+
+  // 4. FALLBACK ENGINE: FormSubmit.co (with 4-second timeout to handle 522 Cloudflare Outages)
+  if (!deliverySuccess && !web3Key) {
+    try {
+      const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`;
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 4000);
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
+      });
+      clearTimeout(tid);
+
+      const result = await res.json().catch(() => ({}));
+      if (res.ok || (result && (result.success === "true" || result.success === true))) {
+        deliverySuccess = true;
+        deliveryProvider = "FormSubmit.co";
+      } else {
+        lastError = result.message || "FormSubmit server error";
+      }
+    } catch (err) {
+      lastError = "FormSubmit சர்வர் முடங்கியுள்ளது (522). Web3Forms Key பெறவும்.";
+      console.warn("FormSubmit unreachable:", err);
+    }
+  }
+
+  // Record delivery status
+  if (deliverySuccess) {
+    sessionStorage.setItem("shop_visitor_email_alert_sent", "true");
+    localStorage.setItem("shop_last_visitor_email_time", Date.now().toString());
+    const statusText = `வெற்றிகரமாக அனுப்பப்பட்டது (${deliveryProvider} - ${new Date().toLocaleTimeString('en-IN')})`;
+    localStorage.setItem("shop_last_visitor_email_status", statusText);
+    const statusEl = document.getElementById("visitor-email-last-status");
+    if (statusEl) statusEl.textContent = `கடைசி நிலை: ${statusText}`;
+    return { success: true, provider: deliveryProvider };
+  } else {
+    const statusText = `தோல்வி (${new Date().toLocaleTimeString('en-IN')}): ${lastError || 'முடங்கியுள்ளது'}`;
+    localStorage.setItem("shop_last_visitor_email_status", statusText);
+    const statusEl = document.getElementById("visitor-email-last-status");
+    if (statusEl) statusEl.textContent = `கடைசி நிலை: ${statusText}`;
+    return { success: false, error: lastError || "Email delivery failed" };
   }
 }
 
@@ -8954,7 +9289,7 @@ function saveVisitorToLogs(visitorData, emailStatus) {
     const entry = {
       id: "vis-" + Date.now(),
       ...visitorData,
-      emailStatus: emailStatus // "Sent", "Throttled", "Disabled", "Failed"
+      emailStatus: emailStatus // "Sent (Provider)", "Throttled", "Disabled", "Failed (...)"
     };
     logs.unshift(entry);
     if (logs.length > 50) logs = logs.slice(0, 50);
@@ -8996,7 +9331,16 @@ async function trackVisitorAndSendEmail() {
   try {
     const visitorData = await collectVisitorDetails();
     const result = await sendVisitorNotificationEmail(visitorData, false);
-    const emailStatus = result.success ? "Sent" : (result.reason === "throttled" ? "Throttled" : (result.reason === "disabled" ? "Disabled" : "Failed"));
+    let emailStatus = "Failed";
+    if (result.success) {
+      emailStatus = result.provider ? `Sent (${result.provider})` : "Sent";
+    } else if (result.reason === "throttled") {
+      emailStatus = "Throttled";
+    } else if (result.reason === "disabled") {
+      emailStatus = "Disabled";
+    } else {
+      emailStatus = `Failed (${result.error || 'Server unreachable'})`;
+    }
     saveVisitorToLogs(visitorData, emailStatus);
   } catch (err) {
     console.warn("Visitor tracking process error:", err);
@@ -9023,11 +9367,13 @@ async function sendTestVisitorEmail() {
     const result = await sendVisitorNotificationEmail(testData, true);
 
     if (result.success) {
-      showToast("✅ சோதனை மின்னஞ்சல் அனுப்பப்பட்டது! உங்கள் ஜிமெயிலை சரிபார்க்கவும்.", "Test email sent to " + targetEmail + "!");
-      saveVisitorToLogs(testData, "Sent (Test)");
+      const prov = result.provider ? ` (${result.provider} வழியாக)` : "";
+      showToast(`✅ சோதனை மின்னஞ்சல் வெற்றிகரமாக அனுப்பப்பட்டது!${prov} உங்கள் ஜிமெயிலை சரிபார்க்கவும்.`, "Test email delivered to " + targetEmail + "!");
+      saveVisitorToLogs(testData, `Sent (Test${prov})`);
       renderAdminVisitorsTab();
     } else {
-      showToast("⚠️ மின்னஞ்சல் அனுப்புவதில் பிழை: " + (result.error || "Failed"), "Email error", "error");
+      const errDetail = result.error || "Failed";
+      showToast("⚠️ மின்னஞ்சல் தோல்வி: " + errDetail + " - Web3Forms Key-ஐ உள்ளிடவும்.", "Email error", "error");
     }
   } catch (err) {
     showToast("மின்னஞ்சல் அனுப்புவதில் பிழை: " + err.message, "Send error", "error");
@@ -9060,7 +9406,7 @@ function renderAdminVisitorsTab() {
   const emailEl = document.getElementById("visitor-stats-active-email");
 
   if (totalEl) totalEl.textContent = logs.length.toString();
-  if (sentEl) sentEl.textContent = logs.filter(l => l.emailStatus === "Sent" || l.emailStatus === "Sent (Test)").length.toString();
+  if (sentEl) sentEl.textContent = logs.filter(l => l.emailStatus && l.emailStatus.startsWith("Sent")).length.toString();
   if (emailEl) emailEl.textContent = SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
 
   if (logs.length === 0) {
@@ -9083,14 +9429,17 @@ function renderAdminVisitorsTab() {
 
   container.innerHTML = logs.map((item, idx) => {
     let statusBadge = "";
-    if (item.emailStatus === "Sent" || item.emailStatus === "Sent (Test)") {
-      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-600"></i><span>Email Sent</span></span>`;
+    if (item.emailStatus && item.emailStatus.startsWith("Sent")) {
+      const isTest = item.emailStatus.includes("Test");
+      const matchProv = item.emailStatus.match(/\((.*?)\)/);
+      const prov = matchProv ? matchProv[1] : "Delivered";
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-600"></i><span>${isTest ? '🧪 ' : ''}Email Sent (${prov})</span></span>`;
     } else if (item.emailStatus === "Throttled") {
       statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-amber-600"></i><span>Same Session (Logged)</span></span>`;
     } else if (item.emailStatus === "Disabled") {
       statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1"><i data-lucide="bell-off" class="w-3 h-3 text-slate-500"></i><span>Alerts Off</span></span>`;
     } else {
-      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i><span>Delivery Failed</span></span>`;
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1" title="${item.emailStatus || 'Delivery Failed'}"><i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i><span>Delivery Pending / Failed</span></span>`;
     }
 
     const mapsBtn = item.mapsUrl
@@ -9198,8 +9547,8 @@ function onAppStart() {
   checkGitHubRemoteUpdates(false);
   updateVisitorLogCountBadge();
 
-  // Background visitor intelligence & email alert trigger (runs 1.8s after page load)
-  setTimeout(trackVisitorAndSendEmail, 1800);
+  // Background visitor intelligence & email alert trigger (runs 1s after page load)
+  setTimeout(trackVisitorAndSendEmail, 1000);
 
   // Background GitHub update checker (every 60 seconds)
   setInterval(() => {
