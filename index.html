@@ -1329,6 +1329,11 @@
           <span>⚙️ அமைப்புகள் & Diagnostics</span>
           <span id="settings-error-badge" class="hidden px-1.5 py-0.2 bg-red-600 text-white text-[9px] rounded-full font-bold">!</span>
         </button>
+        <button data-tab="visitors" onclick="setAdminDashboardTab('visitors')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 flex items-center gap-1 bg-gradient-to-r from-emerald-900 to-teal-900 text-white shadow-sm border-b-2 border-emerald-400">
+          <i data-lucide="eye" class="w-3.5 h-3.5 text-emerald-300"></i>
+          <span>👥 பார்வையாளர்கள் &amp; Email விபரம்</span>
+          <span id="visitor-log-count-badge" class="px-1.5 py-0.2 bg-emerald-500 text-white text-[9px] rounded-full font-bold">0</span>
+        </button>
         <button data-tab="supabase" onclick="setAdminDashboardTab('supabase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 bg-emerald-50 text-emerald-900 border-b-2 border-emerald-600">⚡ Supabase (Vercel Sync)</button>
         <button data-tab="savehtml" onclick="setAdminDashboardTab('savehtml')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">💾 கோப்பை சேமி (Save)</button>
         <button data-tab="firebase" onclick="setAdminDashboardTab('firebase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">🔥 Firebase Sync</button>
@@ -1972,6 +1977,73 @@
                 <label class="block text-[11px] font-bold text-slate-700 mb-0.5">முகவரி (Address)</label>
                 <input type="text" id="set-address-ta" placeholder="கத்திரியங்காடு, பூனாச்சி கிராமம்" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold" />
                 <input type="hidden" id="set-address-en" value="" />
+              </div>
+
+              <!-- Visitor Email Alert Settings Card -->
+              <div class="p-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 rounded-2xl border border-emerald-200 shadow-xs space-y-2">
+                <div class="flex items-center justify-between pb-1 border-b border-emerald-200/80">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                      <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-xs font-black text-slate-900 leading-tight">📧 பார்வையாளர் மின்னஞ்சல் எச்சரிக்கை (Visitor Alerts)</h4>
+                      <p class="text-[9.5px] text-slate-500">Website-ஐ யாராவது திறந்தால் அவர்களின் IP, ஊர், சாதனம் விபரங்கள் உங்கள் ஜிமெயிலுக்கு உடனே வரும்</p>
+                    </div>
+                  </div>
+                  <button 
+                    type="button" 
+                    onclick="setAdminDashboardTab('visitors')" 
+                    class="px-2 py-1 rounded-lg bg-white hover:bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300 transition-all cursor-pointer shadow-xs flex items-center gap-1 shrink-0"
+                    title="முந்தைய பார்வையாளர் விபரங்களை பார்க்க"
+                  >
+                    <i data-lucide="list" class="w-3 h-3"></i>
+                    <span>வரலாறு பார்</span>
+                  </button>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="block text-[10.5px] font-bold text-slate-800">
+                    அறிவிப்பு பெற வேண்டிய உங்கள் Email முகவரி (Notification Email) *
+                  </label>
+                  <div class="flex gap-1.5">
+                    <input 
+                      type="email" 
+                      id="set-notification-email" 
+                      placeholder="hanumanhari.mobile@gmail.com" 
+                      value="hanumanhari.mobile@gmail.com" 
+                      required 
+                      class="flex-1 px-2.5 py-1.5 bg-white border border-emerald-300 focus:border-emerald-500 rounded-xl text-xs font-bold text-emerald-900 shadow-xs font-mono" 
+                    />
+                    <button 
+                      type="button" 
+                      onclick="sendTestVisitorEmail()" 
+                      id="btn-test-visitor-email" 
+                      class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white rounded-xl text-[11px] font-bold shadow-sm transition-all flex items-center gap-1 shrink-0 cursor-pointer"
+                      title="உங்கள் மின்னஞ்சலுக்கு இப்போது ஒரு சோதனை மெயில் அனுப்ப"
+                    >
+                      <i data-lucide="send" class="w-3 h-3"></i>
+                      <span>Test மெயில் அனுப்பு</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-0.5 flex-wrap gap-1.5">
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-bold text-slate-800">
+                    <input 
+                      type="checkbox" 
+                      id="set-visitor-email-alerts" 
+                      checked 
+                      class="w-3.5 h-3.5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer" 
+                    />
+                    <span>புதிய பார்வையாளர் வருகையின் போது மின்னஞ்சல் எச்சரிக்கை அனுப்பவும்</span>
+                  </label>
+                  <span id="visitor-email-last-status" class="text-[9.5px] text-slate-500 font-semibold"></span>
+                </div>
+
+                <div class="p-2 bg-white/90 rounded-xl border border-emerald-100 text-[10px] text-slate-600 leading-relaxed">
+                  💡 <strong>குறிப்பு:</strong> முதல் முறை FormSubmit தளத்திலிருந்து உங்கள் ஜிமெயிலுக்கு (<strong>hanumanhari.mobile@gmail.com</strong>) <em>"Activate Form"</em> என்ற உறுதிப்படுத்தல் மின்னஞ்சல் வரலாம். அதில் உள்ள பட்டனை 1 முறை அழுத்திவிட்டால் போதும்; அதன் பின் ஒவ்வொரு பார்வையாளரின் வருகையும் நேரடியாக உங்கள் Inbox-க்கு வந்துவிடும்.
+                </div>
               </div>
             </div>
 
@@ -2734,6 +2806,79 @@ alter publication supabase_realtime add table shop_data;</pre>
 
         </div>
       </div>
+
+      <!-- Tab 11: Visitor Activity & Email Logs -->
+      <div data-tab-content="visitors" class="admin-tab-content p-3 sm:p-5 overflow-y-auto flex-1 hidden space-y-4">
+        <!-- Visitor Activity Dashboard Banner -->
+        <div class="p-4 bg-gradient-to-r from-slate-900 via-teal-950 to-emerald-950 rounded-2xl text-white shadow-md flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 flex items-center justify-center shrink-0">
+              <i data-lucide="eye" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-black">👥 இணையதள பார்வையாளர்கள் &amp; மின்னஞ்சல் எச்சரிக்கை பதிவேடு</h4>
+              <p class="text-xs text-slate-300">Website-ஐ திறந்தவர்களின் முழு விபரம் (IP, ஊர், சாதனம்) &amp; மின்னஞ்சல் நிலை</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <button 
+              type="button" 
+              onclick="sendTestVisitorEmail()" 
+              class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1 cursor-pointer"
+              title="உங்கள் மின்னஞ்சலுக்கு இப்போது ஒரு சோதனை மெயில் அனுப்ப"
+            >
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>Test Email அனுப்பு</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="renderAdminVisitorsTab()" 
+              class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+            >
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>புதுப்பி (Refresh)</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="clearVisitorLogs()" 
+              class="px-2.5 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs font-bold border border-red-500/30 transition-all cursor-pointer"
+            >
+              <span>அழி (Clear)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Visitor Stats Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-slate-500 font-bold block text-[10px]">பதிவான வருகைகள்</span>
+              <span id="visitor-stats-total-logged" class="text-lg font-black text-slate-900">0</span>
+            </div>
+            <i data-lucide="users" class="w-6 h-6 text-slate-400"></i>
+          </div>
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-emerald-700 font-bold block text-[10px]">மின்னஞ்சல் எச்சரிக்கைகள்</span>
+              <span id="visitor-stats-emails-sent" class="text-lg font-black text-emerald-800">0</span>
+            </div>
+            <i data-lucide="mail-check" class="w-6 h-6 text-emerald-600"></i>
+          </div>
+          <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
+            <div class="truncate mr-2">
+              <span class="text-blue-700 font-bold block text-[10px]">அறிவிப்பு பெறும் ஜிமெயில்</span>
+              <span id="visitor-stats-active-email" class="text-xs font-bold text-blue-900 truncate block">hanumanhari.mobile@gmail.com</span>
+            </div>
+            <i data-lucide="at-sign" class="w-6 h-6 text-blue-600 shrink-0"></i>
+          </div>
+        </div>
+
+        <!-- Visitor Cards Container -->
+        <div id="admin-visitor-logs-container" class="space-y-2.5">
+          <!-- Populated dynamically by renderAdminVisitorsTab() -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2882,6 +3027,8 @@ const DEFAULT_SHOP_INFO = {
   phone: "+91 98765 43210",
   whatsapp: "919876543210",
   instagram: "https://www.instagram.com/print_shop_price_list",
+  notificationEmail: "hanumanhari.mobile@gmail.com",
+  visitorEmailAlerts: true,
   addressEn: "Kathiriyangadu, Poonachi Village",
   addressTa: "கத்திரியங்காடு, பூனாச்சி கிராமம்",
   openingHoursEn: "8:30 AM - 9:30 PM",
@@ -4699,6 +4846,8 @@ function getStoredShopInfo() {
         if (parsed.a4PaperInStock === undefined) parsed.a4PaperInStock = (parsed.a4StockCount > 0);
         if (parsed.photoSheetInStock === undefined) parsed.photoSheetInStock = (parsed.photoStockCount > 0);
         if (!parsed.instagram) parsed.instagram = DEFAULT_SHOP_INFO.instagram;
+        if (!parsed.notificationEmail) parsed.notificationEmail = DEFAULT_SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
+        if (parsed.visitorEmailAlerts === undefined) parsed.visitorEmailAlerts = true;
         return parsed;
       }
     }
@@ -5251,6 +5400,7 @@ function openAdminDashboardModal(defaultTab = 'add') {
   loadAdminSettingsForm();
   updateAdminLivePreview();
   runLiveSystemDiagnostics();
+  updateVisitorLogCountBadge();
 
   modal.classList.add("active");
   content.classList.add("active");
@@ -5299,6 +5449,8 @@ function setAdminDashboardTab(tabName) {
   } else if (tabName === 'settings') {
     loadAdminSettingsForm();
     runLiveSystemDiagnostics();
+  } else if (tabName === 'visitors') {
+    renderAdminVisitorsTab();
   } else if (tabName === 'supabase') {
     const supa = getStoredSupabaseConfig();
     const urlInput = document.getElementById("supabase-url-input");
@@ -6568,6 +6720,16 @@ function loadAdminSettingsForm() {
   if (usernameEl) usernameEl.value = creds.username || "hanumanharikaran";
   if (recCodeEl) recCodeEl.value = creds.recoveryCode || "25091997";
 
+  const notifEmailEl = document.getElementById("set-notification-email");
+  if (notifEmailEl) notifEmailEl.value = shop.notificationEmail || "hanumanhari.mobile@gmail.com";
+  const alertToggleEl = document.getElementById("set-visitor-email-alerts");
+  if (alertToggleEl) alertToggleEl.checked = shop.visitorEmailAlerts !== false;
+  const statusEl = document.getElementById("visitor-email-last-status");
+  if (statusEl) {
+    const lastStatus = localStorage.getItem("shop_last_visitor_email_status");
+    statusEl.textContent = lastStatus ? `கடைசி நிலை: ${lastStatus}` : "";
+  }
+
   updateAdminLogoPreview();
 }
 
@@ -6583,6 +6745,8 @@ function handleAdminDashSaveShopInfo(e) {
   const phoneVal = document.getElementById("set-phone")?.value.trim();
   const whatsappVal = document.getElementById("set-whatsapp")?.value.trim();
   const instaVal = document.getElementById("set-instagram")?.value.trim();
+  const notifEmailVal = document.getElementById("set-notification-email")?.value.trim();
+  const alertToggleVal = document.getElementById("set-visitor-email-alerts")?.checked;
   const hoursTaVal = document.getElementById("set-shop-hours-ta")?.value.trim();
   const hoursEnVal = document.getElementById("set-shop-hours-en")?.value.trim();
   const addressTaVal = document.getElementById("set-address-ta")?.value.trim();
@@ -6605,6 +6769,12 @@ function handleAdminDashSaveShopInfo(e) {
   if (whatsappVal) shop.whatsapp = whatsappVal;
   if (instaVal !== undefined) {
     shop.instagram = instaVal || "https://www.instagram.com/print_shop_price_list";
+  }
+  if (notifEmailVal) {
+    shop.notificationEmail = notifEmailVal;
+  }
+  if (alertToggleVal !== undefined) {
+    shop.visitorEmailAlerts = alertToggleVal;
   }
   if (hoursTaVal) {
     shop.openingHoursTa = hoursTaVal;
@@ -8510,6 +8680,483 @@ function reloadFreshFromHtmlFile() {
   }
 }
 
+// ==================== VISITOR INTELLIGENCE & REALTIME EMAIL ALERTS ====================
+
+function getStoredVisitorLogs() {
+  try {
+    const saved = localStorage.getItem("shop_visitor_logs");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn("Error reading visitor logs", e);
+  }
+  return [];
+}
+
+function updateVisitorLogCountBadge() {
+  const badge = document.getElementById("visitor-log-count-badge");
+  if (badge) {
+    const logs = getStoredVisitorLogs();
+    badge.textContent = logs.length.toString();
+  }
+}
+
+async function collectVisitorDetails() {
+  const now = new Date();
+  const visitTimestamp = now.toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    dateStyle: 'medium',
+    timeStyle: 'medium'
+  }) + " IST";
+
+  const userAgent = navigator.userAgent || "";
+
+  // 1. Device Type
+  let deviceType = "Desktop / Laptop 💻";
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent)) {
+    deviceType = "Tablet 📟";
+  } else if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(userAgent)) {
+    deviceType = "Mobile 📱";
+  }
+
+  // 2. Operating System
+  let os = "Unknown OS";
+  if (/Windows NT 10.0/i.test(userAgent)) os = "Windows 10/11 🪟";
+  else if (/Windows NT 6.3/i.test(userAgent)) os = "Windows 8.1 🪟";
+  else if (/Windows NT 6.1/i.test(userAgent)) os = "Windows 7 🪟";
+  else if (/Android (\d+(\.\d+)?)/i.test(userAgent)) {
+    const match = userAgent.match(/Android (\d+(\.\d+)?)/i);
+    os = `Android ${match ? match[1] : ''} 🤖`;
+  } else if (/iPhone/i.test(userAgent)) {
+    os = "Apple iPhone (iOS) 🍏";
+  } else if (/iPad/i.test(userAgent)) {
+    os = "Apple iPad (iPadOS) 🍏";
+  } else if (/Mac OS X/i.test(userAgent)) {
+    os = "Mac OS 🍎";
+  } else if (/Linux/i.test(userAgent)) {
+    os = "Linux 🐧";
+  }
+
+  // 3. Browser
+  let browser = "Web Browser";
+  if (/Edg\//i.test(userAgent)) {
+    const v = userAgent.match(/Edg\/([0-9]+)/i);
+    browser = `Microsoft Edge ${v ? v[1] : ''}`;
+  } else if (/SamsungBrowser\/([0-9.]+)/i.test(userAgent)) {
+    const v = userAgent.match(/SamsungBrowser\/([0-9.]+)/i);
+    browser = `Samsung Internet ${v ? v[1] : ''}`;
+  } else if (/Chrome\/([0-9.]+)/i.test(userAgent) && !/Chromium|OPR|Opera/i.test(userAgent)) {
+    const v = userAgent.match(/Chrome\/([0-9]+)/i);
+    browser = `Google Chrome ${v ? v[1] : ''}`;
+  } else if (/Safari\/([0-9.]+)/i.test(userAgent) && !/Chrome|Chromium/i.test(userAgent)) {
+    browser = "Apple Safari";
+  } else if (/Firefox\/([0-9.]+)/i.test(userAgent)) {
+    const v = userAgent.match(/Firefox\/([0-9]+)/i);
+    browser = `Mozilla Firefox ${v ? v[1] : ''}`;
+  } else if (/OPR\/|Opera/i.test(userAgent)) {
+    browser = "Opera";
+  }
+
+  // 4. Screen & Orientation
+  const screenRes = `${window.screen.width} × ${window.screen.height} (Pixel Ratio: ${window.devicePixelRatio || 1})`;
+  const orientation = (window.screen.orientation && window.screen.orientation.type) 
+    ? window.screen.orientation.type 
+    : (window.innerWidth > window.innerHeight ? "Landscape" : "Portrait");
+
+  // 5. Referrer / Source
+  let rawReferrer = document.referrer || "";
+  let referrerText = "நேரடி வருகை (Direct / Bookmark / Link)";
+  if (rawReferrer) {
+    if (rawReferrer.includes("google.")) referrerText = "Google தேடல் (Google Search 🔍)";
+    else if (rawReferrer.includes("whatsapp.") || rawReferrer.includes("wa.me")) referrerText = "WhatsApp இணைப்பு (WhatsApp 💬)";
+    else if (rawReferrer.includes("instagram.")) referrerText = "Instagram பக்கம் (Instagram 📸)";
+    else if (rawReferrer.includes("facebook.")) referrerText = "Facebook (Facebook 🌐)";
+    else referrerText = rawReferrer;
+  }
+
+  const pageUrl = window.location.href;
+  const language = navigator.language || navigator.userLanguage || "en-IN";
+  const onlineStatus = navigator.onLine ? "ஆன்லைன் (Online)" : "ஆஃப்லைன் (Offline)";
+  const connectionType = navigator.connection ? (navigator.connection.effectiveType || navigator.connection.type || "Standard") : "Standard";
+  const totalVisitorsCount = localStorage.getItem("shop_visitor_count") || "1483";
+
+  // Base Data Structure
+  let visitorData = {
+    timestamp: visitTimestamp,
+    visitorNumber: totalVisitorsCount,
+    ip: "கண்டறியப்படுகிறது...",
+    city: "கண்டறியப்படுகிறது...",
+    region: "தமிழ்நாடு",
+    country: "இந்தியா",
+    postal: "",
+    isp: "Network Provider",
+    mapsUrl: "",
+    deviceType: deviceType,
+    os: os,
+    browser: browser,
+    screenRes: screenRes,
+    orientation: orientation,
+    language: language,
+    onlineStatus: onlineStatus,
+    connectionType: connectionType,
+    referrer: referrerText,
+    pageUrl: pageUrl
+  };
+
+  // IP & Geolocation with fallbacks and abort timeouts
+  try {
+    // Attempt 1: ipapi.co
+    const controller1 = new AbortController();
+    const t1 = setTimeout(() => controller1.abort(), 3500);
+    const res1 = await fetch("https://ipapi.co/json/", { signal: controller1.signal }).catch(() => null);
+    clearTimeout(t1);
+
+    if (res1 && res1.ok) {
+      const geo = await res1.json().catch(() => null);
+      if (geo && geo.ip) {
+        visitorData.ip = geo.ip;
+        visitorData.city = geo.city || "Tamil Nadu";
+        visitorData.region = geo.region || "Tamil Nadu";
+        visitorData.country = geo.country_name || "India";
+        visitorData.postal = geo.postal || "";
+        visitorData.isp = geo.org || "Network Provider";
+        if (geo.latitude && geo.longitude) {
+          visitorData.mapsUrl = `https://www.google.com/maps?q=${geo.latitude},${geo.longitude}`;
+        }
+        return visitorData;
+      }
+    }
+
+    // Attempt 2: ipwho.is
+    const controller2 = new AbortController();
+    const t2 = setTimeout(() => controller2.abort(), 3500);
+    const res2 = await fetch("https://ipwho.is/", { signal: controller2.signal }).catch(() => null);
+    clearTimeout(t2);
+
+    if (res2 && res2.ok) {
+      const geo2 = await res2.json().catch(() => null);
+      if (geo2 && (geo2.success || geo2.ip)) {
+        visitorData.ip = geo2.ip || visitorData.ip;
+        visitorData.city = geo2.city || "Tamil Nadu";
+        visitorData.region = geo2.region || "Tamil Nadu";
+        visitorData.country = geo2.country || "India";
+        visitorData.postal = geo2.postal || "";
+        visitorData.isp = (geo2.connection && geo2.connection.isp) ? geo2.connection.isp : "Network Provider";
+        if (geo2.latitude && geo2.longitude) {
+          visitorData.mapsUrl = `https://www.google.com/maps?q=${geo2.latitude},${geo2.longitude}`;
+        }
+        return visitorData;
+      }
+    }
+
+    // Attempt 3: api.ipify.org (IP only)
+    const controller3 = new AbortController();
+    const t3 = setTimeout(() => controller3.abort(), 2500);
+    const res3 = await fetch("https://api.ipify.org?format=json", { signal: controller3.signal }).catch(() => null);
+    clearTimeout(t3);
+
+    if (res3 && res3.ok) {
+      const ipOnly = await res3.json().catch(() => null);
+      if (ipOnly && ipOnly.ip) {
+        visitorData.ip = ipOnly.ip;
+      }
+    }
+  } catch (err) {
+    console.warn("IP Geolocation fetch error:", err);
+  }
+
+  return visitorData;
+}
+
+async function sendVisitorNotificationEmail(visitorData, isTest = false) {
+  const shop = getStoredShopInfo();
+  const recipientEmail = (shop.notificationEmail && shop.notificationEmail.trim()) || "hanumanhari.mobile@gmail.com";
+
+  if (!isTest && shop.visitorEmailAlerts === false) {
+    console.log("Visitor email alerts are disabled in Admin Settings.");
+    return { success: false, reason: "disabled" };
+  }
+
+  // Rate Limiting / Session check (skip if manual test)
+  if (!isTest) {
+    const sessionSent = sessionStorage.getItem("shop_visitor_email_alert_sent");
+    const lastSentTime = parseInt(localStorage.getItem("shop_last_visitor_email_time") || "0");
+    const now = Date.now();
+    // 30 minutes cooldown per device / browser session
+    if (sessionSent === "true" || (now - lastSentTime < 30 * 60 * 1000)) {
+      console.log("Visitor email alert throttled for this session.");
+      return { success: false, reason: "throttled" };
+    }
+  }
+
+  const subject = isTest
+    ? `🔔 [டெஸ்ட் சோதனை] Sri Hanuman Print Shop - மின்னஞ்சல் அறிவிப்பு சரிபார்த்தல்`
+    : `🔔 புதிய பார்வையாளர்! Sri Hanuman Shop (${visitorData.city || 'பார்வையாளர்'} - #${visitorData.visitorNumber})`;
+
+  const payload = {
+    "_subject": subject,
+    "_template": "table",
+    "_captcha": "false",
+    "கடை பெயர் (Shop)": shop.nameTa || "ஸ்ரீ ஹனுமான் ஜெராக்ஸ் & போட்டோ பிரிண்ட்",
+    "அறிவிப்பு வகை (Alert Type)": isTest ? "🧪 டெஸ்ட் சோதனை எச்சரிக்கை (Test Alert)" : "👤 புதிய இணைய பார்வையாளர் (New Visitor)",
+    "வருகை நேரம் (Time)": visitorData.timestamp,
+    "பார்வையாளர் எண் (Visit #)": "#" + visitorData.visitorNumber,
+    "IP முகவரி (IP Address)": visitorData.ip,
+    "நகரம் & ஊர் (City/Town)": visitorData.city,
+    "மாவட்டம் / மாநிலம் (State)": visitorData.region,
+    "நாடு & PIN (Country & PIN)": visitorData.country + (visitorData.postal ? " - " + visitorData.postal : ""),
+    "இணைய சேவை (ISP / Network)": visitorData.isp,
+    "சாதனம் (Device Type)": visitorData.deviceType,
+    "இயங்குதளம் (Operating System)": visitorData.os,
+    "உலாவி (Browser)": visitorData.browser,
+    "திரை அளவு (Screen)": visitorData.screenRes,
+    "வந்த வழி (Referrer / Source)": visitorData.referrer,
+    "பார்த்த பக்கம் (Page URL)": visitorData.pageUrl,
+    "Google Maps இருப்பிடம்": visitorData.mapsUrl || "கிடைக்கவில்லை"
+  };
+
+  try {
+    const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (response.ok || (result && (result.success === "true" || result.success === true))) {
+      sessionStorage.setItem("shop_visitor_email_alert_sent", "true");
+      localStorage.setItem("shop_last_visitor_email_time", Date.now().toString());
+      const statusText = `வெற்றிகரமாக அனுப்பப்பட்டது (${new Date().toLocaleTimeString('en-IN')})`;
+      localStorage.setItem("shop_last_visitor_email_status", statusText);
+      const statusEl = document.getElementById("visitor-email-last-status");
+      if (statusEl) statusEl.textContent = `கடைசி நிலை: ${statusText}`;
+      return { success: true, result: result };
+    } else {
+      console.warn("FormSubmit response error:", result);
+      return { success: false, error: result.message || "Email delivery failed" };
+    }
+  } catch (err) {
+    console.error("Error sending visitor email:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+function saveVisitorToLogs(visitorData, emailStatus) {
+  try {
+    let logs = getStoredVisitorLogs();
+    const entry = {
+      id: "vis-" + Date.now(),
+      ...visitorData,
+      emailStatus: emailStatus // "Sent", "Throttled", "Disabled", "Failed"
+    };
+    logs.unshift(entry);
+    if (logs.length > 50) logs = logs.slice(0, 50);
+    localStorage.setItem("shop_visitor_logs", JSON.stringify(logs));
+    updateVisitorLogCountBadge();
+
+    // Sync to Firebase & Supabase
+    syncVisitorLogToFirebase(entry);
+    syncVisitorLogToSupabase(entry);
+  } catch (e) {
+    console.warn("Could not save visitor log:", e);
+  }
+}
+
+function syncVisitorLogToFirebase(entry) {
+  if (typeof isFirebaseConnected !== "undefined" && isFirebaseConnected && typeof db !== "undefined" && db) {
+    db.collection("shop_data").doc("visitor_logs").set({
+      latest: entry,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }).catch(err => console.warn("Firebase visitor log sync error", err));
+  }
+}
+
+async function syncVisitorLogToSupabase(entry) {
+  if (typeof isSupabaseConnected !== "undefined" && isSupabaseConnected && typeof supabaseClient !== "undefined" && supabaseClient) {
+    try {
+      await supabaseClient.from('shop_data').upsert({
+        id: 'visitor_logs',
+        data: entry,
+        updated_at: new Date().toISOString()
+      });
+    } catch (e) {
+      console.warn("Supabase visitor log sync error", e);
+    }
+  }
+}
+
+async function trackVisitorAndSendEmail() {
+  try {
+    const visitorData = await collectVisitorDetails();
+    const result = await sendVisitorNotificationEmail(visitorData, false);
+    const emailStatus = result.success ? "Sent" : (result.reason === "throttled" ? "Throttled" : (result.reason === "disabled" ? "Disabled" : "Failed"));
+    saveVisitorToLogs(visitorData, emailStatus);
+  } catch (err) {
+    console.warn("Visitor tracking process error:", err);
+  }
+}
+
+async function sendTestVisitorEmail() {
+  const emailInput = document.getElementById("set-notification-email");
+  const targetEmail = (emailInput && emailInput.value.trim()) || SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
+
+  const testBtn = document.getElementById("btn-test-visitor-email");
+  const origHtml = testBtn ? testBtn.innerHTML : "";
+  if (testBtn) {
+    testBtn.disabled = true;
+    testBtn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i><span>அனுப்பப்படுகிறது...</span>`;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  showToast("⏳ சோதனை மின்னஞ்சல் அனுப்பப்படுகிறது...", "Sending test visitor email to " + targetEmail);
+
+  try {
+    const testData = await collectVisitorDetails();
+    testData.visitorNumber = "TEST-" + Math.floor(Math.random() * 900 + 100);
+    const result = await sendVisitorNotificationEmail(testData, true);
+
+    if (result.success) {
+      showToast("✅ சோதனை மின்னஞ்சல் அனுப்பப்பட்டது! உங்கள் ஜிமெயிலை சரிபார்க்கவும்.", "Test email sent to " + targetEmail + "!");
+      saveVisitorToLogs(testData, "Sent (Test)");
+      renderAdminVisitorsTab();
+    } else {
+      showToast("⚠️ மின்னஞ்சல் அனுப்புவதில் பிழை: " + (result.error || "Failed"), "Email error", "error");
+    }
+  } catch (err) {
+    showToast("மின்னஞ்சல் அனுப்புவதில் பிழை: " + err.message, "Send error", "error");
+  } finally {
+    if (testBtn) {
+      testBtn.disabled = false;
+      testBtn.innerHTML = origHtml || `<i data-lucide="send" class="w-3.5 h-3.5"></i><span>Test மெயில் அனுப்பு</span>`;
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+}
+
+function clearVisitorLogs() {
+  if (!confirm("அனைத்து பார்வையாளர் பதிவுகளையும் அழிக்க விரும்புகிறீர்களா? (Clear all visitor logs?)")) return;
+  localStorage.removeItem("shop_visitor_logs");
+  updateVisitorLogCountBadge();
+  renderAdminVisitorsTab();
+  showToast("🗑️ பார்வையாளர் பதிவுகள் அழிக்கப்பட்டன!", "Visitor logs cleared");
+}
+
+function renderAdminVisitorsTab() {
+  const container = document.getElementById("admin-visitor-logs-container");
+  if (!container) return;
+
+  const logs = getStoredVisitorLogs();
+  updateVisitorLogCountBadge();
+
+  const totalEl = document.getElementById("visitor-stats-total-logged");
+  const sentEl = document.getElementById("visitor-stats-emails-sent");
+  const emailEl = document.getElementById("visitor-stats-active-email");
+
+  if (totalEl) totalEl.textContent = logs.length.toString();
+  if (sentEl) sentEl.textContent = logs.filter(l => l.emailStatus === "Sent" || l.emailStatus === "Sent (Test)").length.toString();
+  if (emailEl) emailEl.textContent = SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
+
+  if (logs.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 space-y-2">
+        <i data-lucide="inbox" class="w-10 h-10 mx-auto text-slate-300"></i>
+        <p class="text-xs font-bold text-slate-600">இன்னும் பார்வையாளர்கள் விபரம் எதுவும் பதிவாகவில்லை.</p>
+        <p class="text-[11px] text-slate-500">Website-ஐ யாராவது திறந்தவுடன் அவர்களின் IP, ஊர், சாதனம் விபரங்கள் தானாகவே இங்கே பதிவாகி உங்கள் ஜிமெயிலுக்கு அனுப்பப்படும்.</p>
+        <div class="pt-2">
+          <button type="button" onclick="sendTestVisitorEmail()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>இப்போதே ஒரு சோதனை மெயில் அனுப்புக</span>
+          </button>
+        </div>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = logs.map((item, idx) => {
+    let statusBadge = "";
+    if (item.emailStatus === "Sent" || item.emailStatus === "Sent (Test)") {
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-600"></i><span>Email Sent</span></span>`;
+    } else if (item.emailStatus === "Throttled") {
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-amber-600"></i><span>Same Session (Logged)</span></span>`;
+    } else if (item.emailStatus === "Disabled") {
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1"><i data-lucide="bell-off" class="w-3 h-3 text-slate-500"></i><span>Alerts Off</span></span>`;
+    } else {
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i><span>Delivery Failed</span></span>`;
+    }
+
+    const mapsBtn = item.mapsUrl
+      ? `<a href="${item.mapsUrl}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[10.5px] font-bold inline-flex items-center gap-1 border border-blue-200 transition-all cursor-pointer"><i data-lucide="map-pin" class="w-3 h-3 text-blue-600"></i><span>Maps பார்</span></a>`
+      : "";
+
+    return `
+      <div class="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-2">
+        <div class="flex items-center justify-between flex-wrap gap-2 pb-1.5 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-slate-900 text-white text-[10.5px] font-black flex items-center justify-center">
+              #${logs.length - idx}
+            </span>
+            <div>
+              <span class="text-xs font-black text-slate-900 leading-tight block">
+                ${item.city || 'பார்வையாளர்'}, ${item.region || 'தமிழ்நாடு'}
+              </span>
+              <span class="text-[10px] text-slate-500">${item.timestamp}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${mapsBtn}
+            ${statusBadge}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-[11px] text-slate-600 pt-0.5">
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">IP: ${item.ip}</span>
+              <span class="text-[10px] text-slate-500">${item.isp || 'Network Provider'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">${item.deviceType}</span>
+              <span class="text-[10px] text-slate-500">${item.os}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">${item.browser}</span>
+              <span class="text-[10px] text-slate-500">${item.screenRes}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">வந்த வழி:</span>
+              <span class="text-[10px] text-slate-500 truncate block max-w-[140px]" title="${item.referrer}">${item.referrer}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (window.lucide) lucide.createIcons();
+}
+
 function initVisitorCounter() {
   try {
     let count = parseInt(localStorage.getItem("shop_visitor_count") || "1482");
@@ -8549,6 +9196,10 @@ function onAppStart() {
   initSupabase();
   runLiveSystemDiagnostics(false);
   checkGitHubRemoteUpdates(false);
+  updateVisitorLogCountBadge();
+
+  // Background visitor intelligence & email alert trigger (runs 1.8s after page load)
+  setTimeout(trackVisitorAndSendEmail, 1800);
 
   // Background GitHub update checker (every 60 seconds)
   setInterval(() => {
