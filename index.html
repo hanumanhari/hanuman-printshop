@@ -270,15 +270,15 @@
           <span data-ta="அமைப்புகள்" data-en="Settings">அமைப்புகள்</span>
         </button>
 
-        <!-- Save / Download Updated HTML File Button -->
+        <!-- File Controller & Direct Save Button -->
         <button 
           type="button"
-          onclick="openAdminDashboardModal('savehtml')" 
-          class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border border-emerald-400 cursor-pointer animate-pulse"
-          title="எடிட் செய்த அனைத்து விவரங்களுடன் HTML கோப்பை சேமிக்க (Save HTML File)"
+          onclick="openAdminDashboardModal('filecontrol')" 
+          class="px-2.5 py-1 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border border-blue-400 cursor-pointer animate-pulse"
+          title="எங்கு உள்ள ஃபைலை மாற்றினால் இங்கு மாறும்? நேரடி கோப்புக் கட்டுப்பாடு (File Controller)"
         >
-          <i data-lucide="save" class="w-3.5 h-3.5"></i>
-          <span>💾 கோப்பை சேமி (Save HTML)</span>
+          <i data-lucide="folder-git-2" class="w-3.5 h-3.5 text-cyan-300"></i>
+          <span>📁 கோப்பு & நேரடி கட்டுப்பாடு</span>
         </button>
 
         <button 
@@ -1335,7 +1335,10 @@
           <span id="visitor-log-count-badge" class="px-1.5 py-0.2 bg-emerald-500 text-white text-[9px] rounded-full font-bold">0</span>
         </button>
         <button data-tab="supabase" onclick="setAdminDashboardTab('supabase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 bg-emerald-50 text-emerald-900 border-b-2 border-emerald-600">⚡ Supabase (Vercel Sync)</button>
-        <button data-tab="savehtml" onclick="setAdminDashboardTab('savehtml')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">💾 கோப்பை சேமி (Save)</button>
+        <button data-tab="filecontrol" onclick="setAdminDashboardTab('filecontrol')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 flex items-center gap-1 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-sm border-b-2 border-cyan-400">
+          <i data-lucide="folder-git-2" class="w-3.5 h-3.5 text-cyan-300"></i>
+          <span>📁 கோப்பு கட்டுப்பாடு (File Control)</span>
+        </button>
         <button data-tab="firebase" onclick="setAdminDashboardTab('firebase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0">🔥 Firebase Sync</button>
       </div>
 
@@ -2428,130 +2431,606 @@ alter publication supabase_realtime add table shop_data;</pre>
         </div>
       </div>
 
-      <!-- Tab 5: SAVE / EXPORT UPDATED HTML & BACKUP -->
-      <div data-tab-content="savehtml" class="admin-tab-content p-3 sm:p-5 overflow-y-auto flex-1 hidden">
-        <div class="max-w-xl mx-auto space-y-3.5">
+      <!-- Tab 5: COMPLETE FILE LOCATION & LIVE CONTROL CENTER (FILE CONTROL & ARCHITECTURE) -->
+      <div data-tab-content="filecontrol" class="admin-tab-content p-3 sm:p-5 overflow-y-auto flex-1 hidden">
+        <div class="max-w-4xl mx-auto space-y-4">
           
-          <!-- Banner Header -->
-          <div class="p-3.5 sm:p-4 bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 text-white rounded-2xl flex items-center justify-between shadow-md">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center justify-center shrink-0">
-                <i data-lucide="save" class="w-5 h-5"></i>
+          <!-- Master Control Header Banner -->
+          <div class="p-4 sm:p-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-3xl border border-indigo-900/60 shadow-xl space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 flex items-center justify-center shrink-0 shadow-inner">
+                  <i data-lucide="folder-git-2" class="w-6 h-6 text-cyan-300"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm sm:text-base font-black text-white flex items-center gap-2">
+                    <span>📁 கோப்பு இருப்பிடம் & நேரடி கட்டுப்பாட்டு மையம் (File Control Hub)</span>
+                  </h4>
+                  <p class="text-xs text-indigo-200">
+                    "எங்கு உள்ள file-ஐ மாற்றினால் இங்கு மாறும்?" — முழு கோப்பு வரைபடம், செயல்படும் முறை & இங்கிருந்தே நேரடிக் கட்டுப்பாடு!
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 class="text-xs sm:text-sm font-black">HTML கோப்பு சேமிப்பு & காப்புப்பிரதி (Save HTML & Backup)</h4>
-                <p class="text-[10.5px] text-emerald-200">எடிட் செய்த அனைத்து விவரங்களையும் கோப்பில் நிரந்தரமாக சேமிக்கலாம்</p>
+
+              <!-- Quick Status & GitHub Button -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-1 rounded-full text-[10.5px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>index.html • Single Source of Truth</span>
+                </span>
+                <a 
+                  href="https://github.com/hanumanhari/hanuman-printshop/edit/main/index.html" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="GitHub இணையதளத்தில் நேரடியாக index.html-ஐ எடிட் செய்ய"
+                >
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                  <span>🌐 GitHub-ல் எடிட் செய்</span>
+                </a>
               </div>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500 text-white shadow-sm">
-              1-Click Save
-            </span>
+
+            <!-- Architecture Flow Breadcrumb -->
+            <div class="p-2.5 bg-black/40 rounded-2xl border border-indigo-900/50 flex items-center justify-between flex-wrap gap-2 text-xs">
+              <div class="flex items-center gap-1.5 text-slate-300 flex-wrap">
+                <span class="px-2 py-0.5 rounded-lg bg-slate-800 text-cyan-300 font-bold border border-slate-700">1. கணினி ஃபைல் (Local)</span>
+                <i data-lucide="arrow-right" class="w-3 h-3 text-slate-500"></i>
+                <span class="px-2 py-0.5 rounded-lg bg-slate-800 text-purple-300 font-bold border border-slate-700">2. Git Commit / Push</span>
+                <i data-lucide="arrow-right" class="w-3 h-3 text-slate-500"></i>
+                <span class="px-2 py-0.5 rounded-lg bg-slate-800 text-amber-300 font-bold border border-slate-700">3. GitHub Repo (main)</span>
+                <i data-lucide="arrow-right" class="w-3 h-3 text-slate-500"></i>
+                <span class="px-2 py-0.5 rounded-lg bg-slate-800 text-emerald-300 font-bold border border-slate-700">4. Vercel Live (30s)</span>
+              </div>
+              <span class="text-[10px] text-emerald-400 font-bold">⚡ முழு தானியங்கி ஒத்திசைவு (Auto Deploy)</span>
+            </div>
           </div>
 
-          <!-- Feature 1: Direct File Save / Overwrite -->
-          <div class="p-3.5 bg-white rounded-2xl border-2 border-emerald-500 shadow-sm space-y-2.5">
-            <div class="flex items-start gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                <i data-lucide="hard-drive" class="w-4 h-4"></i>
-              </div>
-              <div class="flex-1">
-                <h5 class="text-xs font-black text-slate-900">1. கணினியில் நேரடியாக சேமிக்க (Direct File Save / Overwrite)</h5>
-                <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
-                  நீங்கள் எடிட் செய்த அனைத்து சேவைகள், புதிய விலை பட்டியல், இருப்பு எண்ணிக்கை, கடை பெயர் ஆகியவற்றுடன் <strong>index.html</strong> கோப்பை உங்கள் கணினியிலேயே நேரடியாக சேமிக்கலாம்.
-                </p>
-              </div>
-            </div>
+          <!-- SECTION 1: VISUAL FILE MAP & 4 SYNC LOCATIONS -->
+          <div class="space-y-2">
+            <h5 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
+              <span>1. இந்த இணையதளத்தின் மூலக் கோப்பு (Source File) எங்குள்ளது? எதை மாற்றினால் மாறும்?</span>
+            </h5>
 
-            <div class="flex flex-wrap items-center gap-2 pt-1">
-              <button 
-                type="button" 
-                onclick="saveHtmlDirectlyToFile()" 
-                class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <i data-lucide="save" class="w-4 h-4"></i>
-                <span>💾 index.html கோப்பில் நேரடியாக சேமிக்க</span>
-              </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               
+              <!-- LOCATION 1: LOCAL COMPUTER FILE -->
+              <div class="p-3.5 bg-white rounded-2xl border-2 border-cyan-400 shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-800 flex items-center justify-center shrink-0">
+                      <i data-lucide="laptop" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <h6 class="text-xs font-black text-slate-900">💻 இடம் 1: உங்கள் கணினியில் உள்ள கோப்பு</h6>
+                      <span class="text-[10px] text-cyan-800 font-bold">Local File Path</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-cyan-100 text-cyan-800 border border-cyan-200">
+                    Primary File
+                  </span>
+                </div>
+
+                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
+                  <span class="text-[10px] text-slate-500 block font-bold">முழு ஃபைல் பாத் (File Path):</span>
+                  <code class="text-[11px] font-mono text-cyan-950 font-bold break-all select-all block">
+                    c:\Users\hanum\Downloads\hanuman print shop\index.html
+                  </code>
+                </div>
+
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  💡 <strong>எப்படி மாறும்:</strong> உங்கள் கணினியிலுள்ள இந்த ஒரு <strong>index.html</strong> ஃபைலில்தான் இணையதளத்தின் அனைத்து குறியீடுகளும் உள்ளன. இதில் எடிட் செய்து <code>git push</code> கொடுத்தால், GitHub வழியாக Live தளத்தில் உடனே மாறிவிடும்!
+                </p>
+
+                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                  <button 
+                    type="button" 
+                    onclick="copyTextHelper('c:\\Users\\hanum\\Downloads\\hanuman print shop\\index.html', 'கணினி ஃபைல் Path நகலெடுக்கப்பட்டது!')"
+                    class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-[10.5px] font-bold border border-slate-300 transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="copy" class="w-3 h-3 text-slate-600"></i>
+                    <span>Path Copy செய்</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="saveHtmlDirectlyToFile()"
+                    class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10.5px] font-black shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
+                    title="உங்கள் கணினி index.html ஃபைலில் நேரடியாக சேமிக்க"
+                  >
+                    <i data-lucide="save" class="w-3 h-3"></i>
+                    <span>💾 கணினி ஃபைலில் சேமி</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="downloadCurrentHtmlFile()"
+                    class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10.5px] font-bold shadow-xs transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="download" class="w-3 h-3"></i>
+                    <span>Download</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- LOCATION 2: GITHUB REPO (CLOUD SOURCE) -->
+              <div class="p-3.5 bg-white rounded-2xl border-2 border-purple-400 shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center shrink-0">
+                      <i data-lucide="git-branch" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <h6 class="text-xs font-black text-slate-900">🐙 இடம் 2: GitHub இணைய களஞ்சியம்</h6>
+                      <span class="text-[10px] text-purple-800 font-bold">Cloud Source Repository</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-100 text-purple-800 border border-purple-200">
+                    GitHub main
+                  </span>
+                </div>
+
+                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
+                  <span class="text-[10px] text-slate-500 block font-bold">GitHub Repo லிங்க்:</span>
+                  <a href="https://github.com/hanumanhari/hanuman-printshop/blob/main/index.html" target="_blank" rel="noopener noreferrer" class="text-[11px] font-mono text-purple-900 font-bold hover:underline break-all block">
+                    github.com/hanumanhari/hanuman-printshop/blob/main/index.html
+                  </a>
+                </div>
+
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  💡 <strong>எப்படி மாறும்:</strong> கணினியே தேவையில்லை! நீங்கள் போனில் இருந்துகூட GitHub இணையதளத்தில் உள்ள <strong>index.html</strong>-ல் எடிட் செய்து "Commit changes" கொடுத்துவிட்டால், Vercel அடுத்த 30 வினாடிகளில் Live தளத்தை மாற்றிவிடும்.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                  <a 
+                    href="https://github.com/hanumanhari/hanuman-printshop/edit/main/index.html" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="flex-1 py-1.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-[10.5px] font-black shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="edit-3" class="w-3 h-3"></i>
+                    <span>🌐 GitHub-ல் இப்போதே எடிட் செய்</span>
+                  </a>
+                  <a 
+                    href="https://github.com/hanumanhari/hanuman-printshop" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="px-2.5 py-1.5 bg-slate-900 hover:bg-black text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                    <span>Repo பார்</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- LOCATION 3: VERCEL PRODUCTION HOSTING -->
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-slate-950 text-white flex items-center justify-center shrink-0 text-xs font-black">
+                      ▲
+                    </div>
+                    <div>
+                      <h6 class="text-xs font-black text-slate-900">🚀 இடம் 3: Vercel நேரலை தளம் (Live Website)</h6>
+                      <span class="text-[10px] text-sky-700 font-bold">Public Edge Server</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    🟢 Live (Active)
+                  </span>
+                </div>
+
+                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200">
+                  <span class="text-[10px] text-slate-500 block font-bold">நேரலை முகவரி (Public URL):</span>
+                  <a href="https://hanuman-printshop.vercel.app" target="_blank" rel="noopener noreferrer" class="text-[11px] font-mono text-blue-600 font-bold hover:underline break-all block">
+                    https://hanuman-printshop.vercel.app
+                  </a>
+                </div>
+
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  GitHub-ல் எந்த கமிட் நிகழ்ந்தாலும் Vercel ஆட்டோமேட்டிக்காக பில்ட் செய்து, உலகம் முழுவதற்கும் உலகளாவிய CDN நெட்வொர்க் மூலம் அடுத்த சில வினாடிகளில் நேரலையாக மாற்றிவிடும்.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                  <a 
+                    href="https://hanuman-printshop.vercel.app" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="flex-1 py-1.5 bg-slate-900 hover:bg-black text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                    <span>Live தளம் திற</span>
+                  </a>
+                  <a 
+                    href="https://vercel.com/dashboard" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 rounded-xl text-[10.5px] font-bold transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="activity" class="w-3 h-3 text-sky-600"></i>
+                    <span>Vercel Builds</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- LOCATION 4: CLOUD DATABASE (FIREBASE & SUPABASE) -->
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                      <i data-lucide="cloud" class="w-4 h-4 text-amber-600"></i>
+                    </div>
+                    <div>
+                      <h6 class="text-xs font-black text-slate-900">☁️ இடம் 4: Cloud DB (ஃபைல் எடிட்டிங் தேவையில்லை!)</h6>
+                      <span class="text-[10px] text-amber-800 font-bold">Firebase Firestore & Supabase</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300">
+                    Zero File Edit
+                  </span>
+                </div>
+
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  💡 <strong>மிகவும் எளிய வழி:</strong> நீங்கள் ஃபைலையே தொடாமல், இந்த அட்மின் பேனலில் விலைகள், சேவைகள், கடை பெயரை மாற்றினாலே போதும்; அது தானாகவே Firebase & Supabase-ல் சேமிக்கப்பட்டு, பார்வையாளர்கள் அனைவருக்கும் உடனே அப்டேட் ஆகிவிடும்!
+                </p>
+
+                <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                  <button 
+                    type="button" 
+                    onclick="pushAllDataToCloud()"
+                    class="flex-1 py-1.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white rounded-xl text-[10.5px] font-black shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="upload-cloud" class="w-3 h-3"></i>
+                    <span>Cloud-க்கு உடனே Push செய்</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="setAdminDashboardTab('firebase')"
+                    class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer"
+                  >
+                    <span>Firebase</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="setAdminDashboardTab('supabase')"
+                    class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-xl text-[10.5px] font-bold transition-all cursor-pointer"
+                  >
+                    <span>Supabase</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SECTION 2: INTERACTIVE FEATURE & CODE INSPECTOR ("எந்த வரியை மாற்றினால் என்ன மாறும்?") -->
+          <div class="p-4 bg-slate-900 text-white rounded-3xl border border-slate-800 shadow-lg space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i>
+                <h5 class="text-xs sm:text-sm font-black text-white">
+                  2. எந்தப் பகுதியை மாற்ற index.html-ல் எங்கு செல்ல வேண்டும்? (இங்கிருந்தே உடனே மாற்றலாம்)
+                </h5>
+              </div>
+              <span class="text-[10px] text-slate-400">கீழே உள்ள பட்டனை கிளிக் செய்து இங்கேயே மாற்றவும்</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+              
+              <!-- Map Item 1: Shop Info & Header -->
+              <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover:border-blue-400 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-white flex items-center gap-1.5">
+                    <span>🏪 கடை பெயர் & லோகோ</span>
+                  </span>
+                  <span class="text-[9.5px] font-mono text-cyan-400 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800">வரி ~3020</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300">
+                  <code>DEFAULT_SHOP_INFO</code>: பெயர், தலைப்பு, முகவரி, திறக்கும் நேரம் & லோகோ படம்
+                </p>
+                <button 
+                  type="button" 
+                  onclick="setAdminDashboardTab('settings')" 
+                  class="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="edit-2" class="w-3 h-3"></i>
+                  <span>இங்கேயே மாற்று (Edit Shop Info)</span>
+                </button>
+              </div>
+
+              <!-- Map Item 2: Price List & Services -->
+              <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover:border-emerald-400 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-white flex items-center gap-1.5">
+                    <span>🏷️ சேவைகள் & விலைப் பட்டியல்</span>
+                  </span>
+                  <span class="text-[9.5px] font-mono text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-800">வரி ~3050</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300">
+                  <code>DEFAULT_SERVICES</code>: ஜெராக்ஸ், பிரிண்ட், ஜாதகம், லேமினேஷன் விலைகள்
+                </p>
+                <div class="flex gap-1.5">
+                  <button 
+                    type="button" 
+                    onclick="setAdminDashboardTab('list')" 
+                    class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="list" class="w-3 h-3"></i>
+                    <span>விலைகள் மாற்று</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="setAdminDashboardTab('add')" 
+                    class="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center gap-0.5 cursor-pointer"
+                  >
+                    <span>+ புதியது</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Map Item 3: Categories -->
+              <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover:border-purple-400 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-white flex items-center gap-1.5">
+                    <span>🗂️ பிரிவுகள் (Categories)</span>
+                  </span>
+                  <span class="text-[9.5px] font-mono text-purple-400 bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-800">வரி ~3180</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300">
+                  <code>DEFAULT_CATEGORIES</code>: ஜெராக்ஸ், பிரிண்ட், லேமினேஷன், ஆன்லைன் சேவைகள்
+                </p>
+                <button 
+                  type="button" 
+                  onclick="setAdminDashboardTab('categories')" 
+                  class="w-full py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="folder-tree" class="w-3 h-3"></i>
+                  <span>பிரிவுகள் மாற்று (Edit Categories)</span>
+                </button>
+              </div>
+
+              <!-- Map Item 4: Instagram & QR -->
+              <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover:border-rose-400 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-white flex items-center gap-1.5">
+                    <span>📸 Instagram லிங்க் & QR கோடு</span>
+                  </span>
+                  <span class="text-[9.5px] font-mono text-rose-400 bg-rose-950/80 px-1.5 py-0.5 rounded border border-rose-800">வரி ~3030</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300">
+                  <code>SHOP_INFO.instagram</code>: தலைப்பிலுள்ள QR கோடு மற்றும் இன்ஸ்டா லிங்க்
+                </p>
+                <button 
+                  type="button" 
+                  onclick="setAdminDashboardTab('settings'); document.getElementById('set-instagram')?.focus();" 
+                  class="w-full py-1.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="instagram" class="w-3 h-3"></i>
+                  <span>Instagram மாற்று (Edit Insta)</span>
+                </button>
+              </div>
+
+              <!-- Map Item 5: Visitor Email Alerts -->
+              <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover:border-teal-400 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-white flex items-center gap-1.5">
+                    <span>📧 பார்வையாளர் Email எச்சரிக்கை</span>
+                  </span>
+                  <span class="text-[9.5px] font-mono text-teal-400 bg-teal-950/80 px-1.5 py-0.5 rounded border border-teal-800">வரி ~9050</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300">
+                  <code>sendVisitorNotificationEmail</code>: Web3Forms Key, ஜிமெயில் அறிவிப்புகள்
+                </p>
+                <button 
+                  type="button" 
+                  onclick="setAdminDashboardTab('settings')" 
+                  class="w-full py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="mail" class="w-3 h-3"></i>
+                  <span>Email அமைப்புகள் (Edit Alerts)</span>
+                </button>
+              </div>
+
+              <!-- Map Item 6: Stock & Calculator -->
+              <div class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 space-y-2 hover:border-amber-400 transition-all">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-white flex items-center gap-1.5">
+                    <span>📦 பொருள் இருப்பு (Stocks)</span>
+                  </span>
+                  <span class="text-[9.5px] font-mono text-amber-400 bg-amber-950/80 px-1.5 py-0.5 rounded border border-amber-800">வரி ~3040</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300">
+                  <code>a4StockCount</code>, <code>photoStockCount</code>: A4 தாள் & போட்டோ ஷீட் இருப்பு
+                </p>
+                <button 
+                  type="button" 
+                  onclick="setAdminDashboardTab('stock')" 
+                  class="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="boxes" class="w-3 h-3"></i>
+                  <span>இருப்பு எண்ணிக்கை மாற்று</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SECTION 3: DIRECT ACTIONS (4 FILE CONTROL ACTIONS) -->
+          <div class="space-y-2">
+            <h5 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+              <i data-lucide="wrench" class="w-4 h-4 text-emerald-600"></i>
+              <span>3. இங்கேயே கோப்பை மாற்றும் & சேமிக்கும் நேரடி வழிகள் (Direct Control Actions)</span>
+            </h5>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              
+              <!-- ACTION 1: DIRECT OVERWRITE LOCAL FILE -->
+              <div class="p-3.5 bg-white rounded-2xl border-2 border-emerald-500 shadow-sm space-y-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                    <i data-lucide="hard-drive" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-xs font-black text-slate-900">வழி 1: கணினி ஃபைலில் நேரடியாக சேமிக்க</h6>
+                    <span class="text-[10px] text-emerald-700 font-bold">Direct Overwrite index.html</span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-600">
+                  உலாவி கோப்பு தேர்வு (File Picker) மூலம் உங்கள் கணினியிலுள்ள <strong>index.html</strong>-ஐ தேர்ந்தெடுத்து 1 கிளிக்கில் ஓவர்ரைட் செய்து சேமிக்கலாம்.
+                </p>
+                <button 
+                  type="button" 
+                  onclick="saveHtmlDirectlyToFile()" 
+                  class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                  <span>💾 index.html கோப்பில் நேரடியாக சேமி</span>
+                </button>
+              </div>
+
+              <!-- ACTION 2: DOWNLOAD FILE -->
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-xs font-black text-slate-900">வழி 2: புதிய index.html-ஐ டவுன்லோட் செய்</h6>
+                    <span class="text-[10px] text-blue-700 font-bold">Download Complete File</span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-600">
+                  நீங்கள் மாற்றிய அனைத்து புதிய விவரங்களுடன் கூடிய முழுமையான <strong>index.html</strong> கோப்பை உடனே டவுன்லோட் செய்யலாம்.
+                </p>
+                <button 
+                  type="button" 
+                  onclick="downloadCurrentHtmlFile()" 
+                  class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span>📥 புதிய index.html கோப்பை டவுன்லோட் செய்</span>
+                </button>
+              </div>
+
+              <!-- ACTION 3: COPY GIT PUSH COMMANDS -->
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center shrink-0">
+                    <i data-lucide="terminal" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-xs font-black text-slate-900">வழி 3: Git Terminal கட்டளைகளை இயக்க</h6>
+                    <span class="text-[10px] text-purple-700 font-bold">Git Add & Commit & Push</span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-600">
+                  கணினியில் Git வைத்திருந்தால், ஒரே கிளிக்கில் Terminal கட்டளைகளை காப்பி செய்து இயக்கலாம்:
+                </p>
+                <div class="flex gap-1.5">
+                  <button 
+                    type="button" 
+                    onclick="copyFullGitSyncCommand()" 
+                    class="flex-1 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span>📋 Git Commit & Push Copy செய்</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="copyGitPushCommand()" 
+                    class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold border border-slate-300 transition-all cursor-pointer"
+                    title="'git push origin main' மட்டும்"
+                  >
+                    <span>Push மட்டும்</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- ACTION 4: COPY FULL HTML CODE -->
+              <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center shrink-0">
+                    <i data-lucide="clipboard-copy" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-xs font-black text-slate-900">வழி 4: முழு HTML குறியீட்டை Copy செய்ய</h6>
+                    <span class="text-[10px] text-indigo-700 font-bold">Copy Full Source Code</span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-slate-600">
+                  முழு HTML கோடையும் ஒரே கிளிக்கில் Clipboard-ல் Copy செய்து, நீங்கள் Notepad அல்லது VS Code-ல் ஒட்டலாம்.
+                </p>
+                <button 
+                  type="button" 
+                  onclick="copyFullHtmlCodeToClipboard()" 
+                  class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <i data-lucide="clipboard-copy" class="w-3.5 h-3.5"></i>
+                  <span>📋 முழு HTML குறியீட்டையும் Copy செய்</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SECTION 4: JSON BACKUP & RESTORE & CACHE CLEAR -->
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2 pb-1 border-b border-slate-200">
+              <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="database" class="w-4 h-4 text-slate-600"></i>
+                <span>4. கூடுதல் தரவு மேலாண்மை (JSON Backup, Restore & Reset)</span>
+              </span>
               <button 
                 type="button" 
-                onclick="downloadCurrentHtmlFile()" 
-                class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                onclick="reloadFreshFromHtmlFile()" 
+                class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-[10.5px] font-bold shadow-xs transition-all flex items-center gap-1 cursor-pointer"
+                title="உலாவியின் கேச்-ஐ அழித்து, HTML ஃபைலில் உள்ள மூல விவரங்களை மீட்டெடுக்க"
               >
-                <i data-lucide="download" class="w-4 h-4"></i>
-                <span>📥 பதிவிறக்கு (Download File)</span>
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                <span>🔄 கேச் அழி & ஃபைலில் உள்ளதை ஏற்று</span>
               </button>
             </div>
-          </div>
 
-          <!-- Feature 2: Copy Full HTML Code -->
-          <div class="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2">
-            <div class="flex items-start gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
-                <i data-lucide="copy" class="w-4 h-4"></i>
-              </div>
-              <div class="flex-1">
-                <h5 class="text-xs font-black text-slate-900">2. முழு HTML குறியீட்டை நகலெடுக்க (Copy HTML Code)</h5>
-                <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
-                  முழு HTML கோடையும் ஒரே கிளிக்கில் Clipboard-ல் Copy செய்து, நீங்கள் Notepad அல்லது VS Code-ல் ஒட்டி சேமிக்கலாம்.
-                </p>
-              </div>
-            </div>
-
-            <button 
-              type="button" 
-              onclick="copyFullHtmlCodeToClipboard()" 
-              class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <i data-lucide="clipboard-copy" class="w-3.5 h-3.5"></i>
-              <span>📋 முழு HTML குறியீட்டையும் Copy செய்</span>
-            </button>
-          </div>
-
-          <!-- Feature 3: JSON Backup Export & Import -->
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm space-y-2.5">
-            <div class="flex items-start gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
-                <i data-lucide="database" class="w-4 h-4"></i>
-              </div>
-              <div class="flex-1">
-                <h5 class="text-xs font-black text-slate-900">3. தரவு காப்புப்பிரதி (JSON Backup & Restore)</h5>
-                <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
-                  உங்கள் சேவைகள் மற்றும் அமைப்புகளை தனியாக Backup கோப்பாக (.json) பதிவிறக்கம் செய்து வைக்கலாம் அல்லது மீட்டெடுக்கலாம்.
-                </p>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 pt-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <button 
                 type="button" 
                 onclick="exportShopDataAsJSON()" 
-                class="py-2 bg-white hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-bold border border-slate-300 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                class="py-2 px-3 bg-white hover:bg-slate-100 text-slate-800 rounded-xl font-bold border border-slate-300 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-600"></i>
-                <span>📤 Export Backup (JSON)</span>
+                <span>📤 Export Shop Data (JSON Backup)</span>
               </button>
 
-              <label class="py-2 bg-white hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-bold border border-slate-300 transition-all flex items-center justify-center gap-1 cursor-pointer">
+              <label class="py-2 px-3 bg-white hover:bg-slate-100 text-slate-800 rounded-xl font-bold border border-slate-300 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
                 <i data-lucide="file-up" class="w-3.5 h-3.5 text-blue-600"></i>
-                <span>📥 Import Backup (JSON)</span>
+                <span>📥 Import Shop Data (JSON Restore)</span>
                 <input type="file" accept=".json" onchange="importShopDataFromJSON(event)" class="hidden" />
               </label>
             </div>
           </div>
 
-          <!-- Feature 4: Reload / Reset from Code File Defaults -->
-          <div class="p-3 bg-red-50/60 rounded-2xl border border-red-200 shadow-sm flex items-center justify-between gap-2">
-            <div>
-              <h6 class="text-[11.5px] font-bold text-red-950">HTML கோப்பிலுள்ள மூல விபரங்களை மீட்டெடுக்க:</h6>
-              <p class="text-[10px] text-red-700">உலாவியின் கேச் (Cache) அழிக்கப்பட்டு, HTML கோப்பில் உள்ளவை நேரடியாக ஏற்றப்படும்.</p>
+          <!-- SECTION 5: LIVE SOURCE CODE INSPECTOR -->
+          <div class="p-3.5 bg-slate-900 rounded-2xl border border-slate-800 text-slate-200 space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="text-xs font-black text-white flex items-center gap-1.5">
+                <i data-lucide="code" class="w-4 h-4 text-cyan-400"></i>
+                <span>5. நேரலை மூலக் குறியீடு முன்னோட்டம் (Live Code Inspector)</span>
+              </span>
+              <div class="flex items-center gap-1 text-[10px]">
+                <button type="button" onclick="showLiveCodeSnippet('shop')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 cursor-pointer font-mono">SHOP_INFO</button>
+                <button type="button" onclick="showLiveCodeSnippet('services')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 cursor-pointer font-mono">SERVICES</button>
+                <button type="button" onclick="showLiveCodeSnippet('categories')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700 cursor-pointer font-mono">CATEGORIES</button>
+              </div>
             </div>
-            <button 
-              type="button" 
-              onclick="reloadFreshFromHtmlFile()" 
-              class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-black shrink-0 transition-all cursor-pointer shadow-sm"
-            >
-              🔄 கேச் அழி & ஏற்று
-            </button>
+
+            <pre id="filecontrol-code-preview" class="p-3 bg-black/60 rounded-xl border border-slate-800 font-mono text-[10.5px] text-emerald-400 max-h-48 overflow-y-auto select-all leading-relaxed">// மேலே உள்ள பட்டன்களை கிளிக் செய்து குறியீட்டைப் பார்க்கவும்...</pre>
+
+            <div class="flex justify-between items-center pt-1 text-[10px] text-slate-400">
+              <span>💡 இந்தக் குறியீடு உங்கள் உலாவி நினைவகத்தில் உள்ள நேரலை விவரங்களை குறிக்கிறது.</span>
+              <button type="button" onclick="copyCurrentCodeSnippet()" class="text-cyan-400 hover:underline font-bold flex items-center gap-1 cursor-pointer">
+                <i data-lucide="copy" class="w-3 h-3"></i>
+                <span>குறியீட்டை Copy செய்</span>
+              </button>
+            </div>
           </div>
 
         </div>
@@ -5524,6 +6003,7 @@ function closeAdminDashboardModal() {
 }
 
 function setAdminDashboardTab(tabName) {
+  if (tabName === 'savehtml') tabName = 'filecontrol';
   document.querySelectorAll(".admin-tab-btn").forEach(btn => {
     if (btn.getAttribute("data-tab") === tabName) {
       btn.classList.add("active");
@@ -5568,6 +6048,8 @@ function setAdminDashboardTab(tabName) {
     if (fbInput && !fbInput.value && fb.projectId) {
       fbInput.value = JSON.stringify(fb, null, 2);
     }
+  } else if (tabName === 'filecontrol') {
+    if (typeof renderFileControlTab === 'function') renderFileControlTab();
   }
 
   if (window.lucide) lucide.createIcons();
@@ -8807,6 +9289,78 @@ function reloadFreshFromHtmlFile() {
     initApp();
     showToast("🔄 HTML கோப்பில் உள்ள விபரங்கள் வெற்றிகரமாக ஏற்றப்பட்டன!", "Loaded directly from HTML code defaults!");
   }
+}
+
+// ==================== FILE LOCATION & LIVE CONTROLLER HELPERS ====================
+
+let currentCodeSnippetType = 'shop';
+
+function copyTextHelper(text, toastMsg = "நகலெடுக்கப்பட்டது!") {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast("📋 " + toastMsg, text);
+    }).catch(() => fallbackCopyText(text));
+  } else {
+    fallbackCopyText(text);
+  }
+}
+
+function copyFullGitSyncCommand() {
+  const dateStr = new Date().toLocaleDateString('en-IN');
+  const cmd = `git add index.html\ngit commit -m "update website: ${dateStr}"\ngit push origin main`;
+  copyTextHelper(cmd, "முழுமையான Git Commit & Push கட்டளைகள் Copy செய்யப்பட்டன!");
+}
+
+async function pushAllDataToCloud() {
+  showToast("⏳ அனைத்து தகவல்களும் Cloud-க்கு அனுப்பப்படுகின்றன...", "Pushing data to Firebase & Supabase...");
+  let pushed = 0;
+  try {
+    if (typeof pushAllDataToFirebase === 'function' && typeof isFirebaseConnected !== 'undefined' && isFirebaseConnected) {
+      await pushAllDataToFirebase();
+      pushed++;
+    }
+  } catch (e) {
+    console.warn("Firebase push warning:", e);
+  }
+  try {
+    if (typeof pushAllDataToSupabase === 'function' && typeof isSupabaseConnected !== 'undefined' && isSupabaseConnected) {
+      await pushAllDataToSupabase();
+      pushed++;
+    }
+  } catch (e) {
+    console.warn("Supabase push warning:", e);
+  }
+  if (pushed > 0) {
+    showToast("✅ அனைத்து விவரங்களும் Cloud-ல் உடனே ஒத்திசைக்கப்பட்டன!", "Synced to cloud database successfully!");
+  } else {
+    showToast("ℹ️ Firebase / Supabase இணைப்பை அமைப்புகளில் சரிபார்க்கவும்.", "Check cloud DB connections", "warning");
+  }
+}
+
+function showLiveCodeSnippet(snippetType) {
+  currentCodeSnippetType = snippetType;
+  const pre = document.getElementById("filecontrol-code-preview");
+  if (!pre) return;
+
+  if (snippetType === 'shop') {
+    pre.textContent = "const DEFAULT_SHOP_INFO = " + JSON.stringify(SHOP_INFO, null, 2) + ";";
+  } else if (snippetType === 'services') {
+    pre.textContent = "const DEFAULT_SERVICES = " + JSON.stringify(SERVICES.slice(0, 10), null, 2) + "\n// ...மொத்தம் " + SERVICES.length + " சேவைகள் உள்ளன";
+  } else if (snippetType === 'categories') {
+    pre.textContent = "const DEFAULT_CATEGORIES = " + JSON.stringify(CATEGORIES, null, 2) + ";";
+  }
+}
+
+function copyCurrentCodeSnippet() {
+  const pre = document.getElementById("filecontrol-code-preview");
+  if (pre && pre.textContent) {
+    copyTextHelper(pre.textContent, "குறியீடு Copy செய்யப்பட்டது!");
+  }
+}
+
+function renderFileControlTab() {
+  showLiveCodeSnippet(currentCodeSnippetType || 'shop');
+  if (window.lucide) lucide.createIcons();
 }
 
 // ==================== VISITOR INTELLIGENCE & REALTIME EMAIL ALERTS ====================
