@@ -381,6 +381,17 @@
             <button id="lang-en" class="px-1.5 sm:px-2 py-0.5 rounded-md text-slate-600 hover:bg-slate-200 transition-all">Eng</button>
           </div>
 
+          <!-- HANUMAN RESALE (2ND LIFE) Direct Website Link Button -->
+          <a 
+            href="resale.html" 
+            class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-gray-950 rounded-lg text-xs font-black shadow-sm transition-all cursor-pointer border border-amber-500/60 shrink-0"
+            title="HANUMAN RESALE (2ND LIFE) - வட்டார மறுவிற்பனை தளம்"
+          >
+            <span class="text-sm">👑</span>
+            <span class="hidden md:inline text-[11px] font-black">HANUMAN RESALE</span>
+            <span class="text-[9px] bg-black text-amber-300 px-1 py-0.2 rounded font-black uppercase">2ND LIFE</span>
+          </a>
+
           <!-- Instagram Profile & Live QR Code Trigger Button in Header -->
           <button 
             type="button"
@@ -4395,6 +4406,14 @@ const DEFAULT_CATEGORIES = [
     "nameTa": "visiting card",
     "color": "purple",
     "icon": "folder"
+  },
+  {
+    "id": "resale",
+    "nameTa": "👑 HANUMAN RESALE (2ND LIFE)",
+    "nameEn": "HANUMAN RESALE (2ND LIFE)",
+    "color": "amber",
+    "icon": "shopping-bag",
+    "isDefault": false
   }
 ];
 
@@ -4407,6 +4426,38 @@ const PRESET_IMAGES = {
 };
 
 const DEFAULT_SERVICES = [
+  {
+    "id": "service-hanuman-resale-portal",
+    "category": "resale",
+    "titleTa": "👑 HANUMAN RESALE (2ND LIFE) - வட்டார மறுவிற்பனை தளம்",
+    "titleEn": "HANUMAN RESALE (2ND LIFE) - Regional Classifieds Portal",
+    "badgeTa": "வட்டாரச் சந்தை",
+    "badgeEn": "Regional Market",
+    "badge": "amber",
+    "shortDescTa": "அந்தியூர் • ஒலகடம் • அம்மாபேட்டை • பூனாச்சி • வெள்ளித்திருப்பூர் • பவானி வட்டார மறுவிற்பனை தளம். டிராக்டர், மாடுகள், பைக், தோட்டம், எலக்ட்ரானிக்ஸ் இலவசமாக வாங்க & விற்கலாம்!",
+    "shortDescEn": "Anthiyur, Olagadam, Ammapettai, Poonachi, Vellithiruppur, Bhavani Regional Marketplace for Tractors, Cattle, Bikes, Land, Electronics & Free Classifieds!",
+    "price": 0,
+    "priceUnitTa": "100% இலவச விளம்பரம்",
+    "priceUnitEn": "100% Free Ads",
+    "priceNoteTa": "நேரடி வட்டார சந்தை",
+    "priceNoteEn": "Live Local Marketplace",
+    "featuresTa": [
+      "டிராக்டர், மாடுகள், நிலம் & பைக் இலவச விளம்பரம்",
+      "அந்தியூர் - பவானி 6 வட்டார பிரத்யேக சந்தை",
+      "உரிமையாளர் அனுமதி & நேரடி பாதுகாப்பான தளம்",
+      "போட்டோக்கள் & வீடியோக்களுடன் இலவச பதிவு"
+    ],
+    "featuresEn": [
+      "Free ads for Tractors, Cattle, Land & Bikes",
+      "Anthiyur & Bhavani 6 Regional Market Hubs",
+      "Owner Permission & Safe Verified System",
+      "Post Ads with up to 3 Photos & 2 Videos"
+    ],
+    "image": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80",
+    "inStock": true,
+    "stockCount": 999,
+    "approvalStatus": "accepted"
+  },
   {
     "badge": "blue",
     "priceNoteEn": "",
@@ -6329,7 +6380,15 @@ function getStoredCategories() {
           saveStoredCategories(DEFAULT_CATEGORIES);
           return [...DEFAULT_CATEGORIES];
         }
-        return parsed.filter(c => c.id !== 'electronics');
+        const filteredCats = parsed.filter(c => c.id !== 'electronics');
+        if (!filteredCats.some(c => c.id === 'resale')) {
+          const resaleCat = DEFAULT_CATEGORIES.find(c => c.id === 'resale');
+          if (resaleCat) {
+            filteredCats.push(resaleCat);
+            try { localStorage.setItem("shop_categories_catalog", JSON.stringify(filteredCats)); } catch(e) {}
+          }
+        }
+        return filteredCats;
       }
     }
   } catch (e) {
@@ -6360,7 +6419,15 @@ function getStoredServices() {
           saveStoredServices(DEFAULT_SERVICES);
           return [...DEFAULT_SERVICES];
         }
-        return parsed.filter(s => s.category !== 'electronics');
+        const filteredSrv = parsed.filter(s => s.category !== 'electronics');
+        if (!filteredSrv.some(s => s.id === 'service-hanuman-resale-portal' || s.category === 'resale')) {
+          const resaleSrv = DEFAULT_SERVICES.find(s => s.id === 'service-hanuman-resale-portal');
+          if (resaleSrv) {
+            filteredSrv.unshift(resaleSrv);
+            try { localStorage.setItem("shop_services_catalog", JSON.stringify(filteredSrv)); } catch(e) {}
+          }
+        }
+        return filteredSrv;
       }
     }
   } catch (e) {
@@ -9722,7 +9789,26 @@ function renderServices() {
     return;
   }
 
-  container.innerHTML = filtered.map(service => {
+  const resaleBanner = currentCategory === 'resale' ? `
+    <div class="col-span-full p-3.5 sm:p-4 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 text-gray-950 rounded-2xl shadow-lg border-2 border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-3 mb-2 animate-in fade-in">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-black text-amber-400 font-black text-xl flex items-center justify-center shadow shrink-0">👑</div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="bg-black text-amber-300 text-[9px] font-black px-1.5 py-0.5 rounded uppercase">2ND LIFE MARKET</span>
+            <span class="text-xs font-bold text-amber-950">🌾 100% இலவச விளம்பரங்கள்</span>
+          </div>
+          <h3 class="font-black text-sm sm:text-base leading-tight mt-0.5">HANUMAN RESALE (2ND LIFE) - வட்டார மறுவிற்பனை தளம்</h3>
+          <p class="text-[11px] text-amber-950 font-bold mt-0.5">அந்தியூர் • ஒலகடம் • அம்மாபேட்டை • பூனாச்சி • வெள்ளித்திருப்பூர் • பவானி வட்டார மறுவிற்பனை சந்தை!</p>
+        </div>
+      </div>
+      <a href="resale.html" class="px-5 py-2.5 bg-black hover:bg-gray-900 text-amber-300 font-black text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0 uppercase tracking-wide cursor-pointer">
+        <span>🌐 மறுவிற்பனை தளம் செல்க (Open Resale Website) ➜</span>
+      </a>
+    </div>
+  ` : '';
+
+  container.innerHTML = resaleBanner + filtered.map(service => {
     const title = currentLang === 'ta' ? service.titleTa : service.titleEn;
     const shortDesc = currentLang === 'ta' ? service.shortDescTa : service.shortDescEn;
     const unit = currentLang === 'ta' ? service.priceUnitTa : service.priceUnitEn;
@@ -9819,21 +9905,41 @@ function renderServices() {
 
           <!-- Card Actions (Ultra Compact & Tight) -->
           <div class="mt-1 pt-0.5 border-t border-slate-100 flex items-center gap-1">
-            <button 
-              onclick="openServiceDetail('${service.id}')"
-              class="flex-1 px-1.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-md text-[11px] font-bold transition-colors flex items-center justify-center gap-1"
-            >
-              <i data-lucide="info" class="w-3 h-3 text-slate-600"></i>
-              <span>${currentLang === 'ta' ? 'விவரம்' : 'Details'}</span>
-            </button>
+            ${(service.category === 'resale' || service.id === 'service-hanuman-resale-portal') ? `
+              <a 
+                href="resale.html"
+                class="flex-1 px-1.5 py-1 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-gray-950 rounded-md text-[11px] font-black shadow-sm transition-all flex items-center justify-center gap-1 cursor-pointer"
+                title="மறுவிற்பனை தளம் செல்க"
+              >
+                <span>🌐</span>
+                <span>${currentLang === 'ta' ? 'தளம் செல்க' : 'Visit Website'}</span>
+              </a>
 
-            <button 
-              onclick="orderViaWhatsApp('${service.id}')"
-              class="flex-1 px-1.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[11px] font-bold shadow-sm transition-all flex items-center justify-center gap-1"
-            >
-              <i data-lucide="message-circle" class="w-3 h-3"></i>
-              <span>${currentLang === 'ta' ? 'ஆர்டர்' : 'WhatsApp'}</span>
-            </button>
+              <button 
+                onclick="orderViaWhatsApp('${service.id}')"
+                class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[11px] font-bold shadow-sm transition-all flex items-center justify-center gap-1 cursor-pointer"
+                title="WhatsApp"
+              >
+                <i data-lucide="message-circle" class="w-3 h-3"></i>
+                <span>${currentLang === 'ta' ? 'தகவல்' : 'WhatsApp'}</span>
+              </button>
+            ` : `
+              <button 
+                onclick="openServiceDetail('${service.id}')"
+                class="flex-1 px-1.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-md text-[11px] font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <i data-lucide="info" class="w-3 h-3 text-slate-600"></i>
+                <span>${currentLang === 'ta' ? 'விவரம்' : 'Details'}</span>
+              </button>
+
+              <button 
+                onclick="orderViaWhatsApp('${service.id}')"
+                class="flex-1 px-1.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[11px] font-bold shadow-sm transition-all flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <i data-lucide="message-circle" class="w-3 h-3"></i>
+                <span>${currentLang === 'ta' ? 'ஆர்டர்' : 'WhatsApp'}</span>
+              </button>
+            `}
           </div>
 
         </div>
