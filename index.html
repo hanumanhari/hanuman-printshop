@@ -4041,6 +4041,79 @@ alter publication supabase_realtime add table shop_data;</pre>
     </button>
   </aside>
 
+  <!-- ==================== WEBSITE BLOCKED / MAINTENANCE SCREEN ==================== -->
+  <div id="website-blocked-screen" class="hidden fixed inset-0 z-[9999] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="max-w-md w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-2xl backdrop-blur-xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Brand Shield Logo -->
+      <div class="relative mx-auto w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5 shadow-xl flex items-center justify-center">
+        <div class="w-full h-full bg-slate-950 rounded-[14px] flex flex-col items-center justify-center text-center p-1">
+          <i data-lucide="shield-alert" class="w-9 h-9 text-rose-500 animate-pulse"></i>
+        </div>
+      </div>
+
+      <!-- Shop Brand Title -->
+      <div>
+        <h1 class="text-base sm:text-lg font-black text-white tracking-tight">
+          ஸ்ரீ ஹனுமான் ஜெராக்ஸ் &amp; போட்டோ பிரிண்ட்
+        </h1>
+        <p class="text-[11px] text-slate-400 mt-0.5">கடையின் இணையதள அதிகாரப்பூர்வ அறிவிப்பு</p>
+      </div>
+
+      <!-- Block Notice Box -->
+      <div class="p-4 bg-rose-950/40 border border-rose-500/30 rounded-2xl text-left space-y-2">
+        <div class="flex items-center gap-2 text-rose-300 font-black text-xs sm:text-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+          <span id="blocked-screen-title">🚫 இணையதளம் தற்காலிகமாக முடக்கப்பட்டுள்ளது</span>
+        </div>
+        <p id="blocked-screen-reason" class="text-xs text-rose-100/90 leading-relaxed font-medium">
+          தற்போது இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.
+        </p>
+        <div class="pt-1.5 text-[10px] text-slate-400 flex items-center justify-between border-t border-rose-900/40">
+          <span>நிலை: தற்காலிக முடக்கம் (Blocked)</span>
+          <span id="blocked-screen-time">இப்போது</span>
+        </div>
+      </div>
+
+      <!-- Emergency Direct Contact Buttons -->
+      <div class="space-y-2 pt-1">
+        <p class="text-[11px] font-bold text-slate-300">அவசர தேவைக்கு கடையை நேரடியாக தொடர்பு கொள்ளவும்:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <a 
+            href="tel:7708134143" 
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+          >
+            <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+            <span>7708134143 அழைக்க</span>
+          </a>
+          <a 
+            href="https://wa.me/917708134143?text=வணக்கம்,%20ஸ்ரீ%20ஹனுமான்%20ஜெராக்ஸ்%20சேவை%20தேவைப்படுகிறது" 
+            target="_blank" 
+            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+          >
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span>WhatsApp மெசேஜ்</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Admin Unlock Key Button -->
+      <div class="pt-3 border-t border-slate-800 flex flex-col items-center gap-1.5">
+        <button 
+          type="button" 
+          onclick="handleBlockedScreenAdminLogin()" 
+          class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/30 hover:border-amber-400 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+        >
+          <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>🔑 உரிமையாளர் லாகின் / Unblock செய்</span>
+        </button>
+        <span class="text-[9.5px] text-slate-500">கடை உரிமையாளர் கடவுச்சொல்லை உள்ளிட்டு தளத்தை இயக்கலாம்.</span>
+      </div>
+
+    </div>
+  </div>
+  <!-- ==================== END WEBSITE BLOCKED SCREEN ==================== -->
+
   <!-- Application Logic (Self-Contained & Resilient) -->
   <script id="main-app-script">
 // Multi-Service Shop Data, Dynamic Shop Name Photo, Categories Management, Admin Dashboard & Application Logic
@@ -11690,79 +11763,6 @@ function initVisitorCounter() {
     console.error("Error updating visitor counter", e);
   }
 }
-
-  <!-- ==================== WEBSITE BLOCKED / MAINTENANCE SCREEN ==================== -->
-  <div id="website-blocked-screen" class="hidden fixed inset-0 z-[9999] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
-    <div class="max-w-md w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-2xl backdrop-blur-xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
-      
-      <!-- Brand Shield Logo -->
-      <div class="relative mx-auto w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5 shadow-xl flex items-center justify-center">
-        <div class="w-full h-full bg-slate-950 rounded-[14px] flex flex-col items-center justify-center text-center p-1">
-          <i data-lucide="shield-alert" class="w-9 h-9 text-rose-500 animate-pulse"></i>
-        </div>
-      </div>
-
-      <!-- Shop Brand Title -->
-      <div>
-        <h1 class="text-base sm:text-lg font-black text-white tracking-tight">
-          ஸ்ரீ ஹனுமான் ஜெராக்ஸ் &amp; போட்டோ பிரிண்ட்
-        </h1>
-        <p class="text-[11px] text-slate-400 mt-0.5">கடையின் இணையதள அதிகாரப்பூர்வ அறிவிப்பு</p>
-      </div>
-
-      <!-- Block Notice Box -->
-      <div class="p-4 bg-rose-950/40 border border-rose-500/30 rounded-2xl text-left space-y-2">
-        <div class="flex items-center gap-2 text-rose-300 font-black text-xs sm:text-sm">
-          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
-          <span id="blocked-screen-title">🚫 இணையதளம் தற்காலிகமாக முடக்கப்பட்டுள்ளது</span>
-        </div>
-        <p id="blocked-screen-reason" class="text-xs text-rose-100/90 leading-relaxed font-medium">
-          தற்போது இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.
-        </p>
-        <div class="pt-1.5 text-[10px] text-slate-400 flex items-center justify-between border-t border-rose-900/40">
-          <span>நிலை: தற்காலிக முடக்கம் (Blocked)</span>
-          <span id="blocked-screen-time">இப்போது</span>
-        </div>
-      </div>
-
-      <!-- Emergency Direct Contact Buttons -->
-      <div class="space-y-2 pt-1">
-        <p class="text-[11px] font-bold text-slate-300">அவசர தேவைக்கு கடையை நேரடியாக தொடர்பு கொள்ளவும்:</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <a 
-            href="tel:7708134143" 
-            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
-          >
-            <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
-            <span>7708134143 அழைக்க</span>
-          </a>
-          <a 
-            href="https://wa.me/917708134143?text=வணக்கம்,%20ஸ்ரீ%20ஹனுமான்%20ஜெராக்ஸ்%20சேவை%20தேவைப்படுகிறது" 
-            target="_blank" 
-            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
-          >
-            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-            <span>WhatsApp மெசேஜ்</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Admin Unlock Key Button -->
-      <div class="pt-3 border-t border-slate-800 flex flex-col items-center gap-1.5">
-        <button 
-          type="button" 
-          onclick="handleBlockedScreenAdminLogin()" 
-          class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/30 hover:border-amber-400 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
-        >
-          <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>🔑 உரிமையாளர் லாகின் / Unblock செய்</span>
-        </button>
-        <span class="text-[9.5px] text-slate-500">கடை உரிமையாளர் கடவுச்சொல்லை உள்ளிட்டு தளத்தை இயக்கலாம்.</span>
-      </div>
-
-    </div>
-  </div>
-  <!-- ==================== END WEBSITE BLOCKED SCREEN ==================== -->
 
 function onAppStart() {
   renderWebsiteBlockState();
