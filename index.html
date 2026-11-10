@@ -1967,6 +1967,43 @@
                   </button>
                 </div>
               </div>
+
+              <!-- Message Sending Block / Unblock Row (மெசேஜ் அனுப்புவதையும் Block செய்யும் வசதி) -->
+              <div class="pt-2.5 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-slate-800">📩 வாடிக்கையாளர் செய்தி அனுப்பும் வசதி:</span>
+                    <span id="settings-msg-block-badge" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                      🟢 அனுமதிக்கப்பட்டுள்ளது (Allowed)
+                    </span>
+                  </div>
+                  <span id="settings-msg-block-desc" class="text-[11px] text-slate-600 block mt-0.5">
+                    வாடிக்கையாளர்கள் செய்தி அனுப்புவதை அனுமதிக்கலாம் அல்லது முற்றிலும் Block செய்யலாம்.
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button 
+                    type="button" 
+                    id="settings-msg-block-btn"
+                    onclick="blockMessages()" 
+                    class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+                    title="வாடிக்கையாளர்கள் செய்தி அனுப்புவதை முடக்க (Block Message Sending)"
+                  >
+                    <i data-lucide="message-square-off" class="w-3.5 h-3.5"></i>
+                    <span>🚫 செய்திகளை Block செய்</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    id="settings-msg-unblock-btn"
+                    onclick="unblockMessages(true)" 
+                    class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-sm flex items-center gap-1.5 transition-all cursor-pointer hidden"
+                    title="வாடிக்கையாளர்கள் செய்தி அனுப்புவதை மீண்டும் இயக்க"
+                  >
+                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                    <span>🟢 செய்திகளை அனுமதி</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -3945,6 +3982,16 @@ alter publication supabase_realtime add table shop_data;</pre>
           <div class="flex items-center gap-2">
             <button 
               type="button" 
+              id="tab-msg-block-toggle-btn"
+              onclick="toggleMessagesBlockQuickly()" 
+              class="px-3 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-200 border border-rose-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+              title="செய்திகள் வருவதை முடக்க அல்லது அனுமதிக்க"
+            >
+              <i data-lucide="message-square-off" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>🚫 செய்திகளை Block செய்</span>
+            </button>
+            <button 
+              type="button" 
               onclick="fetchCustomerMessagesFromCloud(true)" 
               class="px-3 py-1.5 bg-cyan-900/60 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
               title="கிளவுடில் இருந்து புதுப்பிக்க"
@@ -4165,55 +4212,67 @@ alter publication supabase_realtime add table shop_data;</pre>
       </div>
 
       <!-- Visitor Inquiry / Text Message Box (உரிமையாளருக்கு செய்தி அனுப்ப) -->
-      <div class="p-3.5 bg-slate-950/70 border border-slate-800 rounded-2xl text-left space-y-2.5 shadow-inner">
-        <div class="flex items-center gap-2 text-cyan-300 font-black text-xs">
-          <i data-lucide="message-square" class="w-4 h-4 text-cyan-400"></i>
-          <span>உரிமையாளருக்கு செய்தி அனுப்ப (Send Message to Owner):</span>
-        </div>
-        
-        <form id="blocked-screen-msg-form" onsubmit="handleSendBlockedScreenMessage(event)" class="space-y-2">
-          <div>
-            <input 
-              type="text" 
-              id="visitor-msg-name" 
-              required
-              placeholder="உங்கள் பெயர் &amp; போன் நம்பர் (Name &amp; Phone)*" 
-              class="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
-            />
+      <div id="blocked-screen-msg-wrapper" class="space-y-2">
+        <!-- Active Message Box (When Messages are Allowed) -->
+        <div id="blocked-screen-msg-box" class="p-3.5 bg-slate-950/70 border border-slate-800 rounded-2xl text-left space-y-2.5 shadow-inner">
+          <div class="flex items-center gap-2 text-cyan-300 font-black text-xs">
+            <i data-lucide="message-square" class="w-4 h-4 text-cyan-400"></i>
+            <span>உரிமையாளருக்கு செய்தி அனுப்ப (Send Message to Owner):</span>
           </div>
-          <div>
-            <textarea 
-              id="visitor-msg-text" 
-              rows="3" 
-              required
-              placeholder="உங்கள் தேவை அல்லது செய்தியை இங்கு டைப் செய்யவும் (Type your message / service inquiry here)..." 
-              class="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none resize-none"
-            ></textarea>
-          </div>
-          <button 
-            type="submit" 
-            id="visitor-msg-submit-btn"
-            class="w-full py-2 bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
-          >
-            <i data-lucide="send" class="w-3.5 h-3.5"></i>
-            <span>செய்தி அனுப்புக (Send Message)</span>
-          </button>
-        </form>
+          
+          <form id="blocked-screen-msg-form" onsubmit="handleSendBlockedScreenMessage(event)" class="space-y-2">
+            <div>
+              <input 
+                type="text" 
+                id="visitor-msg-name" 
+                required
+                placeholder="உங்கள் பெயர் &amp; போன் நம்பர் (Name &amp; Phone)*" 
+                class="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+              />
+            </div>
+            <div>
+              <textarea 
+                id="visitor-msg-text" 
+                rows="3" 
+                required
+                placeholder="உங்கள் தேவை அல்லது செய்தியை இங்கு டைப் செய்யவும் (Type your message / service inquiry here)..." 
+                class="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none resize-none"
+              ></textarea>
+            </div>
+            <button 
+              type="submit" 
+              id="visitor-msg-submit-btn"
+              class="w-full py-2 bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
+            >
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>செய்தி அனுப்புக (Send Message)</span>
+            </button>
+          </form>
 
-        <!-- Sent Success Notification State -->
-        <div id="visitor-msg-success" class="hidden p-3 bg-emerald-950/80 border border-emerald-500/50 rounded-xl text-center space-y-1 animate-in fade-in">
-          <div class="flex items-center justify-center gap-1.5 text-emerald-400 font-black text-xs">
-            <i data-lucide="check-circle" class="w-4 h-4"></i>
-            <span>செய்தி வெற்றிகரமாக அனுப்பப்பட்டது!</span>
+          <!-- Sent Success Notification State -->
+          <div id="visitor-msg-success" class="hidden p-3 bg-emerald-950/80 border border-emerald-500/50 rounded-xl text-center space-y-1 animate-in fade-in">
+            <div class="flex items-center justify-center gap-1.5 text-emerald-400 font-black text-xs">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>செய்தி வெற்றிகரமாக அனுப்பப்பட்டது!</span>
+            </div>
+            <p class="text-[10.5px] text-emerald-200">கடை உரிமையாளர் நிர்வாகி பேனலில் உங்கள் செய்தியை பார்த்துவிட்டு விரைவில் தொடர்பு கொள்வார். நன்றி!</p>
+            <button 
+              type="button" 
+              onclick="resetBlockedScreenMsgForm()" 
+              class="mt-1 text-[10px] text-cyan-300 underline font-bold cursor-pointer"
+            >
+              + மற்றொரு செய்தி அனுப்ப
+            </button>
           </div>
-          <p class="text-[10.5px] text-emerald-200">கடை உரிமையாளர் நிர்வாகி பேனலில் உங்கள் செய்தியை பார்த்துவிட்டு விரைவில் தொடர்பு கொள்வார். நன்றி!</p>
-          <button 
-            type="button" 
-            onclick="resetBlockedScreenMsgForm()" 
-            class="mt-1 text-[10px] text-cyan-300 underline font-bold cursor-pointer"
-          >
-            + மற்றொரு செய்தி அனுப்ப
-          </button>
+        </div>
+
+        <!-- Blocked / Disabled State Notice Box (When Message Sending is Blocked by Admin) -->
+        <div id="blocked-screen-msg-disabled-box" class="hidden p-4 bg-slate-950/70 border border-rose-900/40 rounded-2xl text-center space-y-1.5 shadow-inner">
+          <div class="w-8 h-8 rounded-full bg-rose-500/20 text-rose-400 mx-auto flex items-center justify-center">
+            <i data-lucide="message-square-off" class="w-4 h-4"></i>
+          </div>
+          <p class="text-xs font-black text-rose-300">🚫 செய்தி அனுப்பும் வசதியும் முடக்கப்பட்டுள்ளது</p>
+          <p class="text-[10px] text-slate-400 leading-relaxed">நிர்வாகியால் இந்த இணையதளத்தில் செய்தி அனுப்பும் வசதியும் தற்காலிகமாக நிறுத்தப்பட்டுள்ளது.</p>
         </div>
       </div>
 
@@ -7691,6 +7750,11 @@ function isWebsiteBlocked() {
   return shop.isWebsiteBlocked === true || localStorage.getItem("shop_website_blocked") === "true";
 }
 
+function isMessagesBlocked() {
+  const shop = getStoredShopInfo();
+  return shop.isMessagesBlocked === true || localStorage.getItem("shop_messages_blocked") === "true";
+}
+
 function renderWebsiteBlockState() {
   const blocked = isWebsiteBlocked();
   const shop = getStoredShopInfo();
@@ -7744,7 +7808,7 @@ function renderWebsiteBlockState() {
     }
   }
 
-  // 4. Update Settings Tab Controls
+  // 4. Update Settings Tab Controls for Website Block
   const badge = document.getElementById("settings-block-status-badge");
   const desc = document.getElementById("settings-block-status-desc");
   const reasonInput = document.getElementById("settings-block-reason-input");
@@ -7778,7 +7842,102 @@ function renderWebsiteBlockState() {
     }
   }
 
+  // 5. Update Messages Block State on Blocked Screen & Settings
+  const msgBlocked = isMessagesBlocked();
+  const msgBox = document.getElementById("blocked-screen-msg-box");
+  const msgDisabledBox = document.getElementById("blocked-screen-msg-disabled-box");
+
+  if (msgBox && msgDisabledBox) {
+    if (msgBlocked) {
+      msgBox.classList.add("hidden");
+      msgDisabledBox.classList.remove("hidden");
+    } else {
+      msgBox.classList.remove("hidden");
+      msgDisabledBox.classList.add("hidden");
+    }
+  }
+
+  const msgBadge = document.getElementById("settings-msg-block-badge");
+  const msgDesc = document.getElementById("settings-msg-block-desc");
+  const msgBlockBtn = document.getElementById("settings-msg-block-btn");
+  const msgUnblockBtn = document.getElementById("settings-msg-unblock-btn");
+  const tabMsgBtn = document.getElementById("tab-msg-block-toggle-btn");
+
+  if (msgBadge) {
+    if (msgBlocked) {
+      msgBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300";
+      msgBadge.textContent = "🔴 முடக்கப்பட்டுள்ளது (Messages Blocked)";
+    } else {
+      msgBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300";
+      msgBadge.textContent = "🟢 அனுமதிக்கப்பட்டுள்ளது (Allowed)";
+    }
+  }
+
+  if (msgDesc) {
+    msgDesc.textContent = msgBlocked 
+      ? "வாடிக்கையாளர்கள் செய்தி அனுப்பும் வசதி தற்போது முற்றிலும் முடக்கப்பட்டுள்ளது." 
+      : "முடக்கத் திரையில் வாடிக்கையாளர்கள் செய்தி அனுப்புவதை அனுமதிக்கலாம் அல்லது முற்றிலும் Block செய்யலாம்.";
+  }
+
+  if (msgBlockBtn && msgUnblockBtn) {
+    if (msgBlocked) {
+      msgBlockBtn.classList.add("hidden");
+      msgUnblockBtn.classList.remove("hidden");
+    } else {
+      msgBlockBtn.classList.remove("hidden");
+      msgUnblockBtn.classList.add("hidden");
+    }
+  }
+
+  if (tabMsgBtn) {
+    if (msgBlocked) {
+      tabMsgBtn.className = "px-3 py-1.5 bg-emerald-900/60 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer";
+      tabMsgBtn.innerHTML = `<i data-lucide="message-square" class="w-3.5 h-3.5 text-emerald-300"></i><span>🟢 செய்திகளை அனுமதி (Unblock)</span>`;
+    } else {
+      tabMsgBtn.className = "px-3 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-200 border border-rose-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer";
+      tabMsgBtn.innerHTML = `<i data-lucide="message-square-off" class="w-3.5 h-3.5 text-rose-400"></i><span>🚫 செய்திகளை Block செய்</span>`;
+    }
+  }
+
   if (window.lucide) lucide.createIcons();
+}
+
+function blockMessages(showNotice = true) {
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+  if (showNotice && !confirm(currentLang === 'ta' ? "🚫 வாடிக்கையாளர்கள் செய்தி அனுப்புவதையும் முடக்க (Block) விரும்புகிறீர்களா?" : "Block customer messaging?")) {
+    return;
+  }
+  SHOP_INFO.isMessagesBlocked = true;
+  localStorage.setItem("shop_messages_blocked", "true");
+  saveStoredShopInfo(SHOP_INFO);
+  renderWebsiteBlockState();
+  showToast("🚫 செய்தி அனுப்பும் வசதி முடக்கப்பட்டது!", "Customer messaging blocked!");
+}
+
+function unblockMessages(showNotice = true) {
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+  if (showNotice && !confirm(currentLang === 'ta' ? "🟢 வாடிக்கையாளர்கள் செய்தி அனுப்புவதை மீண்டும் அனுமதிக்கவா (Unblock Messages)?" : "Unblock customer messaging?")) {
+    return;
+  }
+  SHOP_INFO.isMessagesBlocked = false;
+  localStorage.setItem("shop_messages_blocked", "false");
+  saveStoredShopInfo(SHOP_INFO);
+  renderWebsiteBlockState();
+  showToast("🟢 செய்தி அனுப்பும் வசதி மீண்டும் இயக்கப்பட்டது!", "Customer messaging enabled!");
+}
+
+function toggleMessagesBlockQuickly() {
+  if (isMessagesBlocked()) {
+    unblockMessages(true);
+  } else {
+    blockMessages(true);
+  }
 }
 
 async function blockWebsite(customReason) {
@@ -7867,6 +8026,10 @@ function updateCustomerMessagesBadge() {
 
 async function handleSendBlockedScreenMessage(event) {
   if (event) event.preventDefault();
+  if (isMessagesBlocked()) {
+    alert(currentLang === 'ta' ? 'மன்னிக்கவும்! தற்போது செய்தி அனுப்பும் வசதி நிர்வாகியால் முடக்கப்பட்டுள்ளது.' : 'Sorry! Customer messaging is currently disabled by administrator.');
+    return;
+  }
   const nameInput = document.getElementById("visitor-msg-name");
   const textInput = document.getElementById("visitor-msg-text");
   const submitBtn = document.getElementById("visitor-msg-submit-btn");
