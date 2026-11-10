@@ -1701,6 +1701,7 @@
       db: null,
       isFirebaseConnected: false,
       deletedAdIds: JSON.parse(localStorage.getItem('olx_deleted_ad_ids') || '[]'),
+      deletedUserIds: JSON.parse(localStorage.getItem('olx_deleted_user_ids') || '[]'),
       isResaleBlocked: localStorage.getItem('olx_resale_blocked') === 'true',
       resaleBlockedReason: localStorage.getItem('olx_resale_blocked_reason') || 'தற்போது ஹனுமான் ரீசேல் (2nd Life) இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.',
       resaleBlockedAt: localStorage.getItem('olx_resale_blocked_at') || 'இப்போது',
@@ -1975,9 +1976,12 @@
 
 
 
-        // Seed sample regional users if non-admin list is empty so owner can test full control tools
+        // Seed sample regional users ONLY ONCE on very first installation (Never re-seed after owner deletes them)
+        this.deletedUserIds = JSON.parse(localStorage.getItem('olx_deleted_user_ids') || '[]');
+        this.registeredUsers = this.registeredUsers.filter(u => !this.deletedUserIds.includes(u.id));
+        const hasSeededUsers = localStorage.getItem('olx_users_seeded_v1');
         const nonAdminCount = this.registeredUsers.filter(u => !u.isAdmin && u.username !== 'hanuman').length;
-        if (nonAdminCount === 0) {
+        if (!hasSeededUsers && nonAdminCount === 0) {
           const SEED_USERS = [
             {
               id: 101,
@@ -2022,6 +2026,7 @@
           ];
           this.registeredUsers.push(...SEED_USERS);
           localStorage.setItem('olx_registered_users', JSON.stringify(this.registeredUsers));
+          localStorage.setItem('olx_users_seeded_v1', 'true');
         }
 
         // Load Current User Session
@@ -2202,18 +2207,33 @@
           }
         }, err => console.error('Firebase resale_config listener error:', err));
 
-        // 3. Realtime Registered Users & Blocked Users Listener
+        // 3. Realtime Registered Users & Blocked Users Listener (Syncs deletes & blocks live)
         this.db.collection('shop_data').doc('resale_users').onSnapshot(doc => {
           try {
             if (doc.exists) {
               const uData = doc.data();
-              if (uData && Array.isArray(uData.users) && uData.users.length > 0) {
-                this.registeredUsers = uData.users;
+              if (uData && Array.isArray(uData.users)) {
+                const remoteDeleted = uData.deletedUserIds || [];
+                if (Array.isArray(remoteDeleted)) {
+                  let changed = false;
+                  remoteDeleted.forEach(id => {
+                    if (!this.deletedUserIds.includes(id)) {
+                      this.deletedUserIds.push(id);
+                      changed = true;
+                    }
+                  });
+                  if (changed) {
+                    localStorage.setItem('olx_deleted_user_ids', JSON.stringify(this.deletedUserIds));
+                  }
+                }
+                this.registeredUsers = uData.users.filter(u => !this.deletedUserIds.includes(u.id));
                 localStorage.setItem('olx_registered_users', JSON.stringify(this.registeredUsers));
                 if (this.isOwner()) {
                   this.renderOwnerModal();
                 }
               }
+            } else {
+              this.syncUsersToFirebase();
             }
           } catch (err) {
             console.error('Error handling resale_users snapshot:', err);
@@ -2239,6 +2259,7 @@
         try {
           this.db.collection('shop_data').doc('resale_users').set({
             users: this.registeredUsers,
+            deletedUserIds: this.deletedUserIds || [],
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           }, { merge: true }).catch(err => console.error('Error syncing users to Firebase:', err));
         } catch (e) {
@@ -2736,11 +2757,18 @@
       deleteRegisteredUser(userId) {
         const user = this.registeredUsers.find(u => u.id === userId);
         if (!user) return;
-        if (!confirm(`'${user.name}' என்ற பயனரை நிச்சயமாக நீக்க விரும்புகிறீர்களா?
-இவரது கணக்கு மற்றும் விளம்பரங்கள் அனைத்தும் நீக்கப்படும்.`)) return;
-        
-        // Remove ads posted by this user and track deleted IDs
-        const userAds = this.ads.filter(a => a.seller_phone === user.phone);
+        if (!confirm(`'${user.name}' என்ற பயனரை நிச்சயமாக நீக்க விரும்புகிறீர்களா?\nஇவரது கணக்கு மற்றும் விளம்பரங்கள் அனைத்தும் நிரந்தரமாக நீக்கப்படும்.`)) return;
+
+        // 1. Track deleted user ID permanently
+        if (!this.deletedUserIds) this.deletedUserIds = [];
+        if (!this.deletedUserIds.includes(userId)) {
+          this.deletedUserIds.push(userId);
+        }
+        localStorage.setItem('olx_deleted_user_ids', JSON.stringify(this.deletedUserIds));
+        localStorage.setItem('olx_users_seeded_v1', 'true');
+
+        // 2. Remove all ads posted by this user and track their IDs as deleted
+        const userAds = this.ads.filter(a => a.seller_phone === user.phone || a.seller_name === user.name);
         userAds.forEach(ua => {
           if (!this.deletedAdIds.includes(ua.id)) {
             this.deletedAdIds.push(ua.id);
@@ -2748,16 +2776,17 @@
         });
         localStorage.setItem('olx_deleted_ad_ids', JSON.stringify(this.deletedAdIds));
 
-        this.ads = this.ads.filter(a => a.seller_phone !== user.phone);
+        this.ads = this.ads.filter(a => a.seller_phone !== user.phone && a.seller_name !== user.name);
         this.saveAds();
         this.syncAdsToFirebase();
         this.renderAds();
 
+        // 3. Remove user from registered list & sync to Firebase
         this.registeredUsers = this.registeredUsers.filter(u => u.id !== userId);
         localStorage.setItem('olx_registered_users', JSON.stringify(this.registeredUsers));
         this.syncUsersToFirebase();
         this.renderOwnerModal();
-        this.showToast(`பயனர் '${user.name}' மற்றும் அவரது விளம்பரங்கள் நீக்கப்பட்டன!`, '🗑️');
+        this.showToast(`பயனர் '${user.name}' மற்றும் அவரது விளம்பரங்கள் நிரந்தரமாக நீக்கப்பட்டன!`, '🗑️');
       },
 
       deleteAdAsOwner(adId) {
@@ -3764,13 +3793,7 @@
         }
       },
 
-      deleteRegisteredUser(userId) {
-        if (!confirm('இந்த பயனரை நிச்சயமாக நீக்க விரும்புகிறீர்களா? இவர் கணக்கு ரத்தாகும்.')) return;
-        this.registeredUsers = this.registeredUsers.filter(u => u.id !== userId);
-        localStorage.setItem('olx_registered_users', JSON.stringify(this.registeredUsers));
-        this.renderOwnerModal();
-        this.showToast('பயனர் வெற்றிகரமாக நீக்கப்பட்டார்!', '🗑️');
-      },
+
 
       // ================= PUBLIC AUTH MODAL HANDLERS =================
       openAuthModal(reason = null) {
