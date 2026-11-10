@@ -2972,12 +2972,123 @@ alter publication supabase_realtime add table shop_data;</pre>
             </div>
           </div>
 
-          <!-- SECTION 4: JSON BACKUP & RESTORE & CACHE CLEAR -->
+          <!-- SECTION 4: TRANSFER FULL ACCESS TO ANOTHER LAPTOP / PC (NEW PC MIGRATION) -->
+          <div class="p-4 bg-gradient-to-r from-amber-950 via-slate-900 to-indigo-950 text-white rounded-3xl border-2 border-amber-500/60 shadow-xl space-y-3">
+            <div class="flex items-start justify-between flex-wrap gap-2 pb-2 border-b border-amber-500/30">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+                  <i data-lucide="shield-alert" class="w-5 h-5 text-amber-400"></i>
+                </div>
+                <div>
+                  <h5 class="text-xs sm:text-sm font-black text-white flex items-center gap-1.5">
+                    <span>💻 இந்த லேப்டாப் இல்லை என்றால்? வேறு Laptop அல்லது PC-க்கு Full Access மாற்றுவது எப்படி?</span>
+                  </h5>
+                  <p class="text-[11px] text-amber-200">
+                    லேப்டாப் பழுதானாலும் அல்லது தொலைந்தாலும், எந்த புதிய லேப்டாப் / கணினிக்கும் 100% முழு உரிமையை மாற்றும் வழிகள்
+                  </p>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/40">
+                100% Safe Cloud Backup
+              </span>
+            </div>
+
+            <!-- Important Reassurance Note -->
+            <div class="p-3 bg-amber-500/10 rounded-2xl border border-amber-500/20 text-[11px] text-amber-100 leading-relaxed space-y-1">
+              <p>
+                🛡️ <strong>முக்கிய தகவல்:</strong> உங்கள் இணையதளம் வெறும் இந்த ஒரு லேப்டாப்பில் மட்டும் இல்லை! இதன் முழுக் குறியீடுகளும் <strong>GitHub Cloud</strong>-லும், நேரலை சர்வர் <strong>Vercel</strong>-லும், தரவுகள் <strong>Firebase / Supabase</strong>-லும் பாதுகாப்பாக உள்ளன. எனவே லேப்டாப் இல்லாவிட்டாலும் <strong>ஒரு பைசா இழப்போ அல்லது தரவு இழப்போ ஏற்படாது!</strong>
+              </p>
+            </div>
+
+            <!-- 3 Simple Transfer Methods Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+              
+              <!-- Transfer Method 1: No Software (Browser Only) -->
+              <div class="p-3 bg-slate-900/90 rounded-2xl border border-slate-700 space-y-2">
+                <div class="flex items-center gap-2 text-cyan-300 font-extrabold text-[11.5px]">
+                  <i data-lucide="globe" class="w-4 h-4"></i>
+                  <span>முறை 1: சாப்ட்வேர் எதுவுமின்றி (Browser Only)</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300 leading-relaxed">
+                  எந்த புதிய PC அல்லது மொபைலிலும் Chrome-ல் <strong>hanuman-printshop.vercel.app</strong> திறக்கவும் ➔ Admin Login செய்யவும் ➔ <strong>'புதிய index.html Download'</strong> கொடுத்தால் முழு ஃபைலும் உங்கள் புதிய PC-யில் வந்துவிடும்!
+                </p>
+                <button 
+                  type="button" 
+                  onclick="downloadCurrentHtmlFile()" 
+                  class="w-full py-1.5 bg-cyan-700 hover:bg-cyan-800 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="download" class="w-3 h-3"></i>
+                  <span>index.html ஃபைலை பதிவிறக்கு</span>
+                </button>
+              </div>
+
+              <!-- Transfer Method 2: Git Clone to New PC -->
+              <div class="p-3 bg-slate-900/90 rounded-2xl border border-slate-700 space-y-2">
+                <div class="flex items-center gap-2 text-purple-300 font-extrabold text-[11.5px]">
+                  <i data-lucide="git-branch" class="w-4 h-4"></i>
+                  <span>முறை 2: புதிய PC-க்கு Git Clone (Full Repo)</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300 leading-relaxed">
+                  புதிய கணினியில் Git நிறுவிய பின், Terminal-ல் இந்த 1 கட்டளையை இயக்கினால் முழு ஃபைல்களும் Git உரிமையோடு புதிய PC-க்கு வந்துவிடும்:
+                </p>
+                <div class="p-1.5 bg-black/60 rounded-lg font-mono text-[9.5px] text-purple-300 break-all select-all">
+                  git clone https://github.com/hanumanhari/hanuman-printshop.git
+                </div>
+                <button 
+                  type="button" 
+                  onclick="copyGitCloneCommand()" 
+                  class="w-full py-1.5 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="copy" class="w-3 h-3"></i>
+                  <span>Clone கட்டளையை Copy செய்</span>
+                </button>
+              </div>
+
+              <!-- Transfer Method 3: 1-Click Migration Bundle -->
+              <div class="p-3 bg-slate-900/90 rounded-2xl border border-slate-700 space-y-2">
+                <div class="flex items-center gap-2 text-emerald-300 font-extrabold text-[11.5px]">
+                  <i data-lucide="package-check" class="w-4 h-4"></i>
+                  <span>முறை 3: அட்மின் அமைப்புகள் (.json Bundle)</span>
+                </div>
+                <p class="text-[10.5px] text-slate-300 leading-relaxed">
+                  அட்மின் பாஸ்வேர்ட், Web3Forms கீ, Firebase & Supabase இணைப்புகள் அனைத்தையும் ஒரே கோப்பாக டவுன்லோட் செய்து, புதிய PC-யில் 1 நொடியில் Import செய்யலாம்.
+                </p>
+                <button 
+                  type="button" 
+                  onclick="exportFullProjectMigrationBundle()" 
+                  class="w-full py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-[10.5px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <i data-lucide="package" class="w-3 h-3"></i>
+                  <span>Migration Bundle (.json) பதிவிறக்கு</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- GitHub Account Login Access Link -->
+            <div class="p-2.5 bg-slate-900/60 rounded-xl border border-slate-700 flex items-center justify-between flex-wrap gap-2 text-[11px]">
+              <span class="text-slate-300">
+                🔑 <strong>GitHub நேரடி உரிமை:</strong> புதிய கணினியில் <strong>github.com/login</strong> சென்று <strong>hanumanhari</strong> கணக்கில் லாகின் செய்தால், இணையதளத்தின் முழு நிர்வாக உரிமையும் அங்கேயே கிடைத்துவிடும்.
+              </span>
+              <a 
+                href="https://github.com/hanumanhari/hanuman-printshop" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="px-2.5 py-1 bg-white hover:bg-slate-200 text-slate-900 rounded-lg font-bold text-[10px] flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+                <span>GitHub கணக்கு திறக்க</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- SECTION 5: JSON BACKUP & RESTORE & CACHE CLEAR -->
           <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
             <div class="flex items-center justify-between flex-wrap gap-2 pb-1 border-b border-slate-200">
               <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
                 <i data-lucide="database" class="w-4 h-4 text-slate-600"></i>
-                <span>4. கூடுதல் தரவு மேலாண்மை (JSON Backup, Restore & Reset)</span>
+                <span>5. கூடுதல் தரவு மேலாண்மை (JSON Backup, Restore & Reset)</span>
               </span>
               <button 
                 type="button" 
@@ -3008,12 +3119,12 @@ alter publication supabase_realtime add table shop_data;</pre>
             </div>
           </div>
 
-          <!-- SECTION 5: LIVE SOURCE CODE INSPECTOR -->
+          <!-- SECTION 6: LIVE SOURCE CODE INSPECTOR -->
           <div class="p-3.5 bg-slate-900 rounded-2xl border border-slate-800 text-slate-200 space-y-2">
             <div class="flex items-center justify-between flex-wrap gap-2">
               <span class="text-xs font-black text-white flex items-center gap-1.5">
                 <i data-lucide="code" class="w-4 h-4 text-cyan-400"></i>
-                <span>5. நேரலை மூலக் குறியீடு முன்னோட்டம் (Live Code Inspector)</span>
+                <span>6. நேரலை மூலக் குறியீடு முன்னோட்டம் (Live Code Inspector)</span>
               </span>
               <div class="flex items-center gap-1 text-[10px]">
                 <button type="button" onclick="showLiveCodeSnippet('shop')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 cursor-pointer font-mono">SHOP_INFO</button>
@@ -9309,6 +9420,39 @@ function copyFullGitSyncCommand() {
   const dateStr = new Date().toLocaleDateString('en-IN');
   const cmd = `git add index.html\ngit commit -m "update website: ${dateStr}"\ngit push origin main`;
   copyTextHelper(cmd, "முழுமையான Git Commit & Push கட்டளைகள் Copy செய்யப்பட்டன!");
+}
+
+function copyGitCloneCommand() {
+  const cmd = `git clone https://github.com/hanumanhari/hanuman-printshop.git\ncd hanuman-printshop\ngit config user.name "hanumanhari"\ngit config user.email "hanumanhari.mobile@gmail.com"`;
+  copyTextHelper(cmd, "புதிய லேப்டாப்பிற்கான Git Clone கட்டளைகள் Copy செய்யப்பட்டன!");
+}
+
+function exportFullProjectMigrationBundle() {
+  const bundle = {
+    appName: "Sri Hanuman Print Shop",
+    exportVersion: "2026.11",
+    exportedAt: new Date().toISOString(),
+    gitRepo: "https://github.com/hanumanhari/hanuman-printshop.git",
+    liveUrl: "https://hanuman-printshop.vercel.app",
+    admin: getStoredAdmin(),
+    shopInfo: SHOP_INFO,
+    services: SERVICES,
+    categories: CATEGORIES,
+    customStocks: typeof CUSTOM_STOCKS !== "undefined" ? CUSTOM_STOCKS : [],
+    firebase: getStoredFirebaseConfig(),
+    supabase: getStoredSupabaseConfig()
+  };
+  const jsonStr = JSON.stringify(bundle, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `hanuman_shop_NEW_PC_MIGRATION_BUNDLE_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast("📦 புதிய PC-க்கான முழு Migration Bundle பதிவிறக்கம் செய்யப்பட்டது!", "Migration bundle exported!");
 }
 
 async function pushAllDataToCloud() {
