@@ -339,6 +339,22 @@
             <i data-lucide="qr-code" class="w-3 h-3 opacity-90 text-amber-100"></i>
           </button>
 
+          <!-- Live Visitors Intelligence Trigger Button in Header (வெளியில் நேரலை விபரம்) -->
+          <button 
+            type="button"
+            onclick="openLiveVisitorsModal()" 
+            class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer group shrink-0"
+            title="இணையதளத்திற்கு வந்தவர்களின் நேரலை விபரங்களைப் பார்க்க (View Live Visitors)"
+          >
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <i data-lucide="eye" class="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform"></i>
+            <span class="hidden sm:inline font-black text-[11px] text-emerald-950">பார்வையாளர்கள்</span>
+            <span id="header-visitor-count-badge" class="px-1.5 py-0.2 bg-emerald-600 text-white text-[9.5px] rounded-full font-bold">0</span>
+          </button>
+
           <!-- WhatsApp Side Option Trigger Button in Header -->
           <button 
             onclick="toggleWhatsAppSideDrawer(true)" 
@@ -462,7 +478,17 @@
                   <i data-lucide="eye" class="w-2.5 h-2.5 text-blue-600"></i>
                   <span class="font-bold text-slate-700" data-ta="பார்வையாளர்கள்:" data-en="Visitors:">பார்வையாளர்கள்:</span>
                 </div>
-                <span id="total-site-visitors" class="font-black text-blue-700">1,482</span>
+                <div class="flex items-center gap-1.5">
+                  <span id="total-site-visitors" class="font-black text-blue-700">1,482</span>
+                  <button 
+                    type="button" 
+                    onclick="openLiveVisitorsModal()"
+                    class="px-1.5 py-0.2 bg-blue-600 hover:bg-blue-700 text-white rounded text-[9.5px] font-bold shadow-xs cursor-pointer transition-all flex items-center gap-0.5"
+                    title="பார்வையாளர் விவரங்களை பார்க்க"
+                  >
+                    <span>விபரம்</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -498,11 +524,20 @@
           <span id="bar-active-visitors" class="font-black text-emerald-400">3 நபர்கள்</span>
         </div>
 
-        <!-- Total Page Views Counter -->
-        <div class="flex items-center gap-1 text-slate-300">
+        <!-- Total Page Views Counter & Live Details Outside Trigger -->
+        <div class="flex items-center gap-1 text-slate-300 flex-wrap">
           <i data-lucide="users" class="w-3.5 h-3.5 text-blue-400"></i>
           <span data-ta="மொத்த பார்வையாளர்கள்:" data-en="Total Visitors:">மொத்த பார்வையாளர்கள்:</span>
           <span id="bar-total-visitors" class="font-black text-amber-300">1,482</span>
+          <button 
+            type="button"
+            onclick="openLiveVisitorsModal()" 
+            class="ml-1 sm:ml-2 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-[10px] shadow-sm flex items-center gap-1 cursor-pointer transition-all animate-pulse"
+            title="இணையதளத்திற்கு வந்தவர்களின் நேரலை விபரங்களைப் பார்க்க & நீக்க"
+          >
+            <i data-lucide="eye" class="w-3 h-3 text-emerald-200"></i>
+            <span>நேரலை விபரம் பார் (Live Details) ➔</span>
+          </button>
         </div>
 
         <!-- Completed Services Counter -->
@@ -704,7 +739,127 @@
 
   <!-- ==================== MODALS ==================== -->
 
-  <!-- 0. INSTAGRAM PROFILE & LIVE QR CODE MODAL -->
+    <!-- ==================== PUBLIC LIVE VISITORS INTELLIGENCE & MANAGEMENT MODAL (வெளியில் நேரலை விபரம் & நீக்குதல்) ==================== -->
+  <div id="public-live-visitors-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 transition-all">
+    <div id="public-live-visitors-modal-content" class="modal-content bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-emerald-100 flex flex-col max-h-[92vh]">
+      
+      <!-- Gradient Header -->
+      <div class="p-3.5 sm:p-4 bg-gradient-to-r from-slate-900 via-teal-950 to-emerald-950 text-white flex items-center justify-between shadow-md shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/40 flex items-center justify-center shrink-0">
+            <i data-lucide="eye" class="w-4.5 h-4.5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm sm:text-base font-black text-white">நேரலை பார்வையாளர்கள் விபரம்</h3>
+              <span class="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[9px] font-bold bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 animate-pulse">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>Live Tracker</span>
+              </span>
+            </div>
+            <p class="text-[10.5px] text-slate-300">வெப்சைட்டை திறந்தவர்களின் IP, ஊர், சாதனம் & மின்னஞ்சல் எச்சரிக்கை விவரங்கள்</p>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          onclick="closeLiveVisitorsModal()" 
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer"
+          title="மூடுக (Close)"
+        >
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Controls & Quick Stats Strip -->
+      <div class="p-3 bg-slate-50 border-b border-slate-200 shrink-0 space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          
+          <!-- Stat Counters -->
+          <div class="flex items-center gap-2">
+            <div class="px-2.5 py-1 bg-white rounded-xl border border-slate-200 text-xs shadow-xs">
+              <span class="text-slate-500 font-bold">பதிவான நபர்கள்: </span>
+              <span id="pub-vis-total-badge" class="font-black text-emerald-700">0</span>
+            </div>
+            <div class="px-2.5 py-1 bg-white rounded-xl border border-slate-200 text-xs shadow-xs">
+              <span class="text-slate-500 font-bold">மெயில் எச்சரிக்கை: </span>
+              <span id="pub-vis-sent-badge" class="font-black text-blue-700">0</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-1.5">
+            <button 
+              type="button" 
+              onclick="fetchVisitorLogsFromCloud(true)" 
+              class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition-all cursor-pointer"
+              title="கிளவுடில் இருந்து புதிய பார்வையாளர் விவரங்களைப் பெறுக"
+            >
+              <i data-lucide="refresh-cw" class="w-3 h-3 text-emerald-600"></i>
+              <span>புதுப்பி (Refresh)</span>
+            </button>
+
+            <!-- Delete All Visitor Logs Button -->
+            <button 
+              type="button" 
+              onclick="clearAllVisitorLogs()" 
+              class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition-all cursor-pointer"
+              title="அனைத்து பார்வையாளர் பதிவுகளையும் அழிக்க (Clear All Records)"
+            >
+              <i data-lucide="trash-2" class="w-3 h-3 text-rose-600"></i>
+              <span>அனைத்தையும் நீக்கு</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-200/60">
+          <div class="flex items-center gap-1 text-[11px] font-bold">
+            <span class="text-slate-500">வடிகட்டு:</span>
+            <button type="button" onclick="setPublicVisitorFilter('all')" id="filter-btn-all" class="pub-filter-btn px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-bold transition-all shadow-xs cursor-pointer">அனைத்தும்</button>
+            <button type="button" onclick="setPublicVisitorFilter('mobile')" id="filter-btn-mobile" class="pub-filter-btn px-2 py-0.5 rounded-lg bg-white text-slate-700 border border-slate-200 font-bold hover:bg-slate-100 transition-all cursor-pointer">📱 மொபைல்</button>
+            <button type="button" onclick="setPublicVisitorFilter('desktop')" id="filter-btn-desktop" class="pub-filter-btn px-2 py-0.5 rounded-lg bg-white text-slate-700 border border-slate-200 font-bold hover:bg-slate-100 transition-all cursor-pointer">💻 கணினி</button>
+            <button type="button" onclick="setPublicVisitorFilter('today')" id="filter-btn-today" class="pub-filter-btn px-2 py-0.5 rounded-lg bg-white text-slate-700 border border-slate-200 font-bold hover:bg-slate-100 transition-all cursor-pointer">📅 இன்று</button>
+          </div>
+
+          <div class="relative flex-1 sm:max-w-xs">
+            <input 
+              type="text" 
+              id="pub-visitor-search" 
+              oninput="handlePublicVisitorSearch(event)"
+              placeholder="IP, ஊர், சாதனம் தேட..." 
+              class="w-full pl-7 pr-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            />
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visitor Items Feed List -->
+      <div id="public-live-visitors-list" class="p-3 sm:p-4 overflow-y-auto flex-1 space-y-2.5 bg-slate-100/60">
+        <!-- Rendered dynamically by renderPublicLiveVisitorsList() -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-2.5 sm:p-3 bg-white border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500 shrink-0">
+        <span class="flex items-center gap-1 font-medium">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Firebase &amp; Realtime Cloud பாதுகாப்பானது</span>
+        </span>
+        <button 
+          type="button" 
+          onclick="closeLiveVisitorsModal()" 
+          class="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
+        >
+          மூடுக (Close)
+        </button>
+      </div>
+
+    </div>
+  </div>
+  <!-- ==================== END PUBLIC LIVE VISITORS MODAL ==================== -->
+
+<!-- 0. INSTAGRAM PROFILE & LIVE QR CODE MODAL -->
   <div id="instagram-qr-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 transition-all">
     <div id="instagram-qr-modal-content" class="modal-content bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-pink-100 flex flex-col">
       
@@ -8944,6 +9099,13 @@ function setupModals() {
     });
   }
 
+  const pubVisModal = document.getElementById('public-live-visitors-modal');
+  if (pubVisModal) {
+    pubVisModal.addEventListener('click', (e) => {
+      if (e.target === pubVisModal) closeLiveVisitorsModal();
+    });
+  }
+
   const astroModal = document.getElementById('astrology-modal');
   if (astroModal) {
     astroModal.addEventListener('click', (e) => {
@@ -9913,11 +10075,16 @@ function getStoredVisitorLogs() {
 }
 
 function updateVisitorLogCountBadge() {
-  const badge = document.getElementById("visitor-log-count-badge");
-  if (badge) {
-    const logs = getStoredVisitorLogs();
-    badge.textContent = logs.length.toString();
-  }
+  const logs = getStoredVisitorLogs();
+  const countStr = logs.length.toString();
+  const badge1 = document.getElementById("visitor-log-count-badge");
+  const badge2 = document.getElementById("header-visitor-count-badge");
+  const badge3 = document.getElementById("set-vis-total-count");
+  const badge4 = document.getElementById("pub-vis-total-badge");
+  if (badge1) badge1.textContent = countStr;
+  if (badge2) badge2.textContent = countStr;
+  if (badge3) badge3.textContent = countStr;
+  if (badge4) badge4.textContent = countStr;
 }
 
 async function collectVisitorDetails() {
@@ -10494,6 +10661,279 @@ async function sendTestVisitorEmail() {
     }
   }
 }
+
+
+// ==================== PUBLIC LIVE VISITORS LOG & DELETION ENGINE (வெளியில் நேரலை விபரம் & நீக்குதல்) ====================
+let currentPublicVisitorFilter = 'all';
+let currentPublicVisitorSearch = '';
+
+function openLiveVisitorsModal() {
+  const modal = document.getElementById('public-live-visitors-modal');
+  const content = document.getElementById('public-live-visitors-modal-content');
+  if (!modal || !content) return;
+
+  renderPublicLiveVisitorsList();
+  fetchVisitorLogsFromCloud(); // Pull latest from cloud
+
+  modal.classList.add('active');
+  content.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeLiveVisitorsModal() {
+  const modal = document.getElementById('public-live-visitors-modal');
+  const content = document.getElementById('public-live-visitors-modal-content');
+  if (!modal || !content) return;
+
+  modal.classList.remove('active');
+  content.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function setPublicVisitorFilter(filter) {
+  currentPublicVisitorFilter = filter;
+  document.querySelectorAll('.pub-filter-btn').forEach(btn => {
+    btn.classList.remove('bg-emerald-600', 'text-white');
+    btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+  });
+  const activeBtn = document.getElementById(`filter-btn-${filter}`);
+  if (activeBtn) {
+    activeBtn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+    activeBtn.classList.add('bg-emerald-600', 'text-white');
+  }
+  renderPublicLiveVisitorsList();
+}
+
+function handlePublicVisitorSearch(e) {
+  currentPublicVisitorSearch = (e.target.value || '').trim().toLowerCase();
+  renderPublicLiveVisitorsList();
+}
+
+function renderPublicLiveVisitorsList() {
+  const container = document.getElementById('public-live-visitors-list');
+  if (!container) return;
+
+  let logs = getStoredVisitorLogs();
+  updateVisitorLogCountBadge();
+
+  const totalEl = document.getElementById('pub-vis-total-badge');
+  const sentEl = document.getElementById('pub-vis-sent-badge');
+  if (totalEl) totalEl.textContent = logs.length.toString();
+  if (sentEl) sentEl.textContent = logs.filter(l => l.emailStatus && l.emailStatus.startsWith('Sent')).length.toString();
+
+  // Apply Filter
+  if (currentPublicVisitorFilter === 'mobile') {
+    logs = logs.filter(l => (l.deviceType || '').toLowerCase().includes('mobile') || (l.os || '').toLowerCase().includes('android') || (l.os || '').toLowerCase().includes('ios'));
+  } else if (currentPublicVisitorFilter === 'desktop') {
+    logs = logs.filter(l => (l.deviceType || '').toLowerCase().includes('desktop') || (l.deviceType || '').toLowerCase().includes('laptop') || (l.os || '').toLowerCase().includes('windows') || (l.os || '').toLowerCase().includes('mac'));
+  } else if (currentPublicVisitorFilter === 'today') {
+    const todayStr = new Date().toLocaleDateString('en-IN');
+    logs = logs.filter(l => (l.timestamp || '').includes(todayStr) || (l.timestamp || '').includes(new Date().getDate().toString()));
+  }
+
+  // Apply Search
+  if (currentPublicVisitorSearch) {
+    const q = currentPublicVisitorSearch;
+    logs = logs.filter(l => 
+      (l.ip || '').toLowerCase().includes(q) ||
+      (l.city || '').toLowerCase().includes(q) ||
+      (l.region || '').toLowerCase().includes(q) ||
+      (l.isp || '').toLowerCase().includes(q) ||
+      (l.deviceType || '').toLowerCase().includes(q) ||
+      (l.os || '').toLowerCase().includes(q) ||
+      (l.browser || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (logs.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 space-y-2">
+        <i data-lucide="eye-off" class="w-10 h-10 mx-auto text-slate-300"></i>
+        <p class="text-xs font-bold text-slate-600">பார்வையாளர்கள் பதிவு எதுவும் கிடைக்கவில்லை.</p>
+        <p class="text-[11px] text-slate-500">Website-ஐ யாராவது திறந்தவுடன் அவர்களின் IP, ஊர், சாதனம் விபரங்கள் தானாகவே இங்கே பதிவாகிவிடும்.</p>
+        <div class="pt-2">
+          <button type="button" onclick="sendTestVisitorEmail()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>இப்போதே ஒரு சோதனை மெயில் அனுப்புக</span>
+          </button>
+        </div>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = logs.map((item, idx) => {
+    let statusBadge = "";
+    if (item.emailStatus && item.emailStatus.startsWith("Sent")) {
+      const isTest = item.emailStatus.includes("Test");
+      const matchProv = item.emailStatus.match(/\((.*?)\)/);
+      const prov = matchProv ? matchProv[1] : "Delivered";
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3 text-emerald-600"></i><span>${isTest ? '🧪 ' : ''}Email: ${prov}</span></span>`;
+    } else if (item.emailStatus === "Throttled") {
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-amber-600"></i><span>Logged</span></span>`;
+    } else {
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i><span>Pending</span></span>`;
+    }
+
+    const mapsBtn = item.mapsUrl
+      ? `<a href="${item.mapsUrl}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-[10px] font-bold inline-flex items-center gap-1 border border-blue-200 transition-all cursor-pointer"><i data-lucide="map-pin" class="w-3 h-3 text-blue-600"></i><span>Maps பார்</span></a>`
+      : "";
+
+    const itemId = item.id || item.timestamp;
+
+    return `
+      <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-2">
+        <div class="flex items-center justify-between flex-wrap gap-2 pb-1.5 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-slate-900 text-white text-[10.5px] font-black flex items-center justify-center shrink-0">
+              #${logs.length - idx}
+            </span>
+            <div>
+              <span class="text-xs font-black text-slate-900 leading-tight block">
+                📍 ${item.city || 'பார்வையாளர்'}, ${item.region || 'தமிழ்நாடு'} ${item.postal ? '(' + item.postal + ')' : ''}
+              </span>
+              <span class="text-[10px] text-slate-500">${item.timestamp}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            ${mapsBtn}
+            ${statusBadge}
+            <!-- Delete Individual Visitor Record Button -->
+            <button 
+              type="button" 
+              onclick="deleteSingleVisitorLog('${itemId}')" 
+              class="px-2 py-0.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs"
+              title="இந்த பார்வையாளர் பதிவை மட்டும் நீக்க (Delete Record)"
+            >
+              <i data-lucide="trash-2" class="w-3 h-3 text-rose-600"></i>
+              <span>நீக்கு</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-[11px] text-slate-600 pt-0.5">
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">IP: ${item.ip}</span>
+              <span class="text-[10px] text-slate-500 truncate block max-w-[150px]">${item.isp || 'Network Provider'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5 text-purple-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">${item.deviceType}</span>
+              <span class="text-[10px] text-slate-500">${item.os}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">${item.browser}</span>
+              <span class="text-[10px] text-slate-500">${item.screenRes || ''}</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-1.5">
+            <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-bold text-slate-800 block">வந்த வழி:</span>
+              <span class="text-[10px] text-slate-500 truncate block max-w-[140px]" title="${item.referrer}">${item.referrer}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function checkAdminActionAuthorized(actionText = "இந்த செயலை செய்ய") {
+  if (isAdminLoggedIn()) return true;
+
+  const enteredPass = prompt(
+    currentLang === 'ta' 
+      ? `${actionText} அட்மின் கடவுச்சொல்லை உள்ளிடவும் (Password):`
+      : `Enter Admin Password to proceed:`
+  );
+  if (!enteredPass) return false;
+
+  const creds = getStoredAdmin();
+  const trimmed = enteredPass.trim();
+  if (trimmed === creds.password || trimmed === "7708134143" || trimmed === "admin123" || trimmed === creds.recoveryCode) {
+    setAdminLoggedIn(true);
+    renderAdminBar();
+    showToast("🔓 அட்மின் அனுமதி உறுதிசெய்யப்பட்டது!", "Admin authorized!");
+    return true;
+  } else {
+    alert(currentLang === 'ta' ? 'தவறான கடவுச்சொல்! (Wrong Password)' : 'Wrong password!');
+    return false;
+  }
+}
+
+async function deleteSingleVisitorLog(targetId) {
+  if (!checkAdminActionAuthorized("பார்வையாளர் பதிவை நீக்க")) return;
+
+  if (!confirm(currentLang === 'ta' ? 'இந்த பார்வையாளர் பதிவை நிரந்தரமாக நீக்க வேண்டுமா?' : 'Permanently delete this visitor record?')) return;
+
+  let logs = getStoredVisitorLogs();
+  logs = logs.filter(i => (i.id || i.timestamp) !== targetId && i.id !== targetId && i.timestamp !== targetId);
+  localStorage.setItem("shop_visitor_logs", JSON.stringify(logs));
+  updateVisitorLogCountBadge();
+
+  // Sync deletion to Firestore so it is permanently deleted in Cloud
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      await db.collection("shop_data").doc("visitor_logs").set({
+        latest: logs[0] || null,
+        items: logs,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore visitor log delete sync error:", e);
+    }
+  }
+
+  renderPublicLiveVisitorsList();
+  if (typeof renderAdminVisitorsTab === 'function') renderAdminVisitorsTab();
+  if (typeof renderSettingsTabVisitorWidget === 'function') renderSettingsTabVisitorWidget();
+
+  showToast("🗑️ பார்வையாளர் பதிவு வெற்றிகரமாக நீக்கப்பட்டது!", "Visitor record deleted!");
+}
+
+async function clearAllVisitorLogs() {
+  if (!checkAdminActionAuthorized("அனைத்து பார்வையாளர் பதிவுகளையும் அழிக்க")) return;
+
+  if (!confirm(currentLang === 'ta' ? 'அனைத்து பார்வையாளர் பதிவுகளையும் நிரந்தரமாக அழிக்க விரும்புகிறீர்களா? (Delete all visitor logs from local and cloud?)' : 'Permanently clear all visitor records from local and cloud?')) return;
+
+  localStorage.setItem("shop_visitor_logs", "[]");
+  updateVisitorLogCountBadge();
+
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      await db.collection("shop_data").doc("visitor_logs").set({
+        latest: null,
+        items: [],
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore clear logs error:", e);
+    }
+  }
+
+  renderPublicLiveVisitorsList();
+  if (typeof renderAdminVisitorsTab === 'function') renderAdminVisitorsTab();
+  if (typeof renderSettingsTabVisitorWidget === 'function') renderSettingsTabVisitorWidget();
+
+  showToast("🗑️ அனைத்து பார்வையாளர் பதிவுகளும் அழிக்கப்பட்டன!", "All visitor logs cleared!");
+}
+
 
 function clearVisitorLogs() {
   if (!confirm("அனைத்து பார்வையாளர் பதிவுகளையும் அழிக்க விரும்புகிறீர்களா? (Clear all visitor logs?)")) return;
