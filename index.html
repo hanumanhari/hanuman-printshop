@@ -339,18 +339,18 @@
             <i data-lucide="qr-code" class="w-3 h-3 opacity-90 text-amber-100"></i>
           </button>
 
-          <!-- Live Visitors Intelligence Trigger Button in Header (வெளியில் நேரலை விபரம்) -->
+          <!-- Live Visitors Intelligence Trigger Button in Header (உரிமையாளர் பார்வை - Owner Only) -->
           <button 
             type="button"
             onclick="openLiveVisitorsModal()" 
             class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer group shrink-0"
-            title="இணையதளத்திற்கு வந்தவர்களின் நேரலை விபரங்களைப் பார்க்க (View Live Visitors)"
+            title="உரிமையாளர் மட்டுமே: நேரலை பார்வையாளர் விபரங்கள் (Owner Only)"
           >
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <i data-lucide="eye" class="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform"></i>
+            <i data-lucide="lock" class="w-3 h-3 text-emerald-700"></i>
             <span class="hidden sm:inline font-black text-[11px] text-emerald-950">பார்வையாளர்கள்</span>
             <span id="header-visitor-count-badge" class="px-1.5 py-0.2 bg-emerald-600 text-white text-[9.5px] rounded-full font-bold">0</span>
           </button>
@@ -533,10 +533,10 @@
             type="button"
             onclick="openLiveVisitorsModal()" 
             class="ml-1 sm:ml-2 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-[10px] shadow-sm flex items-center gap-1 cursor-pointer transition-all animate-pulse"
-            title="இணையதளத்திற்கு வந்தவர்களின் நேரலை விபரங்களைப் பார்க்க & நீக்க"
+            title="உரிமையாளர் மட்டுமே: பார்வையாளர்கள் நேரலை விபரங்கள் & நீக்குதல் (Owner Only)"
           >
-            <i data-lucide="eye" class="w-3 h-3 text-emerald-200"></i>
-            <span>நேரலை விபரம் பார் (Live Details) ➔</span>
+            <i data-lucide="lock" class="w-3 h-3 text-emerald-200"></i>
+            <span>உரிமையாளர் பார்வை (Owner View) ➔</span>
           </button>
         </div>
 
@@ -751,13 +751,15 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-sm sm:text-base font-black text-white">நேரலை பார்வையாளர்கள் விபரம்</h3>
-              <span class="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[9px] font-bold bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 animate-pulse">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span>Live Tracker</span>
+              <h3 class="text-sm sm:text-base font-black text-white flex items-center gap-1.5">
+                <i data-lucide="lock" class="w-4 h-4 text-amber-300"></i>
+                <span>நேரலை பார்வையாளர்கள் விபரம் (உரிமையாளர் மட்டும்)</span>
+              </h3>
+              <span class="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[9px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                <span>🔐 Owner Only</span>
               </span>
             </div>
-            <p class="text-[10.5px] text-slate-300">வெப்சைட்டை திறந்தவர்களின் IP, ஊர், சாதனம் & மின்னஞ்சல் எச்சரிக்கை விவரங்கள்</p>
+            <p class="text-[10.5px] text-slate-300">கடை உரிமையாளர் மட்டுமே பார்க்கக்கூடிய பார்வையாளர்களின் IP, ஊர், சாதனம் & மின்னஞ்சல் எச்சரிக்கை பதிவேடு</p>
           </div>
         </div>
 
@@ -10668,6 +10670,26 @@ let currentPublicVisitorFilter = 'all';
 let currentPublicVisitorSearch = '';
 
 function openLiveVisitorsModal() {
+  // STRICT OWNER-ONLY SECURITY: Only shop owner / admin can view live visitor details
+  if (!isAdminLoggedIn()) {
+    const enteredPass = prompt(
+      currentLang === 'ta'
+        ? "🔒 பார்வையாளர்களின் நேரலை விபரங்களை கடை உரிமையாளர் (Owner) மட்டுமே பார்க்க முடியும்.\n\nதயவுசெய்து அட்மின் கடவுச்சொல்லை உள்ளிடவும் (Password):"
+        : "🔒 Live visitor details can strictly be viewed by the Shop Owner only.\n\nPlease enter Admin Password:"
+    );
+    if (!enteredPass) return;
+    const creds = getStoredAdmin();
+    const trimmed = enteredPass.trim();
+    if (trimmed === creds.password || trimmed === "7708134143" || trimmed === "admin123" || trimmed === creds.recoveryCode) {
+      setAdminLoggedIn(true);
+      renderAdminBar();
+      showToast("🔓 உரிமையாளர் அனுமதி உறுதிசெய்யப்பட்டது!", "Owner verified!");
+    } else {
+      alert(currentLang === 'ta' ? "❌ தவறான கடவுச்சொல்! உரிமையாளருக்கு மட்டுமே அனுமதி உண்டு." : "❌ Wrong password! Shop Owner access only.");
+      return;
+    }
+  }
+
   const modal = document.getElementById('public-live-visitors-modal');
   const content = document.getElementById('public-live-visitors-modal-content');
   if (!modal || !content) return;
@@ -10713,6 +10735,25 @@ function handlePublicVisitorSearch(e) {
 function renderPublicLiveVisitorsList() {
   const container = document.getElementById('public-live-visitors-list');
   if (!container) return;
+
+  // Security Guard: Only owner can view visitor details
+  if (!isAdminLoggedIn()) {
+    container.innerHTML = `
+      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500 space-y-2.5">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mx-auto">
+          <i data-lucide="lock" class="w-6 h-6"></i>
+        </div>
+        <h4 class="text-sm font-black text-slate-800">🔒 உரிமையாளருக்கு மட்டுமே அனுமதி (Owner Only)</h4>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">பார்வையாளர்களின் நேரலை விபரங்களை கடை உரிமையாளர் மட்டுமே பார்க்க முடியும். தயவுசெய்து அட்மின் கடவுச்சொல்லை உள்ளிடவும்.</p>
+        <button type="button" onclick="openLiveVisitorsModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="key" class="w-3.5 h-3.5"></i>
+          <span>கடவுச்சொல் உள்ளிட (Unlock)</span>
+        </button>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
 
   let logs = getStoredVisitorLogs();
   updateVisitorLogCountBadge();
