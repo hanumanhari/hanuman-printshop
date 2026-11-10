@@ -281,6 +281,22 @@
           <span>📁 கோப்பு & நேரடி கட்டுப்பாடு</span>
         </button>
 
+        <!-- Live Visitors Intelligence Button (நிர்வாகி பயன்முறையில் மட்டுமே) -->
+        <button 
+          type="button"
+          onclick="openLiveVisitorsModal()" 
+          class="px-2.5 py-1 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-900 hover:to-teal-900 text-white rounded-lg font-black flex items-center gap-1.5 shadow-sm transition-all text-[11px] border border-emerald-400/50 cursor-pointer"
+          title="பார்வையாளர் நேரலை விபரம் & நீக்குதல் (Live Visitors Intelligence)"
+        >
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-300"></span>
+          </span>
+          <i data-lucide="eye" class="w-3 h-3 text-emerald-300"></i>
+          <span>👁️ பார்வையாளர்கள்</span>
+          <span id="admin-bar-visitor-count-badge" class="px-1.5 py-0.2 bg-emerald-500 text-white text-[9.5px] rounded-full font-bold">0</span>
+        </button>
+
         <button 
           type="button"
           onclick="handleAdminLogout()" 
@@ -339,21 +355,7 @@
             <i data-lucide="qr-code" class="w-3 h-3 opacity-90 text-amber-100"></i>
           </button>
 
-          <!-- Live Visitors Intelligence Trigger Button in Header (உரிமையாளர் பார்வை - Owner Only) -->
-          <button 
-            type="button"
-            onclick="openLiveVisitorsModal()" 
-            class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer group shrink-0"
-            title="உரிமையாளர் மட்டுமே: நேரலை பார்வையாளர் விபரங்கள் (Owner Only)"
-          >
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <i data-lucide="lock" class="w-3 h-3 text-emerald-700"></i>
-            <span class="hidden sm:inline font-black text-[11px] text-emerald-950">பார்வையாளர்கள்</span>
-            <span id="header-visitor-count-badge" class="px-1.5 py-0.2 bg-emerald-600 text-white text-[9.5px] rounded-full font-bold">0</span>
-          </button>
+
 
           <!-- WhatsApp Side Option Trigger Button in Header -->
           <button 
@@ -460,37 +462,7 @@
               </div>
             </div>
 
-            <!-- Live Visitor Counter Box in Hero Card -->
-            <div class="my-1.5 pt-1.5 border-t border-slate-100 grid grid-cols-2 gap-1 text-[9.5px]">
-              <div class="p-1 bg-emerald-50/70 rounded-lg border border-emerald-200/80 flex items-center justify-between">
-                <div class="flex items-center gap-1">
-                  <span class="relative flex h-1.5 w-1.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                  </span>
-                  <span class="font-bold text-slate-700" data-ta="ஆன்லைனில்:" data-en="Online:">ஆன்லைனில்:</span>
-                </div>
-                <span id="live-active-visitors" class="font-black text-emerald-700">3 நபர்கள்</span>
-              </div>
 
-              <div class="p-1 bg-blue-50/70 rounded-lg border border-blue-200/80 flex items-center justify-between">
-                <div class="flex items-center gap-1">
-                  <i data-lucide="eye" class="w-2.5 h-2.5 text-blue-600"></i>
-                  <span class="font-bold text-slate-700" data-ta="பார்வையாளர்கள்:" data-en="Visitors:">பார்வையாளர்கள்:</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span id="total-site-visitors" class="font-black text-blue-700">1,482</span>
-                  <button 
-                    type="button" 
-                    onclick="openLiveVisitorsModal()"
-                    class="px-1.5 py-0.2 bg-blue-600 hover:bg-blue-700 text-white rounded text-[9.5px] font-bold shadow-xs cursor-pointer transition-all flex items-center gap-0.5"
-                    title="பார்வையாளர் விவரங்களை பார்க்க"
-                  >
-                    <span>விபரம்</span>
-                  </button>
-                </div>
-              </div>
-            </div>
 
             <!-- Open Side WhatsApp Drawer Button -->
             <button 
@@ -509,39 +481,23 @@
     </div>
   </section>
 
-  <!-- Live Visitor & Service Trust Stats Bar -->
+  <!-- Shop Trust & Highlights Bar (பொதுமக்களுக்கான தர உத்தரவாதப் பட்டை - No visitor details outside) -->
   <div class="bg-slate-900 text-white py-1 px-2.5 sm:px-6 border-y border-slate-800 shadow-inner no-print">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-1.5 text-[10.5px]">
       
       <div class="flex items-center gap-2.5 sm:gap-4 flex-wrap">
-        <!-- Live Online Count -->
-        <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded-full border border-slate-700">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span class="font-semibold text-slate-300" data-ta="இப்போது ஆன்லைனில்:" data-en="Online Now:">இப்போது ஆன்லைனில்:</span>
-          <span id="bar-active-visitors" class="font-black text-emerald-400">3 நபர்கள்</span>
+        <div class="flex items-center gap-1.5 text-emerald-300 font-bold">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span data-ta="⚡ உடனடி அதிவேக ஜெராக்ஸ் & பிரிண்டிங்" data-en="⚡ Instant High-Speed Xerox & Print">⚡ உடனடி அதிவேக ஜெராக்ஸ் & பிரிண்டிங்</span>
         </div>
 
-        <!-- Total Page Views Counter & Live Details Outside Trigger -->
-        <div class="flex items-center gap-1 text-slate-300 flex-wrap">
-          <i data-lucide="users" class="w-3.5 h-3.5 text-blue-400"></i>
-          <span data-ta="மொத்த பார்வையாளர்கள்:" data-en="Total Visitors:">மொத்த பார்வையாளர்கள்:</span>
-          <span id="bar-total-visitors" class="font-black text-amber-300">1,482</span>
-          <button 
-            type="button"
-            onclick="openLiveVisitorsModal()" 
-            class="ml-1 sm:ml-2 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-[10px] shadow-sm flex items-center gap-1 cursor-pointer transition-all animate-pulse"
-            title="உரிமையாளர் மட்டுமே: பார்வையாளர்கள் நேரலை விபரங்கள் & நீக்குதல் (Owner Only)"
-          >
-            <i data-lucide="lock" class="w-3 h-3 text-emerald-200"></i>
-            <span>உரிமையாளர் பார்வை (Owner View) ➔</span>
-          </button>
+        <div class="hidden xs:flex sm:flex items-center gap-1 text-cyan-300 font-bold">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span data-ta="100% தரமான அச்சு & பாஸ்போர்ட் போட்டோ" data-en="100% Quality Prints & Passport Photos">100% தரமான அச்சு & பாஸ்போர்ட் போட்டோ</span>
         </div>
 
         <!-- Completed Services Counter -->
-        <div class="hidden xs:flex sm:flex items-center gap-1 text-slate-300">
+        <div class="hidden sm:flex items-center gap-1 text-slate-300">
           <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
           <span data-ta="நிறைவுற்ற சேவைகள்:" data-en="Completed Services:">நிறைவுற்ற சேவைகள்:</span>
           <span class="font-black text-emerald-300">3,500+</span>
@@ -5837,11 +5793,6 @@ function setupFirestoreListeners() {
       const count = doc.data().count;
       if (count !== undefined) {
         localStorage.setItem("shop_visitor_count", count.toString());
-        const formattedCount = count.toLocaleString('en-IN');
-        const totalEl1 = document.getElementById("total-site-visitors");
-        const totalEl2 = document.getElementById("bar-total-visitors");
-        if (totalEl1) totalEl1.textContent = formattedCount;
-        if (totalEl2) totalEl2.textContent = formattedCount;
       }
     }
   }, err => handleSnapshotError(err, "visitor_counter"));
@@ -10123,10 +10074,12 @@ function updateVisitorLogCountBadge() {
   const badge2 = document.getElementById("header-visitor-count-badge");
   const badge3 = document.getElementById("set-vis-total-count");
   const badge4 = document.getElementById("pub-vis-total-badge");
+  const badgeAdminBar = document.getElementById("admin-bar-visitor-count-badge");
   if (badge1) badge1.textContent = countStr;
   if (badge2) badge2.textContent = countStr;
   if (badge3) badge3.textContent = countStr;
   if (badge4) badge4.textContent = countStr;
+  if (badgeAdminBar) badgeAdminBar.textContent = countStr;
 }
 
 async function collectVisitorDetails() {
@@ -10710,24 +10663,10 @@ let currentPublicVisitorFilter = 'all';
 let currentPublicVisitorSearch = '';
 
 function openLiveVisitorsModal() {
-  // STRICT OWNER-ONLY SECURITY: Only shop owner / admin can view live visitor details
+  // STRICT ADMIN-MODE-ONLY SECURITY: Live visitors are strictly visible in Admin Mode
   if (!isAdminLoggedIn()) {
-    const enteredPass = prompt(
-      currentLang === 'ta'
-        ? "🔒 பார்வையாளர்களின் நேரலை விபரங்களை கடை உரிமையாளர் (Owner) மட்டுமே பார்க்க முடியும்.\n\nதயவுசெய்து அட்மின் கடவுச்சொல்லை உள்ளிடவும் (Password):"
-        : "🔒 Live visitor details can strictly be viewed by the Shop Owner only.\n\nPlease enter Admin Password:"
-    );
-    if (!enteredPass) return;
-    const creds = getStoredAdmin();
-    const trimmed = enteredPass.trim();
-    if (trimmed === creds.password || trimmed === "7708134143" || trimmed === "admin123" || trimmed === creds.recoveryCode) {
-      setAdminLoggedIn(true);
-      renderAdminBar();
-      showToast("🔓 உரிமையாளர் அனுமதி உறுதிசெய்யப்பட்டது!", "Owner verified!");
-    } else {
-      alert(currentLang === 'ta' ? "❌ தவறான கடவுச்சொல்! உரிமையாளருக்கு மட்டுமே அனுமதி உண்டு." : "❌ Wrong password! Shop Owner access only.");
-      return;
-    }
+    openAdminLoginModal();
+    return;
   }
 
   const modal = document.getElementById('public-live-visitors-modal');
@@ -11452,29 +11391,6 @@ function initVisitorCounter() {
     let count = parseInt(localStorage.getItem("shop_visitor_count") || "1482");
     count += 1;
     localStorage.setItem("shop_visitor_count", count.toString());
-
-    const formattedCount = count.toLocaleString('en-IN');
-    const baseActive = Math.floor(Math.random() * 4) + 2;
-
-    const totalEl1 = document.getElementById("total-site-visitors");
-    const totalEl2 = document.getElementById("bar-total-visitors");
-    const activeEl1 = document.getElementById("live-active-visitors");
-    const activeEl2 = document.getElementById("bar-active-visitors");
-
-    if (totalEl1) totalEl1.textContent = formattedCount;
-    if (totalEl2) totalEl2.textContent = formattedCount;
-
-    const activeText = currentLang === 'ta' ? `${baseActive} நபர்கள்` : `${baseActive} online`;
-    if (activeEl1) activeEl1.textContent = activeText;
-    if (activeEl2) activeEl2.textContent = activeText;
-
-    setInterval(() => {
-      const fluc = Math.floor(Math.random() * 4) + 2;
-      const flucText = currentLang === 'ta' ? `${fluc} நபர்கள்` : `${fluc} online`;
-      if (activeEl1) activeEl1.textContent = flucText;
-      if (activeEl2) activeEl2.textContent = flucText;
-    }, 8000);
-
   } catch (e) {
     console.error("Error updating visitor counter", e);
   }
