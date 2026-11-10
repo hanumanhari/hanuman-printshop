@@ -309,6 +309,18 @@
           <span id="admin-bar-visitor-count-badge" class="px-1.5 py-0.2 bg-emerald-500 text-white text-[9.5px] rounded-full font-bold">0</span>
         </button>
 
+        <!-- Customer Messages Button in Admin Bar -->
+        <button 
+          type="button"
+          onclick="openAdminDashboardModal('messages')" 
+          class="px-2.5 py-1 bg-gradient-to-r from-blue-900 to-indigo-900 hover:from-blue-950 hover:to-indigo-950 text-white rounded-lg font-black flex items-center gap-1.5 shadow-sm transition-all text-[11px] border border-cyan-400/50 cursor-pointer"
+          title="வாடிக்கையாளர்கள் அனுப்பிய செய்திகள் (Customer Inquiries)"
+        >
+          <i data-lucide="mail" class="w-3 h-3 text-cyan-300"></i>
+          <span>📩 செய்திகள்</span>
+          <span id="admin-bar-messages-count-badge" class="px-1.5 py-0.2 bg-cyan-400 text-slate-950 text-[9.5px] rounded-full font-black">0</span>
+        </button>
+
         <button 
           type="button"
           onclick="handleAdminLogout()" 
@@ -1514,6 +1526,11 @@
           <i data-lucide="eye" class="w-3.5 h-3.5 text-emerald-300"></i>
           <span>👥 பார்வையாளர்கள் &amp; Email விபரம்</span>
           <span id="visitor-log-count-badge" class="px-1.5 py-0.2 bg-emerald-500 text-white text-[9px] rounded-full font-bold">0</span>
+        </button>
+        <button data-tab="messages" onclick="setAdminDashboardTab('messages')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 flex items-center gap-1.5 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white shadow-sm border-b-2 border-cyan-400">
+          <i data-lucide="message-square-text" class="w-3.5 h-3.5 text-cyan-300"></i>
+          <span>📩 வாடிக்கையாளர் செய்திகள்</span>
+          <span id="customer-messages-count-badge" class="px-1.5 py-0.2 bg-cyan-400 text-slate-950 text-[9px] rounded-full font-black">0</span>
         </button>
         <button data-tab="supabase" onclick="setAdminDashboardTab('supabase')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 bg-emerald-50 text-emerald-900 border-b-2 border-emerald-600">⚡ Supabase (Vercel Sync)</button>
         <button data-tab="filecontrol" onclick="setAdminDashboardTab('filecontrol')" class="admin-tab-btn px-2.5 py-1.5 rounded-t-lg text-xs font-black transition-all shrink-0 flex items-center gap-1 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-sm border-b-2 border-cyan-400">
@@ -3908,6 +3925,78 @@ alter publication supabase_realtime add table shop_data;</pre>
           <!-- Populated dynamically by renderAdminVisitorsTab() -->
         </div>
       </div>
+
+      <!-- Tab 12: Customer Messages & Inquiries (வாடிக்கையாளர் செய்திகள்) -->
+      <div data-tab-content="messages" class="admin-tab-content p-3 sm:p-5 overflow-y-auto flex-1 hidden space-y-4">
+        <!-- Messages Dashboard Banner -->
+        <div class="p-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 rounded-2xl text-white shadow-md flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 flex items-center justify-center shrink-0">
+              <i data-lucide="message-square-text" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-black flex items-center gap-2">
+                <span>📩 வாடிக்கையாளர் செய்திகள் (Customer Inquiries)</span>
+              </h3>
+              <p class="text-xs text-slate-300">இணையதளம் முடக்கப்பட்டிருந்தாலோ அல்லது தளத்திலிருந்தோ வாடிக்கையாளர்கள் அனுப்பிய நேரடி செய்திகள்</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button 
+              type="button" 
+              onclick="fetchCustomerMessagesFromCloud(true)" 
+              class="px-3 py-1.5 bg-cyan-900/60 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+              title="கிளவுடில் இருந்து புதுப்பிக்க"
+            >
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-300"></i>
+              <span>புதுப்பி (Refresh)</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="clearAllCustomerMessages()" 
+              class="px-3 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+              title="அனைத்து செய்திகளையும் அழிக்க"
+            >
+              <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>அனைத்தையும் நீக்கு</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages Stats Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-slate-500 font-bold block text-[10px]">வந்த மொத்த செய்திகள்</span>
+              <span id="customer-msgs-total-count" class="text-lg font-black text-slate-900">0</span>
+            </div>
+            <i data-lucide="inbox" class="w-6 h-6 text-slate-400"></i>
+          </div>
+          <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-blue-700 font-bold block text-[10px]">அறிவிப்பு பெறும் ஜிமெயில்</span>
+              <span id="customer-msgs-email-target" class="text-xs font-bold text-blue-900 truncate block">hanumanhari.mobile@gmail.com</span>
+            </div>
+            <i data-lucide="mail-check" class="w-6 h-6 text-blue-600"></i>
+          </div>
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-emerald-700 font-bold block text-[10px]">கிளவுட் ஒத்திசைவு நிலை</span>
+              <span class="text-xs font-black text-emerald-800 flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>நேரலையில் இணைக்கப்பட்டுள்ளது</span>
+              </span>
+            </div>
+            <i data-lucide="cloud-check" class="w-6 h-6 text-emerald-600"></i>
+          </div>
+        </div>
+
+        <!-- Messages Feed Container -->
+        <div id="admin-customer-messages-container" class="space-y-2.5">
+          <!-- Populated dynamically by renderCustomerMessagesTab() -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -4075,25 +4164,56 @@ alter publication supabase_realtime add table shop_data;</pre>
         </div>
       </div>
 
-      <!-- Emergency Direct Contact Buttons -->
-      <div class="space-y-2 pt-1">
-        <p class="text-[11px] font-bold text-slate-300">அவசர தேவைக்கு கடையை நேரடியாக தொடர்பு கொள்ளவும்:</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <a 
-            href="tel:7708134143" 
-            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+      <!-- Visitor Inquiry / Text Message Box (உரிமையாளருக்கு செய்தி அனுப்ப) -->
+      <div class="p-3.5 bg-slate-950/70 border border-slate-800 rounded-2xl text-left space-y-2.5 shadow-inner">
+        <div class="flex items-center gap-2 text-cyan-300 font-black text-xs">
+          <i data-lucide="message-square" class="w-4 h-4 text-cyan-400"></i>
+          <span>உரிமையாளருக்கு செய்தி அனுப்ப (Send Message to Owner):</span>
+        </div>
+        
+        <form id="blocked-screen-msg-form" onsubmit="handleSendBlockedScreenMessage(event)" class="space-y-2">
+          <div>
+            <input 
+              type="text" 
+              id="visitor-msg-name" 
+              required
+              placeholder="உங்கள் பெயர் &amp; போன் நம்பர் (Name &amp; Phone)*" 
+              class="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none"
+            />
+          </div>
+          <div>
+            <textarea 
+              id="visitor-msg-text" 
+              rows="3" 
+              required
+              placeholder="உங்கள் தேவை அல்லது செய்தியை இங்கு டைப் செய்யவும் (Type your message / service inquiry here)..." 
+              class="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none resize-none"
+            ></textarea>
+          </div>
+          <button 
+            type="submit" 
+            id="visitor-msg-submit-btn"
+            class="w-full py-2 bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
           >
-            <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
-            <span>7708134143 அழைக்க</span>
-          </a>
-          <a 
-            href="https://wa.me/917708134143?text=வணக்கம்,%20ஸ்ரீ%20ஹனுமான்%20ஜெராக்ஸ்%20சேவை%20தேவைப்படுகிறது" 
-            target="_blank" 
-            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>செய்தி அனுப்புக (Send Message)</span>
+          </button>
+        </form>
+
+        <!-- Sent Success Notification State -->
+        <div id="visitor-msg-success" class="hidden p-3 bg-emerald-950/80 border border-emerald-500/50 rounded-xl text-center space-y-1 animate-in fade-in">
+          <div class="flex items-center justify-center gap-1.5 text-emerald-400 font-black text-xs">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>செய்தி வெற்றிகரமாக அனுப்பப்பட்டது!</span>
+          </div>
+          <p class="text-[10.5px] text-emerald-200">கடை உரிமையாளர் நிர்வாகி பேனலில் உங்கள் செய்தியை பார்த்துவிட்டு விரைவில் தொடர்பு கொள்வார். நன்றி!</p>
+          <button 
+            type="button" 
+            onclick="resetBlockedScreenMsgForm()" 
+            class="mt-1 text-[10px] text-cyan-300 underline font-bold cursor-pointer"
           >
-            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-            <span>WhatsApp மெசேஜ்</span>
-          </a>
+            + மற்றொரு செய்தி அனுப்ப
+          </button>
         </div>
       </div>
 
@@ -6007,6 +6127,28 @@ function setupFirestoreListeners() {
       }
     }
   }, err => handleSnapshotError(err, "visitor_logs"));
+
+  // Realtime Customer Messages Listener
+  let lastCustomerMsgId = null;
+  db.collection("shop_data").doc("customer_messages").onSnapshot(doc => {
+    if (doc.exists) {
+      const d = doc.data();
+      if (Array.isArray(d.items)) {
+        localStorage.setItem("shop_customer_messages", JSON.stringify(d.items));
+        updateCustomerMessagesBadge();
+        const activeTabBtn = document.querySelector('.admin-tab-btn[data-tab="messages"]');
+        if (activeTabBtn && activeTabBtn.classList.contains('active')) {
+          renderCustomerMessagesTab();
+        }
+        if (d.latest && d.latest.id !== lastCustomerMsgId) {
+          lastCustomerMsgId = d.latest.id;
+          if (isAdminLoggedIn()) {
+            showToast(`📩 புதிய செய்தி: ${d.latest.name}`, `New message from ${d.latest.name}`);
+          }
+        }
+      }
+    }
+  }, err => console.warn("Firestore customer messages listener error:", err));
 }
 
 function syncCategoriesToFirebase(categories) {
@@ -6838,6 +6980,9 @@ function setAdminDashboardTab(tabName) {
     if (typeof fetchVisitorLogsFromCloud === 'function') fetchVisitorLogsFromCloud();
   } else if (tabName === 'visitors') {
     renderAdminVisitorsTab();
+  } else if (tabName === 'messages') {
+    renderCustomerMessagesTab();
+    fetchCustomerMessagesFromCloud();
   } else if (tabName === 'supabase') {
     const supa = getStoredSupabaseConfig();
     const urlInput = document.getElementById("supabase-url-input");
@@ -7686,6 +7831,305 @@ async function unblockWebsite(showNotice = true) {
   renderAdminBar();
 
   showToast("🟢 இணையதளம் வெற்றிகரமாக மீண்டும் இயக்கப்பட்டது!", "Website successfully unblocked!");
+}
+
+
+// ==================== CUSTOMER INQUIRY & MESSAGES CONTROLLER ====================
+function getStoredCustomerMessages() {
+  try {
+    const raw = localStorage.getItem("shop_customer_messages");
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error("Error reading customer messages", e);
+    return [];
+  }
+}
+
+function saveStoredCustomerMessages(msgs) {
+  try {
+    localStorage.setItem("shop_customer_messages", JSON.stringify(msgs));
+    updateCustomerMessagesBadge();
+  } catch (e) {
+    console.error("Error saving customer messages", e);
+  }
+}
+
+function updateCustomerMessagesBadge() {
+  const msgs = getStoredCustomerMessages();
+  const countStr = msgs.length.toString();
+  const b1 = document.getElementById("admin-bar-messages-count-badge");
+  const b2 = document.getElementById("customer-messages-count-badge");
+  const b3 = document.getElementById("customer-msgs-total-count");
+  if (b1) b1.textContent = countStr;
+  if (b2) b2.textContent = countStr;
+  if (b3) b3.textContent = countStr;
+}
+
+async function handleSendBlockedScreenMessage(event) {
+  if (event) event.preventDefault();
+  const nameInput = document.getElementById("visitor-msg-name");
+  const textInput = document.getElementById("visitor-msg-text");
+  const submitBtn = document.getElementById("visitor-msg-submit-btn");
+  const successBox = document.getElementById("visitor-msg-success");
+  const formBox = document.getElementById("blocked-screen-msg-form");
+
+  const nameVal = nameInput ? nameInput.value.trim() : "";
+  const textVal = textInput ? textInput.value.trim() : "";
+
+  if (!nameVal || !textVal) {
+    alert(currentLang === 'ta' ? 'தயவுசெய்து உங்கள் பெயர் & செய்தியை உள்ளிடவும்!' : 'Please enter your name & message!');
+    return;
+  }
+
+  const origBtnHtml = submitBtn ? submitBtn.innerHTML : "";
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i><span>அனுப்பப்படுகிறது...</span>`;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }) + ", " + now.toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+
+  const newMsg = {
+    id: "msg_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+    name: nameVal,
+    text: textVal,
+    timestamp: timeStr,
+    source: "Website Block Screen"
+  };
+
+  let msgs = getStoredCustomerMessages();
+  msgs.unshift(newMsg);
+  saveStoredCustomerMessages(msgs);
+
+  // Sync to Cloud Firestore so the Shop Owner gets it immediately on all devices
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      await db.collection("shop_data").doc("customer_messages").set({
+        latest: newMsg,
+        items: msgs.slice(0, 50),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore customer message sync error:", e);
+    }
+  }
+
+  // Send Notification Email to Shop Owner
+  try {
+    const emailData = {
+      subject: `📩 [ஸ்ரீ ஹனுமான்] புதிய வாடிக்கையாளர் செய்தி: ${nameVal}`,
+      name: nameVal,
+      message: textVal,
+      time: timeStr
+    };
+    sendCustomerInquiryEmail(emailData);
+  } catch (err) {
+    console.warn("Email alert error", err);
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = origBtnHtml;
+  }
+  if (formBox) formBox.classList.add("hidden");
+  if (successBox) successBox.classList.remove("hidden");
+  if (nameInput) nameInput.value = "";
+  if (textInput) textInput.value = "";
+  if (window.lucide) lucide.createIcons();
+}
+
+function resetBlockedScreenMsgForm() {
+  const formBox = document.getElementById("blocked-screen-msg-form");
+  const successBox = document.getElementById("visitor-msg-success");
+  if (formBox) formBox.classList.remove("hidden");
+  if (successBox) successBox.classList.add("hidden");
+}
+
+async function sendCustomerInquiryEmail(data) {
+  try {
+    const targetEmail = SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
+    const templateParams = {
+      to_email: targetEmail,
+      subject: data.subject,
+      visitor_name: data.name,
+      visitor_number: "INQUIRY",
+      visitor_time: data.time,
+      ip_address: "Blocked Screen Inquiry",
+      location: data.name,
+      device_info: "Customer Message",
+      browser_name: "Customer Message",
+      referrer_url: "Block Screen",
+      maps_url: "",
+      system_summary: `வாடிக்கையாளர் பெயர் / போன்: ${data.name}\nசெய்தி: ${data.message}`
+    };
+
+    if (window.emailjs && DEFAULT_EMAILJS_CONFIG.publicKey) {
+      emailjs.init({ publicKey: DEFAULT_EMAILJS_CONFIG.publicKey });
+      await emailjs.send(DEFAULT_EMAILJS_CONFIG.serviceId, DEFAULT_EMAILJS_CONFIG.templateId, templateParams);
+    }
+  } catch (e) {
+    console.warn("Customer inquiry email notification failed", e);
+  }
+}
+
+function renderCustomerMessagesTab() {
+  const container = document.getElementById("admin-customer-messages-container");
+  if (!container) return;
+
+  const msgs = getStoredCustomerMessages();
+  updateCustomerMessagesBadge();
+
+  const totalEl = document.getElementById("customer-msgs-total-count");
+  const emailEl = document.getElementById("customer-msgs-email-target");
+  if (totalEl) totalEl.textContent = msgs.length.toString();
+  if (emailEl) emailEl.textContent = SHOP_INFO.notificationEmail || "hanumanhari.mobile@gmail.com";
+
+  if (msgs.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 space-y-2">
+        <i data-lucide="inbox" class="w-10 h-10 mx-auto text-slate-300"></i>
+        <p class="text-xs font-bold text-slate-600">இன்னும் வாடிக்கையாளர் செய்திகள் எதுவும் வரவில்லை.</p>
+        <p class="text-[11px] text-slate-500">இணையதளம் முடக்கப்பட்டிருக்கும் போது வாடிக்கையாளர்கள் தட்டச்சு செய்து அனுப்பும் செய்திகள் உடனுக்குடன் இங்கே பட்டியலிடப்படும்!</p>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = msgs.map((item, idx) => {
+    // Extract phone number if present in name / text
+    const phoneMatch = (item.name + " " + item.text).match(/\b[6-9]\d{9}\b/);
+    const phone = phoneMatch ? phoneMatch[0] : "";
+
+    const callBtn = phone
+      ? `<a href="tel:${phone}" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold flex items-center gap-1 transition-all"><i data-lucide="phone-call" class="w-3 h-3 text-blue-600"></i><span>${phone} அழைக்க</span></a>`
+      : "";
+
+    const waBtn = phone
+      ? `<a href="https://wa.me/91${phone}?text=வணக்கம்,%20ஸ்ரீ%20ஹனுமான்%20ஜெராக்ஸ்%20சார்பாக%20தொடர்பு%20கொள்கிறோம்." target="_blank" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold flex items-center gap-1 transition-all"><i data-lucide="message-circle" class="w-3 h-3 text-emerald-600"></i><span>WhatsApp பதில்</span></a>`
+      : "";
+
+    return `
+      <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-2">
+        <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white text-[10.5px] font-black flex items-center justify-center shrink-0">
+              #${msgs.length - idx}
+            </span>
+            <div>
+              <span class="text-xs font-black text-slate-900 leading-tight block">
+                👤 ${item.name || 'வாடிக்கையாளர்'}
+              </span>
+              <span class="text-[10px] text-slate-500">${item.timestamp}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            ${callBtn}
+            ${waBtn}
+            <button 
+              type="button" 
+              onclick="deleteCustomerMessage('${item.id}')" 
+              class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs"
+              title="இந்த செய்தியை நீக்க"
+            >
+              <i data-lucide="trash-2" class="w-3 h-3 text-rose-600"></i>
+              <span>நீக்கு</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-800 leading-relaxed font-medium">
+          💬 ${item.text.replace(/\n/g, '<br/>')}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (window.lucide) lucide.createIcons();
+}
+
+async function deleteCustomerMessage(targetId) {
+  if (!confirm(currentLang === 'ta' ? 'இந்த வாடிக்கையாளர் செய்தியை நீக்க வேண்டுமா?' : 'Delete this message?')) return;
+
+  let msgs = getStoredCustomerMessages();
+  msgs = msgs.filter(m => m.id !== targetId);
+  saveStoredCustomerMessages(msgs);
+
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      await db.collection("shop_data").doc("customer_messages").set({
+        items: msgs,
+        latest: msgs[0] || null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore delete message error:", e);
+    }
+  }
+
+  renderCustomerMessagesTab();
+  showToast("🗑️ செய்தி நீக்கப்பட்டது!", "Message deleted");
+}
+
+async function clearAllCustomerMessages() {
+  if (!confirm(currentLang === 'ta' ? 'அனைத்து வாடிக்கையாளர் செய்திகளையும் அழிக்க விரும்புகிறீர்களா?' : 'Clear all customer messages?')) return;
+
+  saveStoredCustomerMessages([]);
+
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      await db.collection("shop_data").doc("customer_messages").set({
+        items: [],
+        latest: null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore clear messages error:", e);
+    }
+  }
+
+  renderCustomerMessagesTab();
+  showToast("🗑️ அனைத்து செய்திகளும் அழிக்கப்பட்டன!", "All messages cleared");
+}
+
+async function fetchCustomerMessagesFromCloud(showNotice = false) {
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      const doc = await db.collection("shop_data").doc("customer_messages").get();
+      if (doc.exists) {
+        const d = doc.data();
+        if (Array.isArray(d.items)) {
+          let localMsgs = getStoredCustomerMessages();
+          const map = new Map();
+          d.items.forEach(i => map.set(i.id, i));
+          localMsgs.forEach(i => { if (!map.has(i.id)) map.set(i.id, i); });
+          const merged = Array.from(map.values());
+          merged.sort((a, b) => (new Date(b.timestamp || 0).getTime() || 0) - (new Date(a.timestamp || 0).getTime() || 0));
+          localStorage.setItem("shop_customer_messages", JSON.stringify(merged));
+          updateCustomerMessagesBadge();
+          renderCustomerMessagesTab();
+          if (showNotice) {
+            showToast("🔄 கிளவுடில் இருந்து செய்திகள் புதுப்பிக்கப்பட்டன!", "Customer messages refreshed from Cloud!");
+          }
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("fetchCustomerMessagesFromCloud error:", e);
+    }
+  }
+  renderCustomerMessagesTab();
 }
 
 function toggleWebsiteBlockQuickly() {
@@ -11767,6 +12211,7 @@ function initVisitorCounter() {
 function onAppStart() {
   renderWebsiteBlockState();
   initVisitorCounter();
+  updateCustomerMessagesBadge();
   initFirebase();
   // Ensure customized services and categories are active and synced to Cloud
   if (typeof syncServicesToFirebase === "function") syncServicesToFirebase(SERVICES);
