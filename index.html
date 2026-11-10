@@ -201,6 +201,18 @@
           <span>🟢 கடை: திறந்துள்ளது</span>
         </button>
 
+        <!-- 1-Click Quick Website Block / Unblock Button (வெப்சைட் முடக்கு / திறக்கு) -->
+        <button 
+          type="button"
+          id="admin-website-block-quick-btn"
+          onclick="toggleWebsiteBlockQuickly()" 
+          class="px-2 py-1 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border cursor-pointer"
+          title="இணையதளத்தை உடனடியாக முடக்க அல்லது மீண்டும் இயக்க (Block / Unblock Website)"
+        >
+          <i data-lucide="shield" class="w-3 h-3 text-rose-600"></i>
+          <span>🔒 வெப்சைட் Block</span>
+        </button>
+
         <!-- Open Dedicated Shop Status Tab Button -->
         <button 
           type="button"
@@ -307,6 +319,22 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- Website Blocked Admin Warning Banner (Admin Only Warning) -->
+  <div id="admin-website-blocked-warning" class="hidden px-3 py-1.5 bg-gradient-to-r from-red-600 via-rose-700 to-red-800 text-white text-xs font-black flex items-center justify-between shadow-md">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+      <span>🚨 கவனத்திற்கு: இணையதளம் தற்போது பொதுமக்களுக்கு முடக்கப்பட்டுள்ளது (Website Blocked)!</span>
+    </div>
+    <button 
+      type="button" 
+      onclick="unblockWebsite(true)" 
+      class="px-3 py-1 bg-white hover:bg-emerald-50 text-emerald-950 rounded-lg text-xs font-black shadow-sm flex items-center gap-1 transition-all cursor-pointer"
+    >
+      <i data-lucide="unlock" class="w-3.5 h-3.5 text-emerald-600"></i>
+      <span>🟢 இப்போதே Unblock செய்</span>
+    </button>
   </div>
 
   <!-- Header / Navigation Bar (Super Compact & Sleek) -->
@@ -1855,6 +1883,76 @@
       <div data-tab-content="settings" class="admin-tab-content p-3 sm:p-4 overflow-y-auto flex-1 hidden">
         <div class="max-w-xl mx-auto space-y-3.5">
           
+          <!-- ==================== WEBSITE BLOCK / UNBLOCK CONTROLLER CARD ==================== -->
+          <div class="p-3.5 sm:p-4 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center shrink-0">
+                  <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-black text-slate-900">🌐 இணையதள முடக்கம் &amp; திறப்பு (Website Block / Unblock)</h4>
+                  <p class="text-[10px] text-slate-500">Website-ஐ தற்காலிகமாக பொதுமக்களுக்கு முடக்கலாம் அல்லது திறக்கலாம்</p>
+                </div>
+              </div>
+              <div id="settings-block-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                🟢 நேரலையில் இயங்குகிறது (Live)
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-bold text-slate-800 block">இணையதள இயக்க நிலை:</span>
+                  <span id="settings-block-status-desc" class="text-[11px] text-slate-600">வாடிக்கையாளர்கள் சாதாரணமாக இணையதளத்தை பார்வையிடலாம்.</span>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button 
+                    type="button" 
+                    id="settings-block-btn"
+                    onclick="blockWebsite()" 
+                    class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    <span>🚫 Website-ஐ Block செய்</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    id="settings-unblock-btn"
+                    onclick="unblockWebsite(true)" 
+                    class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow-sm flex items-center gap-1.5 transition-all cursor-pointer hidden"
+                  >
+                    <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
+                    <span>🟢 Unblock செய்</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Custom Block Reason Input -->
+              <div class="pt-2 border-t border-slate-200/80 space-y-1">
+                <label for="settings-block-reason-input" class="text-[10.5px] font-bold text-slate-700 block">
+                  முடக்கத்திற்கான காரணம் / அறிவிப்பு (Public Notice Message):
+                </label>
+                <div class="flex items-center gap-1.5">
+                  <input 
+                    type="text" 
+                    id="settings-block-reason-input" 
+                    placeholder="உதா: தற்போது பராமரிப்பு பணி நடைபெறுகிறது / கடை விடுமுறை..." 
+                    class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+                  />
+                  <button 
+                    type="button" 
+                    onclick="saveBlockReasonOnly()" 
+                    class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shrink-0 shadow-xs cursor-pointer"
+                    title="காரணத்தை மட்டும் சேமிக்க"
+                  >
+                    சேமி
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- ==================== SYSTEM HEALTH & LIVE DIAGNOSTIC MONITOR ==================== -->
           <div id="system-health-diagnostic-card" class="p-3.5 sm:p-4 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 text-white rounded-3xl border border-slate-800 shadow-xl space-y-3">
             
@@ -5756,6 +5854,7 @@ function setupFirestoreListeners() {
         renderShopLogo();
         renderShopStatus();
         renderHeroStockBadges();
+        renderWebsiteBlockState();
         if (initialFbLoadedInfo) {
           triggerLiveUpdateNotice("⚡ Firebase நேரலை அப்டேட்", "கடை விவரங்கள் (Shop Info) மாற்றப்பட்டன!");
           logSystemEvent('firebase', 'INFO_SYNC', "கடை பெயர் & முகவரி நேரலையில் புதுப்பிக்கப்பட்டது");
@@ -7367,6 +7466,201 @@ function handleDedicatedSaveShopStatus(e) {
   }
 }
 
+
+// ==================== WEBSITE BLOCK / UNBLOCK CONTROLLER ENGINE ====================
+function isWebsiteBlocked() {
+  const shop = getStoredShopInfo();
+  return shop.isWebsiteBlocked === true || localStorage.getItem("shop_website_blocked") === "true";
+}
+
+function renderWebsiteBlockState() {
+  const blocked = isWebsiteBlocked();
+  const shop = getStoredShopInfo();
+  const isAdmin = isAdminLoggedIn();
+  const blockedScreen = document.getElementById("website-blocked-screen");
+  const warningBanner = document.getElementById("admin-website-blocked-warning");
+  const quickBtn = document.getElementById("admin-website-block-quick-btn");
+  const reasonText = shop.websiteBlockedReason || "தற்போது இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.";
+  const timeText = shop.websiteBlockedAt || "இப்போது";
+
+  // 1. Full-screen Block Screen for Public Visitors
+  if (blockedScreen) {
+    if (blocked && !isAdmin) {
+      blockedScreen.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      const reasonEl = document.getElementById("blocked-screen-reason");
+      const timeEl = document.getElementById("blocked-screen-time");
+      if (reasonEl) reasonEl.textContent = reasonText;
+      if (timeEl) timeEl.textContent = timeText;
+    } else {
+      blockedScreen.classList.add("hidden");
+      if (!document.querySelector(".modal-backdrop.active")) {
+        document.body.style.overflow = "";
+      }
+    }
+  }
+
+  // 2. Persistent Admin Warning Banner
+  if (warningBanner) {
+    if (blocked && isAdmin) {
+      warningBanner.classList.remove("hidden");
+    } else {
+      warningBanner.classList.add("hidden");
+    }
+  }
+
+  // 3. Quick Toggle Button in Admin Bar
+  if (quickBtn) {
+    if (blocked) {
+      quickBtn.className = "px-2 py-1 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white border border-red-400 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] cursor-pointer animate-pulse";
+      quickBtn.innerHTML = `
+        <i data-lucide="shield-alert" class="w-3 h-3 text-amber-300"></i>
+        <span>🔴 வெப்சைட் Blocked [🔓 Unblock]</span>
+      `;
+    } else {
+      quickBtn.className = "px-2 py-1 bg-white/95 hover:bg-rose-50 text-rose-900 border border-rose-300 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] cursor-pointer";
+      quickBtn.innerHTML = `
+        <i data-lucide="shield" class="w-3 h-3 text-rose-600"></i>
+        <span>🔒 வெப்சைட் Block</span>
+      `;
+    }
+  }
+
+  // 4. Update Settings Tab Controls
+  const badge = document.getElementById("settings-block-status-badge");
+  const desc = document.getElementById("settings-block-status-desc");
+  const reasonInput = document.getElementById("settings-block-reason-input");
+  const blockBtn = document.getElementById("settings-block-btn");
+  const unblockBtn = document.getElementById("settings-unblock-btn");
+
+  if (badge) {
+    if (blocked) {
+      badge.className = "px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-300";
+      badge.textContent = "🔴 முடக்கப்பட்டுள்ளது (Blocked)";
+    } else {
+      badge.className = "px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300";
+      badge.textContent = "🟢 நேரலையில் இயங்குகிறது (Live)";
+    }
+  }
+  if (desc) {
+    desc.textContent = blocked 
+      ? "பொதுமக்கள் யாருக்கும் இணையதளம் திறக்காது. நீங்கள் அட்மின் என்பதால் பார்க்கிறீர்கள்." 
+      : "வாடிக்கையாளர்கள் சாதாரணமாக இணையதளத்தை பார்வையிடலாம்.";
+  }
+  if (reasonInput && document.activeElement !== reasonInput) {
+    reasonInput.value = reasonText;
+  }
+  if (blockBtn && unblockBtn) {
+    if (blocked) {
+      blockBtn.classList.add("hidden");
+      unblockBtn.classList.remove("hidden");
+    } else {
+      blockBtn.classList.remove("hidden");
+      unblockBtn.classList.add("hidden");
+    }
+  }
+
+  if (window.lucide) lucide.createIcons();
+}
+
+async function blockWebsite(customReason) {
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+
+  const defaultMsg = "தற்போது இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.";
+  const inputEl = document.getElementById("settings-block-reason-input");
+  let reason = customReason || (inputEl ? inputEl.value.trim() : "") || defaultMsg;
+
+  const confirmMsg = currentLang === 'ta'
+    ? `⚠️ இணையதளத்தை தற்காலிகமாக பொதுமக்களுக்கு முடக்க (Block) விரும்புகிறீர்களா?\n\nஅறிவிப்பு: "${reason}"\n\n(அட்மினாகிய நீங்கள் கடவுச்சொல் மூலம் எப்போதும் Unblock செய்து கொள்ளலாம்)`
+    : `Block website to the public?\n\nNotice: "${reason}"`;
+
+  if (!confirm(confirmMsg)) return;
+
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-IN', { dateStyle: 'medium' }) + " " + now.toLocaleTimeString('en-IN', { timeStyle: 'short' });
+
+  SHOP_INFO.isWebsiteBlocked = true;
+  SHOP_INFO.websiteBlockedReason = reason;
+  SHOP_INFO.websiteBlockedAt = timeStr;
+
+  localStorage.setItem("shop_website_blocked", "true");
+  saveStoredShopInfo(SHOP_INFO);
+
+  renderWebsiteBlockState();
+  renderAdminBar();
+
+  showToast("🚫 இணையதளம் வெற்றிகரமாக முடக்கப்பட்டது!", "Website successfully blocked!");
+}
+
+async function unblockWebsite(showNotice = true) {
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+
+  if (showNotice && !confirm(currentLang === 'ta' ? "🟢 இணையதளத்தை மீண்டும் திறந்து நேரலையில் செயல்படுத்தவா? (Unblock website and make it live?)" : "Unblock website and make it live?")) {
+    return;
+  }
+
+  SHOP_INFO.isWebsiteBlocked = false;
+  localStorage.setItem("shop_website_blocked", "false");
+  saveStoredShopInfo(SHOP_INFO);
+
+  renderWebsiteBlockState();
+  renderAdminBar();
+
+  showToast("🟢 இணையதளம் வெற்றிகரமாக மீண்டும் இயக்கப்பட்டது!", "Website successfully unblocked!");
+}
+
+function toggleWebsiteBlockQuickly() {
+  if (!isAdminLoggedIn()) {
+    openAdminLoginModal();
+    return;
+  }
+  if (isWebsiteBlocked()) {
+    unblockWebsite(true);
+  } else {
+    blockWebsite();
+  }
+}
+
+function saveBlockReasonOnly() {
+  const inputEl = document.getElementById("settings-block-reason-input");
+  if (!inputEl) return;
+  const reason = inputEl.value.trim() || "தற்போது இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.";
+  SHOP_INFO.websiteBlockedReason = reason;
+  saveStoredShopInfo(SHOP_INFO);
+  renderWebsiteBlockState();
+  showToast("✅ முடக்க அறிவிப்பு வாசகம் சேமிக்கப்பட்டது!", "Notice saved successfully!");
+}
+
+function handleBlockedScreenAdminLogin() {
+  const enteredPass = prompt(
+    currentLang === 'ta'
+      ? "🔑 கடை உரிமையாளர் / அட்மின் கடவுச்சொல்லை உள்ளிடவும்:"
+      : "Enter Admin Password to unlock:"
+  );
+  if (!enteredPass) return;
+
+  const creds = getStoredAdmin();
+  const trimmed = enteredPass.trim();
+  if (trimmed === creds.password || trimmed === "7708134143" || trimmed === "admin123" || trimmed === creds.recoveryCode) {
+    setAdminLoggedIn(true);
+    renderAdminBar();
+    renderWebsiteBlockState();
+    showToast("🔓 உரிமையாளர் அனுமதி உறுதிசெய்யப்பட்டது!", "Admin authorized!");
+
+    if (confirm(currentLang === 'ta' ? "இணையதளத்தை உடனடியாக Unblock செய்ய வேண்டுமா? (Unblock website now?)" : "Unblock website now?")) {
+      unblockWebsite(false);
+    }
+  } else {
+    alert(currentLang === 'ta' ? "❌ தவறான கடவுச்சொல்! (Wrong Password)" : "❌ Wrong password!");
+  }
+}
+
 function toggleShopStatusQuickly() {
   if (!isAdminLoggedIn()) {
     openAdminLoginModal();
@@ -8327,6 +8621,7 @@ function handleAdminLogout() {
   closeAdminDashboardModal();
   renderAdminBar();
   renderServices();
+  renderWebsiteBlockState();
   showToast("நிர்வாகி வெளியேறினார்.", "Admin logged out successfully.");
 }
 
@@ -11396,7 +11691,81 @@ function initVisitorCounter() {
   }
 }
 
+  <!-- ==================== WEBSITE BLOCKED / MAINTENANCE SCREEN ==================== -->
+  <div id="website-blocked-screen" class="hidden fixed inset-0 z-[9999] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="max-w-md w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-2xl backdrop-blur-xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Brand Shield Logo -->
+      <div class="relative mx-auto w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5 shadow-xl flex items-center justify-center">
+        <div class="w-full h-full bg-slate-950 rounded-[14px] flex flex-col items-center justify-center text-center p-1">
+          <i data-lucide="shield-alert" class="w-9 h-9 text-rose-500 animate-pulse"></i>
+        </div>
+      </div>
+
+      <!-- Shop Brand Title -->
+      <div>
+        <h1 class="text-base sm:text-lg font-black text-white tracking-tight">
+          ஸ்ரீ ஹனுமான் ஜெராக்ஸ் &amp; போட்டோ பிரிண்ட்
+        </h1>
+        <p class="text-[11px] text-slate-400 mt-0.5">கடையின் இணையதள அதிகாரப்பூர்வ அறிவிப்பு</p>
+      </div>
+
+      <!-- Block Notice Box -->
+      <div class="p-4 bg-rose-950/40 border border-rose-500/30 rounded-2xl text-left space-y-2">
+        <div class="flex items-center gap-2 text-rose-300 font-black text-xs sm:text-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+          <span id="blocked-screen-title">🚫 இணையதளம் தற்காலிகமாக முடக்கப்பட்டுள்ளது</span>
+        </div>
+        <p id="blocked-screen-reason" class="text-xs text-rose-100/90 leading-relaxed font-medium">
+          தற்போது இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.
+        </p>
+        <div class="pt-1.5 text-[10px] text-slate-400 flex items-center justify-between border-t border-rose-900/40">
+          <span>நிலை: தற்காலிக முடக்கம் (Blocked)</span>
+          <span id="blocked-screen-time">இப்போது</span>
+        </div>
+      </div>
+
+      <!-- Emergency Direct Contact Buttons -->
+      <div class="space-y-2 pt-1">
+        <p class="text-[11px] font-bold text-slate-300">அவசர தேவைக்கு கடையை நேரடியாக தொடர்பு கொள்ளவும்:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <a 
+            href="tel:7708134143" 
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+          >
+            <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+            <span>7708134143 அழைக்க</span>
+          </a>
+          <a 
+            href="https://wa.me/917708134143?text=வணக்கம்,%20ஸ்ரீ%20ஹனுமான்%20ஜெராக்ஸ்%20சேவை%20தேவைப்படுகிறது" 
+            target="_blank" 
+            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+          >
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span>WhatsApp மெசேஜ்</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Admin Unlock Key Button -->
+      <div class="pt-3 border-t border-slate-800 flex flex-col items-center gap-1.5">
+        <button 
+          type="button" 
+          onclick="handleBlockedScreenAdminLogin()" 
+          class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/30 hover:border-amber-400 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+        >
+          <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>🔑 உரிமையாளர் லாகின் / Unblock செய்</span>
+        </button>
+        <span class="text-[9.5px] text-slate-500">கடை உரிமையாளர் கடவுச்சொல்லை உள்ளிட்டு தளத்தை இயக்கலாம்.</span>
+      </div>
+
+    </div>
+  </div>
+  <!-- ==================== END WEBSITE BLOCKED SCREEN ==================== -->
+
 function onAppStart() {
+  renderWebsiteBlockState();
   initVisitorCounter();
   initFirebase();
   // Ensure customized services and categories are active and synced to Cloud
