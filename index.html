@@ -6825,7 +6825,7 @@ function populateCategoryDropdowns(selectedVal = null) {
   if (!select) return;
 
   const currentVal = selectedVal || select.value || "xerox";
-  const usableCategories = CATEGORIES.filter(c => c.id !== "all");
+  const usableCategories = (isResaleBlockedState ? CATEGORIES.filter(c => c.id !== "resale") : CATEGORIES).filter(c => c.id !== "all");
 
   select.innerHTML = usableCategories.map(cat => {
     const name = currentLang === "ta" ? cat.nameTa : cat.nameEn;
@@ -7012,7 +7012,7 @@ function renderAdminCategoriesList() {
   const container = document.getElementById("ad-categories-list-table");
   if (!container) return;
 
-  const usableCategories = CATEGORIES.filter(c => c.id !== "all");
+  const usableCategories = (isResaleBlockedState ? CATEGORIES.filter(c => c.id !== "resale") : CATEGORIES).filter(c => c.id !== "all");
 
   if (usableCategories.length === 0) {
     container.innerHTML = `
@@ -8164,58 +8164,67 @@ async function unblockWebsite(showNotice = true) {
 let isResaleBlockedState = (localStorage.getItem("olx_resale_blocked") === "true");
 let resaleBlockedReasonState = localStorage.getItem("olx_resale_blocked_reason") || "தற்போது ஹனுமான் ரீசேல் (2nd Life) இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.";
 
+let isRenderingResaleState = false;
+
 function renderResaleBlockStateInPrintShop() {
-  const badge = document.getElementById("settings-resale-block-status-badge");
-  const desc = document.getElementById("settings-resale-block-status-desc");
-  const blockBtn = document.getElementById("settings-resale-block-btn");
-  const unblockBtn = document.getElementById("settings-resale-unblock-btn");
-  const quickBtn = document.getElementById("admin-resale-block-quick-btn");
-  const quickText = document.getElementById("admin-resale-block-quick-text");
-  const headerBadge = document.getElementById("header-resale-badge");
-  const headerLink = document.getElementById("header-hanuman-resale-link");
+  if (isRenderingResaleState) return;
+  isRenderingResaleState = true;
+  try {
+    const badge = document.getElementById("settings-resale-block-status-badge");
+    const desc = document.getElementById("settings-resale-block-status-desc");
+    const blockBtn = document.getElementById("settings-resale-block-btn");
+    const unblockBtn = document.getElementById("settings-resale-unblock-btn");
+    const quickBtn = document.getElementById("admin-resale-block-quick-btn");
+    const quickText = document.getElementById("admin-resale-block-quick-text");
+    const headerLink = document.getElementById("header-hanuman-resale-link");
 
-  if (isResaleBlockedState) {
-    if (badge) {
-      badge.className = "px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-300";
-      badge.textContent = "🔴 முடக்கப்பட்டுள்ளது (Blocked)";
-    }
-    if (desc) desc.textContent = "ரீசேல் தளம் முடக்கப்பட்டுள்ளது! பொதுமக்களால் ரீசேலுக்குள் நுழைய முடியாது.";
-    if (blockBtn) blockBtn.classList.add("hidden");
-    if (unblockBtn) unblockBtn.classList.remove("hidden");
+    if (isResaleBlockedState) {
+      // 1. COMPLETELY HIDE Hanuman Resale header button from visitors
+      if (headerLink) {
+        headerLink.classList.add("hidden");
+      }
 
-    if (quickBtn) {
-      quickBtn.className = "px-2 py-1 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border cursor-pointer bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 text-white border-red-400 animate-pulse";
-    }
-    if (quickText) quickText.textContent = "🔴 ரீசேல் Blocked [🔓 Unblock]";
+      // 2. Settings badge in Admin Mode
+      if (badge) {
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-300";
+        badge.textContent = "🔴 முடக்கப்பட்டுள்ளது (தளத்தில் முற்றிலும் மறைக்கப்பட்டுள்ளது)";
+      }
+      if (desc) desc.textContent = "ரீசேல் தளம் முடக்கப்பட்டுள்ளது! பொதுமக்களுக்கு ரீசேல் பொத்தான்கள், பிரிவுகள் & அட்டைகள் எதுவும் காட்டப்படாது.";
+      if (blockBtn) blockBtn.classList.add("hidden");
+      if (unblockBtn) unblockBtn.classList.remove("hidden");
 
-    if (headerBadge) {
-      headerBadge.className = "text-[9px] bg-red-600 text-white px-1 py-0.2 rounded font-black uppercase animate-pulse";
-      headerBadge.textContent = "🔒 Blocked";
-    }
-    if (headerLink) {
-      headerLink.title = "🚫 ஹனுமான் ரீசேல் தளம் தற்காலிகமாக முடக்கப்பட்டுள்ளது";
-    }
-  } else {
-    if (badge) {
-      badge.className = "px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300";
-      badge.textContent = "🟢 நேரலையில் இயங்குகிறது (Live)";
-    }
-    if (desc) desc.textContent = "வாடிக்கையாளர்கள் ரீசேல் தளத்திற்குள் சென்று பழைய பொருட்கள் வாங்க/விற்கலாம்.";
-    if (blockBtn) blockBtn.classList.remove("hidden");
-    if (unblockBtn) unblockBtn.classList.add("hidden");
+      // 3. Quick button in Admin Bar (Visible ONLY in Admin Mode)
+      if (quickBtn) {
+        quickBtn.className = "px-2 py-1 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border cursor-pointer bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 text-white border-red-400 animate-pulse";
+      }
+      if (quickText) quickText.textContent = "🔴 ரீசேல் Blocked [🔓 Unblock]";
+    } else {
+      // 1. Show Hanuman Resale header button
+      if (headerLink) {
+        headerLink.classList.remove("hidden");
+      }
 
-    if (quickBtn) {
-      quickBtn.className = "px-2 py-1 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border cursor-pointer bg-white/95 text-amber-900 border-amber-300 hover:bg-amber-50";
-    }
-    if (quickText) quickText.textContent = "👑 🔒 ரீசேல் Block";
+      // 2. Settings badge in Admin Mode
+      if (badge) {
+        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300";
+        badge.textContent = "🟢 நேரலையில் இயங்குகிறது (Live)";
+      }
+      if (desc) desc.textContent = "ரீசேல் தளம் நேரலையில் இயங்குகிறது. வாடிக்கையாளர்கள் ரீசேல் தளத்திற்குள் சென்று பழைய பொருட்கள் வாங்க/விற்கலாம்.";
+      if (blockBtn) blockBtn.classList.remove("hidden");
+      if (unblockBtn) unblockBtn.classList.add("hidden");
 
-    if (headerBadge) {
-      headerBadge.className = "text-[9px] bg-black text-amber-300 px-1 py-0.2 rounded font-black uppercase";
-      headerBadge.textContent = "2ND LIFE";
+      // 3. Quick button in Admin Bar
+      if (quickBtn) {
+        quickBtn.className = "px-2 py-1 rounded-lg font-black flex items-center gap-1 shadow-sm transition-all text-[11px] border cursor-pointer bg-white/95 text-amber-900 border-amber-300 hover:bg-amber-50";
+      }
+      if (quickText) quickText.textContent = "👑 🔒 ரீசேல் Block";
     }
-    if (headerLink) {
-      headerLink.title = "HANUMAN RESALE (2ND LIFE) - வட்டார மறுவிற்பனை தளம்";
-    }
+
+    // Refresh categories & services to completely hide/show resale pills & cards
+    if (typeof renderCategories === "function") renderCategories();
+    if (typeof renderServices === "function") renderServices();
+  } finally {
+    isRenderingResaleState = false;
   }
 }
 
@@ -9824,12 +9833,24 @@ function renderCategories() {
   const container = document.getElementById('category-pills');
   if (!container) return;
 
-  const pillsHtml = CATEGORIES.map(cat => {
+  if (isResaleBlockedState && currentCategory === 'resale') {
+    currentCategory = 'all';
+  }
+
+  const activeServices = isResaleBlockedState
+    ? SERVICES.filter(s => s.category !== 'resale' && s.id !== 'service-hanuman-resale-portal')
+    : SERVICES;
+
+  const displayCats = isResaleBlockedState
+    ? CATEGORIES.filter(c => c.id !== 'resale')
+    : CATEGORIES;
+
+  const pillsHtml = displayCats.map(cat => {
     const isActive = cat.id === currentCategory;
     const name = currentLang === 'ta' ? cat.nameTa : cat.nameEn;
     const count = cat.id === 'all' 
-      ? SERVICES.length 
-      : SERVICES.filter(s => s.category === cat.id).length;
+      ? activeServices.length 
+      : activeServices.filter(s => s.category === cat.id).length;
 
     return `
       <button 
@@ -9873,7 +9894,6 @@ function renderCategories() {
   renderFooterQuickLinks();
   renderWhatsAppDrawerItems();
 
-  renderResaleBlockStateInPrintShop();
   if (window.lucide) lucide.createIcons();
 }
 
@@ -9881,7 +9901,7 @@ function renderHeroQuickBadges() {
   const container = document.getElementById("hero-quick-badges-container");
   if (!container) return;
 
-  const usableCategories = CATEGORIES.filter(c => c.id !== "all");
+  const usableCategories = (isResaleBlockedState ? CATEGORIES.filter(c => c.id !== "resale") : CATEGORIES).filter(c => c.id !== "all");
 
   if (usableCategories.length === 0) {
     container.innerHTML = "";
@@ -9923,7 +9943,6 @@ function renderHeroQuickBadges() {
     `;
   }).join('');
 
-  renderResaleBlockStateInPrintShop();
   if (window.lucide) lucide.createIcons();
 }
 
@@ -9931,7 +9950,7 @@ function renderFooterQuickLinks() {
   const container = document.getElementById("footer-quick-links-list");
   if (!container) return;
 
-  const usableCategories = CATEGORIES.filter(c => c.id !== "all");
+  const usableCategories = (isResaleBlockedState ? CATEGORIES.filter(c => c.id !== "resale") : CATEGORIES).filter(c => c.id !== "all");
 
   if (usableCategories.length === 0) {
     container.innerHTML = `<li class="text-slate-500 italic text-xs">${currentLang === 'ta' ? 'பிரிவுகள் இல்லை' : 'No categories'}</li>`;
@@ -9954,7 +9973,7 @@ function renderWhatsAppDrawerItems() {
   const container = document.getElementById("whatsapp-drawer-items-list");
   if (!container) return;
 
-  const usableCategories = CATEGORIES.filter(c => c.id !== "all");
+  const usableCategories = (isResaleBlockedState ? CATEGORIES.filter(c => c.id !== "resale") : CATEGORIES).filter(c => c.id !== "all");
 
   if (usableCategories.length === 0) {
     container.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs">${currentLang === 'ta' ? 'பிரிவுகள் எதுவும் இல்லை.' : 'No categories found.'}</div>`;
@@ -10014,7 +10033,11 @@ function renderServices() {
 
   const adminAuth = isAdminLoggedIn();
 
-  const filtered = SERVICES.filter(service => {
+  const activeServices = isResaleBlockedState
+    ? SERVICES.filter(s => s.category !== 'resale' && s.id !== 'service-hanuman-resale-portal')
+    : SERVICES;
+
+  const filtered = activeServices.filter(service => {
     const matchCategory = currentCategory === 'all' || service.category === currentCategory;
     const title = ((currentLang === 'ta' ? service.titleTa : service.titleEn) || '').toLowerCase();
     const desc = ((currentLang === 'ta' ? service.shortDescTa : service.shortDescEn) || '').toLowerCase();
@@ -10038,7 +10061,7 @@ function renderServices() {
     return;
   }
 
-  const resaleBanner = currentCategory === 'resale' ? `
+  const resaleBanner = (!isResaleBlockedState && currentCategory === 'resale') ? `
     <div class="col-span-full p-3.5 sm:p-4 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 text-gray-950 rounded-2xl shadow-lg border-2 border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-3 mb-2 animate-in fade-in">
       <div class="flex items-center gap-3">
         <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-black text-amber-400 font-black text-xl flex items-center justify-center shadow shrink-0">👑</div>
@@ -10670,7 +10693,7 @@ function renderDynamicCalculator() {
   const container = document.getElementById("calculator-dynamic-container");
   if (!container) return;
 
-  const usableCategories = CATEGORIES.filter(c => c.id !== "all");
+  const usableCategories = (isResaleBlockedState ? CATEGORIES.filter(c => c.id !== "resale") : CATEGORIES).filter(c => c.id !== "all");
 
   if (SERVICES.length === 0 || usableCategories.length === 0) {
     container.innerHTML = `

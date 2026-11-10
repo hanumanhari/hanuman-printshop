@@ -632,15 +632,18 @@
         </div>
       </div>
 
-      <!-- Direct Link back to Hanuman Print Shop -->
-      <div class="pt-2">
+      <!-- Direct Link back to Hanuman Print Shop with auto redirect indicator -->
+      <div class="pt-2 space-y-2">
         <a 
           href="index.html" 
-          class="w-full py-2 px-3 bg-slate-800 hover:bg-slate-700 text-teal-300 border border-teal-500/40 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm"
+          class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 hover:from-amber-600 hover:to-rose-700 text-gray-950 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition shadow-md"
         >
           <span>🖨️</span>
-          <span>ஸ்ரீ ஹனுமான் ஜெராக்ஸ் &amp; போட்டோ பிரிண்ட் கடைக்கு செல்ல</span>
+          <span>முதன்மை பிரிண்ட் ஷாப் தளத்திற்கு செல்ல (Return to Print Shop) ➜</span>
         </a>
+        <p id="resale-redirect-counter" class="text-[10px] text-amber-300 font-bold text-center animate-pulse">
+          (3 வினாடிகளில் தானாக முதன்மை தளத்திற்கு திரும்புகிறது...)
+        </p>
       </div>
 
       <!-- Admin Unlock Key Button -->
@@ -1706,6 +1709,7 @@
       resaleBlockedReason: localStorage.getItem('olx_resale_blocked_reason') || 'தற்போது ஹனுமான் ரீசேல் (2nd Life) இணையதள சேவை தற்காலிகமாக முடக்கப்பட்டுள்ளது. விரைவில் திறக்கப்படும்.',
       resaleBlockedAt: localStorage.getItem('olx_resale_blocked_at') || 'இப்போது',
       isResaleMessagesBlocked: localStorage.getItem('olx_resale_msg_blocked') === 'true',
+      resaleRedirectTimer: null,
 
       // Authentication State
       currentUser: null,
@@ -2289,9 +2293,17 @@
         const ownerWarningBanner = document.getElementById('owner-resale-blocked-warning');
         const isOwner = this.isOwner();
 
+        const headerEl = document.querySelector('header');
+        const mainEl = document.querySelector('main');
+        const footerEl = document.querySelector('footer');
+
         if (this.isResaleBlocked) {
-          // If public visitor: show full-screen blocked screen
+          // If public visitor: HIDE ENTIRE RESALE SITE SO NOTHING IS VISIBLE ("resale kattave kudathu")
           if (!isOwner) {
+            if (headerEl) headerEl.classList.add('hidden');
+            if (mainEl) mainEl.classList.add('hidden');
+            if (footerEl) footerEl.classList.add('hidden');
+
             if (blockedScreen) {
               blockedScreen.classList.remove('hidden');
               document.body.style.overflow = 'hidden';
@@ -2309,9 +2321,33 @@
                 if (msgBox) msgBox.classList.remove('hidden');
                 if (disabledBox) disabledBox.classList.add('hidden');
               }
+
+              // Auto redirect visitor back to index.html after 3 seconds ("resale kullaye poga kudathu")
+              if (!this.resaleRedirectTimer) {
+                let secLeft = 3;
+                const counterEl = document.getElementById('resale-redirect-counter');
+                if (counterEl) counterEl.textContent = `(${secLeft} வினாடிகளில் தானாக முதன்மை தளத்திற்கு திரும்புகிறது...)`;
+                this.resaleRedirectTimer = setInterval(() => {
+                  secLeft--;
+                  if (counterEl) counterEl.textContent = `(${secLeft} வினாடிகளில் தானாக முதன்மை தளத்திற்கு திரும்புகிறது...)`;
+                  if (secLeft <= 0) {
+                    clearInterval(this.resaleRedirectTimer);
+                    this.resaleRedirectTimer = null;
+                    window.location.replace('index.html');
+                  }
+                }, 1000);
+              }
             }
           } else {
-            // Owner is logged in: don't block owner screen, show banner & quick unblock button
+            // Owner is logged in: show content to owner so they can manage
+            if (headerEl) headerEl.classList.remove('hidden');
+            if (mainEl) mainEl.classList.remove('hidden');
+            if (footerEl) footerEl.classList.remove('hidden');
+
+            if (this.resaleRedirectTimer) {
+              clearInterval(this.resaleRedirectTimer);
+              this.resaleRedirectTimer = null;
+            }
             if (blockedScreen) {
               blockedScreen.classList.add('hidden');
               document.body.style.overflow = '';
@@ -2320,7 +2356,15 @@
             if (headerBlockBtn) headerBlockBtn.classList.remove('hidden');
           }
         } else {
-          // Not blocked
+          // Not blocked: show full site normally
+          if (headerEl) headerEl.classList.remove('hidden');
+          if (mainEl) mainEl.classList.remove('hidden');
+          if (footerEl) footerEl.classList.remove('hidden');
+
+          if (this.resaleRedirectTimer) {
+            clearInterval(this.resaleRedirectTimer);
+            this.resaleRedirectTimer = null;
+          }
           if (blockedScreen) {
             blockedScreen.classList.add('hidden');
             document.body.style.overflow = '';
@@ -2422,6 +2466,10 @@
       },
 
       handleResaleBlockedOwnerLogin() {
+        if (this.resaleRedirectTimer) {
+          clearInterval(this.resaleRedirectTimer);
+          this.resaleRedirectTimer = null;
+        }
         const pass = prompt('🔑 கடை உரிமையாளர் / அட்மின் பாஸ்வேர்டை உள்ளிடவும்:');
         if (!pass) return;
 
