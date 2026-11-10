@@ -835,6 +835,46 @@
             <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2"></i>
           </div>
         </div>
+
+        <!-- Selection & Multi-Delete Toolbar (செலக்ட் செய்து நீக்கும் பார்) -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-slate-200/80 bg-gradient-to-r from-emerald-50/70 to-teal-50/70 p-2 rounded-xl border border-emerald-200">
+          <div class="flex items-center gap-2">
+            <!-- Select All Checkbox -->
+            <label class="flex items-center gap-1.5 px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-800 cursor-pointer hover:bg-slate-50 select-none shadow-xs">
+              <input 
+                type="checkbox" 
+                id="pub-visitor-select-all" 
+                onchange="toggleSelectAllVisitors(event)" 
+                class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500 cursor-pointer" 
+              />
+              <span>☑️ அனைத்தும் தேர்வு செய் (Select All)</span>
+            </label>
+            <span id="pub-selected-count-label" class="text-xs font-bold text-slate-700 hidden flex items-center gap-1 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span><span id="pub-selected-count-num" class="text-emerald-800 font-black">0</span> நபர்கள் தேர்வு</span>
+            </span>
+          </div>
+
+          <!-- Delete Selected Button (Active when >= 1 selected) -->
+          <div id="pub-delete-selected-btn-container" class="hidden flex items-center gap-1.5">
+            <button 
+              type="button" 
+              onclick="clearVisitorSelection()" 
+              class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold shadow-xs cursor-pointer transition-all"
+            >
+              ரத்து (Clear)
+            </button>
+            <button 
+              type="button" 
+              onclick="deleteSelectedVisitorLogs()" 
+              class="px-3.5 py-1 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-sm transition-all cursor-pointer animate-pulse"
+              title="தேர்வு செய்யப்பட்ட பார்வையாளர் பதிவுகளை மட்டும் நீக்க"
+            >
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>தேர்வு செய்ததை நீக்கு (<span id="pub-delete-btn-count">0</span>)</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Visitor Items Feed List -->
@@ -10824,11 +10864,21 @@ function renderPublicLiveVisitorsList() {
 
     const itemId = item.id || item.timestamp;
 
+    const isSelected = selectedVisitorIds.has(itemId);
+
     return `
-      <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-2">
+      <div class="p-3 bg-white rounded-2xl border ${isSelected ? 'border-rose-400 ring-2 ring-rose-400/30 bg-rose-50/20' : 'border-slate-200'} shadow-xs hover:shadow-md transition-all space-y-2">
         <div class="flex items-center justify-between flex-wrap gap-2 pb-1.5 border-b border-slate-100">
           <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-slate-900 text-white text-[10.5px] font-black flex items-center justify-center shrink-0">
+            <!-- Individual Checkbox for Multi-Select -->
+            <input 
+              type="checkbox" 
+              onchange="toggleSelectVisitor('${itemId}', event)" 
+              ${isSelected ? 'checked' : ''} 
+              class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500 cursor-pointer shrink-0"
+              title="தேர்வு செய்ய (Select)"
+            />
+            <span class="w-6 h-6 rounded-lg ${isSelected ? 'bg-rose-600' : 'bg-slate-900'} text-white text-[10.5px] font-black flex items-center justify-center shrink-0">
               #${logs.length - idx}
             </span>
             <div>
@@ -10892,6 +10942,12 @@ function renderPublicLiveVisitorsList() {
     `;
   }).join("");
 
+  const selectAllCb = document.getElementById('pub-visitor-select-all');
+  if (selectAllCb) {
+    const visibleIds = logs.map(l => l.id || l.timestamp).filter(Boolean);
+    selectAllCb.checked = visibleIds.length > 0 && visibleIds.every(id => selectedVisitorIds.has(id));
+  }
+
   if (window.lucide) lucide.createIcons();
 }
 
@@ -10918,6 +10974,132 @@ function checkAdminActionAuthorized(actionText = "இந்த செயலை �
   }
 }
 
+
+// Selection Set for Multi-Select Visitor Deletion
+let selectedVisitorIds = new Set();
+
+function toggleSelectVisitor(id, event) {
+  if (event) event.stopPropagation();
+  if (selectedVisitorIds.has(id)) {
+    selectedVisitorIds.delete(id);
+  } else {
+    selectedVisitorIds.add(id);
+  }
+  updateVisitorSelectionUI();
+  renderPublicLiveVisitorsList();
+}
+
+function toggleSelectAllVisitors(event) {
+  const isChecked = event ? event.target.checked : false;
+  let logs = getStoredVisitorLogs();
+
+  // Apply current filter & search to select only matching visible visitors
+  if (currentPublicVisitorFilter === 'mobile') {
+    logs = logs.filter(l => (l.deviceType || '').toLowerCase().includes('mobile') || (l.os || '').toLowerCase().includes('android') || (l.os || '').toLowerCase().includes('ios'));
+  } else if (currentPublicVisitorFilter === 'desktop') {
+    logs = logs.filter(l => (l.deviceType || '').toLowerCase().includes('desktop') || (l.deviceType || '').toLowerCase().includes('laptop') || (l.os || '').toLowerCase().includes('windows') || (l.os || '').toLowerCase().includes('mac'));
+  } else if (currentPublicVisitorFilter === 'today') {
+    const todayStr = new Date().toLocaleDateString('en-IN');
+    logs = logs.filter(l => (l.timestamp || '').includes(todayStr) || (l.timestamp || '').includes(new Date().getDate().toString()));
+  }
+  if (currentPublicVisitorSearch) {
+    const q = currentPublicVisitorSearch;
+    logs = logs.filter(l => 
+      (l.ip || '').toLowerCase().includes(q) ||
+      (l.city || '').toLowerCase().includes(q) ||
+      (l.region || '').toLowerCase().includes(q) ||
+      (l.isp || '').toLowerCase().includes(q) ||
+      (l.deviceType || '').toLowerCase().includes(q) ||
+      (l.os || '').toLowerCase().includes(q) ||
+      (l.browser || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (isChecked) {
+    logs.forEach(l => {
+      const id = l.id || l.timestamp;
+      if (id) selectedVisitorIds.add(id);
+    });
+  } else {
+    selectedVisitorIds.clear();
+  }
+  updateVisitorSelectionUI();
+  renderPublicLiveVisitorsList();
+}
+
+function clearVisitorSelection() {
+  selectedVisitorIds.clear();
+  updateVisitorSelectionUI();
+  renderPublicLiveVisitorsList();
+}
+
+function updateVisitorSelectionUI() {
+  const count = selectedVisitorIds.size;
+  const countLabel = document.getElementById('pub-selected-count-label');
+  const countNum = document.getElementById('pub-selected-count-num');
+  const btnContainer = document.getElementById('pub-delete-selected-btn-container');
+  const btnCount = document.getElementById('pub-delete-btn-count');
+  const selectAllCb = document.getElementById('pub-visitor-select-all');
+
+  if (countNum) countNum.textContent = count.toString();
+  if (btnCount) btnCount.textContent = count.toString();
+
+  if (count > 0) {
+    if (countLabel) countLabel.classList.remove('hidden');
+    if (btnContainer) btnContainer.classList.remove('hidden');
+  } else {
+    if (countLabel) countLabel.classList.add('hidden');
+    if (btnContainer) btnContainer.classList.add('hidden');
+    if (selectAllCb) selectAllCb.checked = false;
+  }
+}
+
+async function deleteSelectedVisitorLogs() {
+  if (selectedVisitorIds.size === 0) {
+    alert(currentLang === 'ta' ? 'தயவுசெய்து நீக்க வேண்டிய பார்வையாளர்களை தேர்வு செய்யவும்!' : 'Please select at least one visitor to delete!');
+    return;
+  }
+
+  if (!checkAdminActionAuthorized("தேர்வு செய்த பார்வையாளர் பதிவுகளை நீக்க")) return;
+
+  const count = selectedVisitorIds.size;
+  const msg = currentLang === 'ta'
+    ? `தேர்வு செய்யப்பட்ட ${count} பார்வையாளர் பதிவுகளை நிரந்தரமாக நீக்க வேண்டுமா?`
+    : `Permanently delete the ${count} selected visitor records?`;
+
+  if (!confirm(msg)) return;
+
+  let logs = getStoredVisitorLogs();
+  logs = logs.filter(i => {
+    const id = i.id || i.timestamp;
+    return !selectedVisitorIds.has(id) && !selectedVisitorIds.has(i.id) && !selectedVisitorIds.has(i.timestamp);
+  });
+
+  localStorage.setItem("shop_visitor_logs", JSON.stringify(logs));
+  selectedVisitorIds.clear();
+  updateVisitorSelectionUI();
+  updateVisitorLogCountBadge();
+
+  // Sync deletion to Firestore so it is permanently deleted in Cloud
+  if (typeof db !== "undefined" && db && isFirebaseConnected) {
+    try {
+      await db.collection("shop_data").doc("visitor_logs").set({
+        latest: logs[0] || null,
+        items: logs,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore delete selected logs error:", e);
+    }
+  }
+
+  renderPublicLiveVisitorsList();
+  if (typeof renderAdminVisitorsTab === 'function') renderAdminVisitorsTab();
+  if (typeof renderSettingsTabVisitorWidget === 'function') renderSettingsTabVisitorWidget();
+
+  showToast(`🗑️ தேர்வு செய்யப்பட்ட ${count} பதிவுகள் வெற்றிகரமாக நீக்கப்பட்டன!`, `${count} visitor records deleted!`);
+}
+
 async function deleteSingleVisitorLog(targetId) {
   if (!checkAdminActionAuthorized("பார்வையாளர் பதிவை நீக்க")) return;
 
@@ -10926,6 +11108,8 @@ async function deleteSingleVisitorLog(targetId) {
   let logs = getStoredVisitorLogs();
   logs = logs.filter(i => (i.id || i.timestamp) !== targetId && i.id !== targetId && i.timestamp !== targetId);
   localStorage.setItem("shop_visitor_logs", JSON.stringify(logs));
+  selectedVisitorIds.delete(targetId);
+  updateVisitorSelectionUI();
   updateVisitorLogCountBadge();
 
   // Sync deletion to Firestore so it is permanently deleted in Cloud
@@ -10954,6 +11138,8 @@ async function clearAllVisitorLogs() {
   if (!confirm(currentLang === 'ta' ? 'அனைத்து பார்வையாளர் பதிவுகளையும் நிரந்தரமாக அழிக்க விரும்புகிறீர்களா? (Delete all visitor logs from local and cloud?)' : 'Permanently clear all visitor records from local and cloud?')) return;
 
   localStorage.setItem("shop_visitor_logs", "[]");
+  selectedVisitorIds.clear();
+  updateVisitorSelectionUI();
   updateVisitorLogCountBadge();
 
   if (typeof db !== "undefined" && db && isFirebaseConnected) {
@@ -10977,11 +11163,7 @@ async function clearAllVisitorLogs() {
 
 
 function clearVisitorLogs() {
-  if (!confirm("அனைத்து பார்வையாளர் பதிவுகளையும் அழிக்க விரும்புகிறீர்களா? (Clear all visitor logs?)")) return;
-  localStorage.removeItem("shop_visitor_logs");
-  updateVisitorLogCountBadge();
-  renderAdminVisitorsTab();
-  showToast("🗑️ பார்வையாளர் பதிவுகள் அழிக்கப்பட்டன!", "Visitor logs cleared");
+  clearAllVisitorLogs();
 }
 
 
@@ -11109,6 +11291,15 @@ function renderSettingsTabVisitorWidget() {
           <div class="flex items-center gap-1">
             ${mapsBtn}
             ${statusBadge}
+            <button 
+              type="button" 
+              onclick="deleteSingleVisitorLog('${item.id || item.timestamp}')" 
+              class="px-2 py-0.2 bg-rose-950/60 hover:bg-rose-900 text-rose-300 rounded text-[9.5px] font-bold inline-flex items-center gap-1 border border-rose-500/30 transition-all cursor-pointer"
+              title="நீக்க (Delete)"
+            >
+              <i data-lucide="trash-2" class="w-2.5 h-2.5 text-rose-400"></i>
+              <span>நீக்கு</span>
+            </button>
           </div>
         </div>
 
@@ -11204,6 +11395,15 @@ function renderAdminVisitorsTab() {
           <div class="flex items-center gap-1.5">
             ${mapsBtn}
             ${statusBadge}
+            <button 
+              type="button" 
+              onclick="deleteSingleVisitorLog('${item.id || item.timestamp}')" 
+              class="px-2 py-0.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs"
+              title="இந்த பார்வையாளர் பதிவை மட்டும் நீக்க (Delete Record)"
+            >
+              <i data-lucide="trash-2" class="w-3 h-3 text-rose-600"></i>
+              <span>நீக்கு</span>
+            </button>
           </div>
         </div>
 
