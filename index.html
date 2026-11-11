@@ -16,16 +16,31 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- html2canvas & html2pdf CDN for PDF & Image Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- html2canvas & html2pdf CDN for PDF & Image Export (Deferred for fast load) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <!-- Firebase App & Cloud Firestore JS SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- Supabase JS Client v2 CDN for Realtime Multi-Device Sync -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Critical Zero-Flicker Pre-render Block Shield (Executes synchronously before paint) -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem("shop_info_config");
+        var info = saved ? JSON.parse(saved) : {};
+        var isBlocked = (info.isWebsiteBlocked === true) || (localStorage.getItem("shop_website_blocked") === "true");
+        var isAdmin = (sessionStorage.getItem("shop_admin_auth") === "true") || (localStorage.getItem("shop_admin_auth") === "true");
+        if (isBlocked && !isAdmin) {
+          document.documentElement.classList.add("site-pre-blocked");
+        }
+      } catch(e) {}
+    })();
+  </script>
   
   <!-- Critical Mobile-Optimized & Component Styles -->
   <style>
@@ -33,6 +48,14 @@
       font-family: 'Plus Jakarta Sans', 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
+    /* Immediate Zero-Flicker Block Shield */
+    html.site-pre-blocked body > *:not(#website-blocked-screen) {
+      display: none !important;
+    }
+    html.site-pre-blocked #website-blocked-screen {
+      display: flex !important;
+    }
+
     .glass-header {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(12px);
@@ -626,8 +649,40 @@
     </div>
 
     <!-- Services Dynamic Cards Grid (Ultra Dense & Tight Grid) -->
-    <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1.5 sm:gap-2 pt-0.5">
-      <!-- Injected via JavaScript -->
+    <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1.5 sm:gap-2 pt-0.5 min-h-[420px]">
+      <!-- Instant Pre-render Skeletons: Prevents white gap collapse & layout shifts -->
+      <div class="service-card flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm animate-pulse">
+        <div class="h-24 sm:h-26 w-full bg-slate-200"></div>
+        <div class="p-2 space-y-1.5">
+          <div class="h-3 bg-slate-200 rounded w-3/4"></div>
+          <div class="h-2.5 bg-slate-100 rounded w-1/2"></div>
+          <div class="h-2 bg-slate-100 rounded w-full"></div>
+        </div>
+      </div>
+      <div class="service-card flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm animate-pulse">
+        <div class="h-24 sm:h-26 w-full bg-slate-200"></div>
+        <div class="p-2 space-y-1.5">
+          <div class="h-3 bg-slate-200 rounded w-3/4"></div>
+          <div class="h-2.5 bg-slate-100 rounded w-1/2"></div>
+          <div class="h-2 bg-slate-100 rounded w-full"></div>
+        </div>
+      </div>
+      <div class="service-card flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm animate-pulse">
+        <div class="h-24 sm:h-26 w-full bg-slate-200"></div>
+        <div class="p-2 space-y-1.5">
+          <div class="h-3 bg-slate-200 rounded w-3/4"></div>
+          <div class="h-2.5 bg-slate-100 rounded w-1/2"></div>
+          <div class="h-2 bg-slate-100 rounded w-full"></div>
+        </div>
+      </div>
+      <div class="service-card flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm animate-pulse">
+        <div class="h-24 sm:h-26 w-full bg-slate-200"></div>
+        <div class="p-2 space-y-1.5">
+          <div class="h-3 bg-slate-200 rounded w-3/4"></div>
+          <div class="h-2.5 bg-slate-100 rounded w-1/2"></div>
+          <div class="h-2 bg-slate-100 rounded w-full"></div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -4471,6 +4526,7 @@ const DEFAULT_SHOP_INFO = {
   "addressTa": "கத்திரியங்காடு, பூனாச்சி கிராமம்",
   "openingHoursEn": "8:30 AM - 9:30 PM",
   "openingHoursTa": "8:30 AM - 9:30 PM",
+  "isWebsiteBlocked": false,
   "isOpen": true,
   "closedNoticeTa": "இப்போது மூடப்பட்டுள்ளது",
   "closedNoticeEn": "இப்போது மூடப்பட்டுள்ளது",
@@ -6724,6 +6780,7 @@ function showToast(messageTa, messageEn, type = "success") {
 
 // ==================== INITIALIZATION ====================
 function initApp() {
+  renderWebsiteBlockState();
   renderShopLogo();
   renderShopStatus();
   renderHeroStockBadges();
@@ -8012,6 +8069,7 @@ function renderWebsiteBlockState() {
   // 1. Full-screen Block Screen for Public Visitors
   if (blockedScreen) {
     if (blocked && !isAdmin) {
+      document.documentElement.classList.add("site-pre-blocked");
       blockedScreen.classList.remove("hidden");
       document.body.style.overflow = "hidden";
       const reasonEl = document.getElementById("blocked-screen-reason");
@@ -8019,6 +8077,7 @@ function renderWebsiteBlockState() {
       if (reasonEl) reasonEl.textContent = reasonText;
       if (timeEl) timeEl.textContent = timeText;
     } else {
+      document.documentElement.classList.remove("site-pre-blocked");
       blockedScreen.classList.add("hidden");
       if (!document.querySelector(".modal-backdrop.active")) {
         document.body.style.overflow = "";
